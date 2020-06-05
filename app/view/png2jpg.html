@@ -1,0 +1,110 @@
+{% extends "./base.html" %}
+
+<!-- Head -->
+{% block head %}
+<link rel="stylesheet" href="/public/lib/jquery-ui/jquery-ui.min.css" />
+<link rel="stylesheet" href="/public/lib/pupload/jquery.ui.plupload/css/jquery.ui.plupload.css" />
+{% endblock %}
+
+<!-- Body -->
+{% block body %}
+<div class="container">
+  <ol class="breadcrumb">
+    <li><a href="/">首页</a></li>
+    <li class="active">{{ pageTitle }}</li>
+  </ol>
+
+  <h2>{{ pageTitle }}</h2>
+  <p>注意事项：</p>
+  <div class="row">
+    <div class="col-xs-8">
+      <ol>
+        <li>单个文件最大10M</li>
+        <li>单次最多20个文件</li>
+        <li>免费安全、我们不存储您的文件</li>
+      </ol>
+    </div>
+    <div class="col-xs-4"></div>
+  </div>
+  <br />
+
+  <div id="js_uploader"></div>
+
+  <div class="text-center">
+    <br />
+    <br />
+    <button id="js_downloadBtn" class="btn btn-primary disabled">DOWNLOAD ALL IMAGES</button>
+  </div>
+</div>
+{% endblock %}
+
+<!-- Foot -->
+{% block foot %}
+<script src="/public/lib/jquery-ui/jquery-ui.min.js"></script>
+<script src="/public/lib/pupload/plupload.full.min.js"></script>
+<script src="/public/lib/pupload/jquery.ui.plupload/jquery.ui.plupload.min.js"></script>
+<script>
+  $(document).ready(function () {
+    var $uploader = $("#js_uploader");
+    var $downloadBtn = $("#js_downloadBtn");
+
+    function downloadURI(uri, name) {
+      if (HTMLElement.prototype.click) {
+        var link = document.createElement("a");
+        link.download = name;
+        link.href = uri;
+        link.style.display = "none";
+        document.body.appendChild(link);
+        link.click();
+        setTimeout(function () {
+          link.remove();
+        }, 500);
+      } else {
+        window.location.href = uri;
+      }
+    }
+
+    $uploader.plupload({
+      runtimes: "html5,flash,silverlight,html4",
+      url: "/api/png2jpg/convert",
+      max_file_size: "10mb",
+      chunk_size: "1mb",
+      headers: {
+        key: "{{ key }}",
+      },
+      sortable: true,
+      dragdrop: true,
+      views: {
+        list: true,
+        thumbs: true,
+        active: "thumbs",
+      },
+      flash_swf_url: "/public/lib/pupload/Moxie.swf",
+      silverlight_xap_url: "/public/lib/pupload/Moxie.xap",
+    });
+    $uploader.on("complete", function (evt, args) {
+      var files = args.files;
+      console.log(files.length);
+      if (files.length) {
+        $downloadBtn.removeClass("disabled");
+      } else {
+        $downloadBtn.addClass("disabled");
+      }
+    });
+
+    $downloadBtn.on("click", function () {
+      $.ajax({
+        type: "GET",
+        url: "/api/png2jpg/downloadAll?key={{ key }}",
+        success: function (res) {
+          if (res.success) {
+            downloadURI(res.data, "png2jpg.zip");
+          } else {
+            layer.msg(res.message, { icon: 5 });
+          }
+        },
+      });
+    });
+  });
+</script>
+{% endblock %}

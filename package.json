@@ -1,0 +1,55 @@
+{
+  "name": "tools",
+  "version": "1.0.0",
+  "description": "Some useful tools",
+  "private": true,
+  "egg": {
+    "declarations": true
+  },
+  "dependencies": {
+    "blueimp-md5": "^2.16.0",
+    "compressing": "^1.5.1",
+    "dayjs": "^1.8.28",
+    "egg": "^2.15.1",
+    "egg-scripts": "^2.11.0",
+    "egg-sequelize": "^5.2.1",
+    "egg-view-nunjucks": "^2.2.0",
+    "fs-extra": "^9.0.1",
+    "ip": "^1.1.5",
+    "jimp": "^0.13.0",
+    "lodash": "^4.17.15",
+    "mysql2": "^2.1.0",
+    "uuid": "^8.1.0"
+  },
+  "devDependencies": {
+    "autod": "^3.0.1",
+    "autod-egg": "^1.1.0",
+    "egg-bin": "^4.11.0",
+    "egg-ci": "^1.11.0",
+    "egg-mock": "^3.21.0",
+    "prettier": "^2.0.5"
+  },
+  "engines": {
+    "node": ">=10.0.0"
+  },
+  "scripts": {
+    "start": "egg-scripts start --daemon --title=tools --workers=1 --port=1026",
+    "stop": "egg-scripts stop --title=tools",
+    "dev": "egg-bin dev --port=1026",
+    "debug": "egg-bin debug",
+    "test": "npm run lint -- --fix && npm run test-local",
+    "test-local": "egg-bin test",
+    "cov": "egg-bin cov",
+    "ci": "npm run lint && npm run cov",
+    "autod": "autod"
+  },
+  "ci": {
+    "version": "10"
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "author": "rmlzy@outlook.com",
+  "license": "MIT"
+}

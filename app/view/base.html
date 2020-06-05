@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>{{ title }}</title>
+    <meta name="description" content="{{ description }}" />
+    <meta name="author" content="{{ author.name }}<{{ author.email }}>" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <link rel="shortcut icon" href="/public/front/img/favicon.ico" />
+    <link rel="stylesheet" href="/public/lib/bootstrap/css/theme.min.css" />
+    <link rel="stylesheet" href="/public/css/tools.css?v={{ version }}" />
+    {% block head %}{% endblock %}
+  </head>
+
+  <body>
+    <header class="navbar navbar-default navbar-static-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button class="collapsed navbar-toggle" data-target="#kis-navbar" data-toggle="collapse" type="button">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a href="/" class="navbar-brand">远子小站</a>
+        </div>
+
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li class="dropdown">
+              <a
+                href="#"
+                class="dropdown-toggle"
+                data-toggle="dropdown"
+                role="button"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >
+                开发工具
+                <b class="caret"></b>
+              </a>
+              <ul class="dropdown-menu">
+                <li><a href="/png2jpg.html">PNG转JPG</a></li>
+              </ul>
+            </li>
+            <li><a href="/navigation.html">网站导航</a></li>
+            <li><a href="https://rmlzy.com">博客</a></li>
+          </ul>
+          <form class="navbar-form navbar-right">
+            <div class="form-group">
+              <input type="text" class="form-control" placeholder="JSON格式化" />
+            </div>
+            <button type="submit" class="btn btn-default">搜索</button>
+          </form>
+        </div>
+      </div>
+    </header>
+
+    <div>
+      {% block body %}{% endblock %}
+    </div>
+
+    <footer class="well">
+      <div class="container">
+        <p>本站已经稳定运行 {{ systemRunning }} 天, 总访问量 {{ pv }} 次</p>
+        <p>源代码托管在 <a href="{{ repoUrl }}" target="_blank">Github</a>.</p>
+      </div>
+    </footer>
+
+    <script src="/public/lib/jquery/jquery-3.5.1.min.js"></script>
+    <script src="/public/lib/jquery/jquery.serializejson.min.js"></script>
+    <script src="/public/lib/layer/layer.js"></script>
+    <script src="/public/lib/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/public/lib/lodash/lodash.min.js"></script>
+    {% block foot %}{% endblock %}
+  </body>
+</html>
