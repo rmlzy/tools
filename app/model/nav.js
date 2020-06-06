@@ -2,7 +2,7 @@
 
 module.exports = (app) => {
   const { INTEGER, STRING } = app.Sequelize;
-  const Tool = app.model.define("Tool", {
+  const Nav = app.model.define("Nav", {
     id: {
       type: INTEGER(10),
       allowNull: false,
@@ -11,37 +11,45 @@ module.exports = (app) => {
       unique: true,
     },
 
-    // 名称
-    name: {
+    // 网站名称
+    title: {
       type: STRING(100),
       defaultValue: "",
     },
 
-    // 地址
+    // 网站地址
     url: {
       type: STRING(255),
       defaultValue: "",
       unique: true,
     },
 
-    // 描述
+    // 网站图标
+    logo: {
+      type: STRING(255),
+      defaultValue: "",
+    },
+
+    // 网站描述
     desc: {
       type: STRING(255),
       defaultValue: "",
     },
 
-    // 状态
-    status: {
-      type: STRING(10),
-      values: ["DONE", "WORKING", "DISABLED"],
-      defaultValue: "DONE",
+    // 排序, 值越大越靠前
+    sort: {
+      type: INTEGER,
+      defaultValue: 1,
     },
 
-    // 使用次数
-    used: {
+    // 点击数
+    clicked: {
       type: INTEGER,
       defaultValue: 0,
     },
   });
-  return Tool;
+  Nav.associate = function () {
+    app.model.Nav.belongsTo(app.model.Category, { foreignKey: "categoryId" });
+  };
+  return Nav;
 };

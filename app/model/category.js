@@ -2,7 +2,7 @@
 
 module.exports = (app) => {
   const { INTEGER, STRING } = app.Sequelize;
-  const Tool = app.model.define("Tool", {
+  const Category = app.model.define("Category", {
     id: {
       type: INTEGER(10),
       allowNull: false,
@@ -11,37 +11,21 @@ module.exports = (app) => {
       unique: true,
     },
 
-    // 名称
+    // 分类名称
     name: {
       type: STRING(100),
-      defaultValue: "",
-    },
-
-    // 地址
-    url: {
-      type: STRING(255),
       defaultValue: "",
       unique: true,
     },
 
-    // 描述
+    // 分类描述
     desc: {
       type: STRING(255),
       defaultValue: "",
     },
-
-    // 状态
-    status: {
-      type: STRING(10),
-      values: ["DONE", "WORKING", "DISABLED"],
-      defaultValue: "DONE",
-    },
-
-    // 使用次数
-    used: {
-      type: INTEGER,
-      defaultValue: 0,
-    },
   });
-  return Tool;
+  Category.associate = function () {
+    app.model.Category.hasMany(app.model.Nav, { foreignKey: "categoryId" });
+  };
+  return Category;
 };

@@ -16,10 +16,15 @@ module.exports = (app) => {
       defaultValue: "",
     },
 
+    status: {
+      type: STRING(10),
+      values: ["DONE", "WORKING", "REJECT"],
+      defaultValue: "DONE",
+    },
+
     email: {
       type: STRING(100),
       defaultValue: "",
-      unique: true,
     },
 
     content: {

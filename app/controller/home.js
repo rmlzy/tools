@@ -19,6 +19,14 @@ class HomeController extends Controller {
         used: "200k",
       },
       {
+        name: "在线MD5加密",
+        url: "/md5.html",
+        desc: "在线加密字符串",
+        used: "0",
+      },
+    ];
+    const comingTools = [
+      {
         name: "JavaScript工具",
         url: "/javascript.html",
         desc: "在线js美化、解压缩、混淆",
@@ -28,16 +36,8 @@ class HomeController extends Controller {
         name: "CSS工具",
         url: "/css.html",
         desc: "在线css美化、格式化、压缩",
-        used: "200k",
+        used: "10k",
       },
-      {
-        name: "在线MD5加密",
-        url: "/md5.html",
-        desc: "在线加密字符串",
-        used: "0",
-      },
-    ];
-    const comingTools = [
       {
         name: "时间格式化",
         url: "/dayjs.html",
@@ -53,7 +53,7 @@ class HomeController extends Controller {
       {
         name: "JSON格式化",
         url: "/json-formatter.html",
-        desc: "一个免费的图片转换工具",
+        desc: "JSON格式验证、序列化",
         used: "0",
       },
       {

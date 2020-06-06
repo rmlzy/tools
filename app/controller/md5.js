@@ -33,7 +33,6 @@ class Md5Controller extends Controller {
         },
       };
     } catch (e) {
-      console.log(e);
       ctx.logger.error("Error while Md5Controller.encrypt, stack: ", e);
       ctx.body = { success: false, message: "内部服务器错误" };
     }
