@@ -9,8 +9,9 @@ const compressing = require("compressing");
 
 class Png2JpgController extends Controller {
   async render() {
-    const { ctx } = this;
+    const { ctx, service } = this;
     const uuid = uuidv4();
+    await service.dict.addTotalPV();
     await ctx.render("png2jpg.html", {
       pageTitle: "PNG 转 JPG",
       key: uuid,
@@ -49,7 +50,7 @@ class Png2JpgController extends Controller {
       ctx.body = { success: true, data: "SUCCESS" };
     } catch (e) {
       ctx.logger.error("Error while Png2JpgController.convert, stack: ", e);
-      ctx.body = { success: false, message: ctx.__("InnerErrorMsg") };
+      ctx.body = { success: false, message: "内部服务器错误" };
     }
   }
 
@@ -66,7 +67,7 @@ class Png2JpgController extends Controller {
       ctx.body = { success: true, data: `/public/temp/${key}.zip` };
     } catch (e) {
       ctx.logger.error("Error while Png2JpgController.downloadAll, stack: ", e);
-      ctx.body = { success: false, message: ctx.__("InnerErrorMsg") };
+      ctx.body = { success: false, message: "内部服务器错误" };
     }
   }
 }

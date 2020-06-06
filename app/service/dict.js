@@ -1,29 +1,31 @@
 const Service = require("egg").Service;
-const _ = require("lodash");
 
-class TagService extends Service {
+class DictService extends Service {
   async get(key) {
     const { ctx } = this;
-    return ctx.model.Dict.findOne({ where: { key } });
+    const row = await ctx.model.Dict.findOne({ where: { key } });
+    return row ? row.get({ plain: true }).value : null;
   }
 
-  async set(key, path, value) {
+  async set(key, value) {
     const { ctx } = this;
-    let val = {};
-    const valStr = await this.get(key);
-    if (valStr) {
-      try {
-        val = JSON.parse(valStr);
-      } catch (e) {
-        // ignore
-      }
-      _.set(val, path, value);
-      return ctx.model.Dict.update({ value: val }, { where: { key } });
+    const existed = await this.get(key);
+    if (existed) {
+      return ctx.model.Dict.update({ value }, { where: { key } });
     } else {
-      _.set(val, path, value);
-      return ctx.model.Dict.create(value);
+      return ctx.model.Dict.create({ key, value });
+    }
+  }
+
+  async addTotalPV() {
+    const { ctx } = this;
+    try {
+      const pv = await this.get("totalPV");
+      await this.set("totalPV", Number(pv) + 1);
+    } catch (e) {
+      ctx.logger.error("Error while DictService.addTotalPV, stack: ", e);
     }
   }
 }
 
-module.exports = TagService;
+module.exports = DictService;

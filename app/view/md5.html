@@ -1,0 +1,95 @@
+{% extends "./base.html" %}
+
+<!-- Head -->
+{% block head %} {% endblock %}
+
+<!-- Body -->
+{% block body %}
+<div class="container">
+  <ol class="breadcrumb">
+    <li><a href="/">首页</a></li>
+    <li class="active">{{ pageTitle }}</li>
+  </ol>
+
+  <h2>MD5加密说明:</h2>
+  <ol>
+    <li>
+      MD5 信息摘要算法（英语：MD5 Message-Digest
+      Algorithm），一种被广泛使用的密码散列函数，可以产生出一个128位（16字节）的散列值（hash
+      value），用于确保信息传输完整一致。MD5由美国密码学家罗纳德·李维斯特（Ronald Linn
+      Rivest）设计，于1992年公开，用以取代MD4算法。这套算法的程序在 RFC 1321
+      标准中被加以规范。1996年后该算法被证实存在弱点，可以被加以破解，对于需要高度安全性的数据，专家一般建议改用其他算法，如SHA-2。
+      2004年，证实 MD5 算法无法防止碰撞（collision），因此不适用于安全性认证，如SSL公开密钥认证或是数字签名等用途。
+    </li>
+    <li>MD5 加密理论上是一种不可逆的加密算法</li>
+    <li>16 位MD5实际上取的都是 32 位的8~24位</li>
+    <li>本工具基于<a href="https://github.com/blueimp/JavaScript-MD5">blueimp-md5</a>实现</li>
+  </ol>
+  <br />
+
+  <div class="row">
+    <div class="col-sm-12 col-md-7 col-lg-7">
+      <textarea id="js_source" class="form-control" placeholder="原文放在这里" rows="14"></textarea>
+      <div style="padding: 20px 0 30px;">
+        <button id="js_resetBtn" class="btn btn-default">重置</button>
+        <button id="js_encryptBtn" class="btn btn-primary">加密</button>
+      </div>
+    </div>
+    <div class="col-sm-12 col-md-5 col-lg-5">
+      <div class="form-group">
+        <label>32位大写</label>
+        <input type="text" class="form-control" id="js_32Upper" placeholder="32位大写" />
+      </div>
+      <div class="form-group">
+        <label>32位小写</label>
+        <input type="text" class="form-control" id="js_32Lower" placeholder="32位小写" />
+      </div>
+      <div class="form-group">
+        <label>16位大写</label>
+        <input type="text" class="form-control" id="js_16Upper" placeholder="16位大写" />
+      </div>
+      <div class="form-group">
+        <label>16位小写</label>
+        <input type="text" class="form-control" id="js_16Lower" placeholder="16位小写" />
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+<!-- Foot -->
+{% block foot %}
+<script>
+  $(document).ready(function () {
+    $("#js_resetBtn").on("click", function () {
+      $("#js_source").val("");
+      $("#js_32Upper").val("");
+      $("#js_32Lower").val("");
+      $("#js_16Upper").val("");
+      $("#js_16Lower").val("");
+    });
+
+    $("#js_encryptBtn").on("click", function () {
+      var source = $("#js_source").val();
+      if (source === "") {
+        return;
+      }
+      $.ajax({
+        type: "POST",
+        url: "/api/md5/encrypt",
+        data: { source: source },
+        success: function (res) {
+          if (res.success) {
+            $("#js_32Upper").val(res.data.upper32);
+            $("#js_32Lower").val(res.data.lower32);
+            $("#js_16Upper").val(res.data.upper16);
+            $("#js_16Lower").val(res.data.lower16);
+          } else {
+            layer.msg(res.message, { icon: 5 });
+          }
+        },
+      });
+    });
+  });
+</script>
+{% endblock %}

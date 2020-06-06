@@ -12,6 +12,9 @@ module.exports = () => {
     ctx.locals.author = ctx.app.config.author;
     ctx.locals.repoUrl = ctx.app.config.repoUrl;
 
+    const pv = await ctx.service.dict.get("totalPV");
+    ctx.locals.totalPV = pv;
+
     const deployedDate = dayjs(ctx.app.config.firstDeployDate);
     ctx.locals.systemRunning = today.diff(deployedDate, "day");
     await next();

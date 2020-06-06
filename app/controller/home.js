@@ -4,7 +4,7 @@ const Controller = require("egg").Controller;
 
 class HomeController extends Controller {
   async render() {
-    const { ctx } = this;
+    const { ctx, service } = this;
     const onlineTools = [
       {
         name: "PNG转JPG",
@@ -30,6 +30,12 @@ class HomeController extends Controller {
         desc: "在线css美化、格式化、压缩",
         used: "200k",
       },
+      {
+        name: "在线MD5加密",
+        url: "/md5.html",
+        desc: "在线加密字符串",
+        used: "0",
+      },
     ];
     const comingTools = [
       {
@@ -41,12 +47,6 @@ class HomeController extends Controller {
       {
         name: "图片压缩",
         url: "/tiny-image.html",
-        desc: "一个免费的图片转换工具",
-        used: "0",
-      },
-      {
-        name: "在线MD5加密",
-        url: "/md5.html",
         desc: "一个免费的图片转换工具",
         used: "0",
       },
@@ -63,6 +63,7 @@ class HomeController extends Controller {
         used: "0",
       },
     ];
+    await service.dict.addTotalPV();
     await ctx.render("home.html", { onlineTools, comingTools });
   }
 }
