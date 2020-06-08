@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>登录控制台</title>
+    <meta name="description" content="{{ description }}" />
+    <meta name="author" content="{{ author.name }}<{{ author.email }}>" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <link rel="shortcut icon" href="/public/front/img/favicon.ico" />
+    <link rel="stylesheet" href="/public/lib/bootstrap/css/theme.min.css" />
+    <link rel="stylesheet" href="/public/css/admin.css?v={{ version }}" />
+    {% block head %}{% endblock %}
+  </head>
+
+  <body>
+    <div id="js_loginPage" class="login-page">
+      <form id="js_loginForm" class="login__form" action="#">
+        <h2 class="login__form__title">登录</h2>
+        <p class="login__form__desc"></p>
+        <input type="hidden" name="code" value="{{ code }}" />
+
+        <div class="form-group">
+          <label class="control-label">邮箱</label>
+          <div class="form-control-static">
+            <input class="form-control" name="email" type="email" placeholder="邮箱" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="control-label">密码</label>
+          <div class="form-control-static">
+            <input class="form-control" name="password" type="password" placeholder="密码" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="control-label">验证码</label>
+          <div class="form-control-static">
+            <div class="row">
+              <div class="col-xs-8">
+                <input class="form-control" name="captcha" type="text" placeholder="验证码" />
+              </div>
+              <div class="col-xs-4">
+                <div id="js_captcha" class="login__form__captcha"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="form-control-static">
+            <button type="submit" class="btn btn-primary btn-block">提交</button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <script src="/public/lib/jquery/jquery-3.5.1.min.js"></script>
+    <script src="/public/lib/jquery/jquery.serializejson.min.js"></script>
+    <script src="/public/lib/layer/layer.js"></script>
+    <script src="/public/lib/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/public/lib/lodash/lodash.min.js"></script>
+    <script>
+      $(document).ready(function () {
+        setRandomBg();
+        setCaptcha();
+
+        $("#js_captcha").on("click", function () {
+          setCaptcha();
+        });
+
+        function setRandomBg() {
+          var bgs = [
+            "/public/img/login-bg-1.jpg",
+            "/public/img/login-bg-2.jpg",
+            "/public/img/login-bg-3.jpg",
+            "/public/img/login-bg-4.jpg",
+          ];
+          var randomIndex = _.random(0, bgs.length - 1, false);
+          $("#js_loginPage").css("background-image", "url(" + bgs[randomIndex] + ")");
+        }
+
+        function setCaptcha() {
+          $.ajax({
+            type: "GET",
+            url: "/api/generateImageCaptcha",
+            dataType: "json",
+            success: function (res) {
+              if (res.success) {
+                $("#js_captcha").html(res.data);
+              } else {
+                layer.msg(res.message, { icon: 5 });
+              }
+            },
+          });
+        }
+
+        $("#js_loginForm").on("submit", function (evt) {
+          evt.preventDefault();
+          var formData = $(this).serializeJSON();
+          layer.load();
+          $.ajax({
+            type: "POST",
+            url: "/api/login",
+            data: formData,
+            success: function (res) {
+              layer.closeAll("loading");
+              if (res.success) {
+                window.location.href = "/admin/home.html";
+              } else {
+                setCaptcha();
+                layer.msg(res.message, { icon: 5 });
+              }
+            },
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

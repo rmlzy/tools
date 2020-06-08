@@ -34,4 +34,12 @@ module.exports = (app) => {
   router.get("/admin/category.html", controller.admin.category.render);
   router.get("/admin/nav.html", controller.admin.nav.render);
   router.get("/admin/tool.html", controller.admin.tool.render);
+  // Admin API
+  router.get("/api/generateImageCaptcha", controller.admin.login.generateImageCaptcha);
+  router.post("/api/login", controller.admin.login.login);
+  // Category
+  router.get("/api/category/:id", controller.admin.category.detail);
+  router.post("/api/category", controller.admin.category.create);
+  router.put("/api/category/:id", controller.admin.category.update);
+  router.delete("/api/category/:id", controller.admin.category.delete);
 };

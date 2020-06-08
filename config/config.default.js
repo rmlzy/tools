@@ -8,7 +8,7 @@
 module.exports = (appInfo) => {
   const config = (exports = {});
 
-  config.keys = appInfo.name + "_tools";
+  config.keys = "TOOLS";
 
   // 中间件
   config.middleware = ["locals"];

@@ -1,7 +1,9 @@
 "use strict";
 
+const dayjs = require("dayjs");
+
 module.exports = (app) => {
-  const { INTEGER, STRING } = app.Sequelize;
+  const { INTEGER, STRING, DATE } = app.Sequelize;
   const Category = app.model.define("Category", {
     id: {
       type: INTEGER(10),
@@ -22,6 +24,22 @@ module.exports = (app) => {
     desc: {
       type: STRING(255),
       defaultValue: "",
+    },
+
+    createdAt: {
+      type: DATE,
+      get() {
+        const createdAt = this.getDataValue("createdAt");
+        return dayjs(createdAt).format("YYYY-MM-DD HH:mm:ss");
+      },
+    },
+
+    updatedAt: {
+      type: DATE,
+      get() {
+        const updatedAt = this.getDataValue("updatedAt");
+        return dayjs(updatedAt).format("YYYY-MM-DD HH:mm:ss");
+      },
     },
   });
   Category.associate = function () {

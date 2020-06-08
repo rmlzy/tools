@@ -4,7 +4,7 @@ const dayjs = require("dayjs");
 
 module.exports = (app) => {
   const { INTEGER, STRING, DATE } = app.Sequelize;
-  const Nav = app.model.define("Nav", {
+  const User = app.model.define("User", {
     id: {
       type: INTEGER(10),
       allowNull: false,
@@ -13,41 +13,48 @@ module.exports = (app) => {
       unique: true,
     },
 
-    // 网站名称
-    title: {
+    // 邮箱, 用于登录
+    email: {
       type: STRING(100),
-      defaultValue: "",
-    },
-
-    // 网站地址
-    url: {
-      type: STRING(255),
-      defaultValue: "",
+      allowNull: false,
       unique: true,
     },
 
-    // 网站图标
-    logo: {
-      type: STRING(255),
+    // 密码, 用于登录
+    password: {
+      type: STRING(50),
       defaultValue: "",
     },
 
-    // 网站描述
-    desc: {
-      type: STRING(255),
+    // 用户等级
+    level: {
+      type: STRING(10),
+      values: ["USER", "ADMIN"],
+      defaultValue: "USER",
+    },
+
+    // 用户昵称
+    nickname: {
+      type: STRING(20),
       defaultValue: "",
     },
 
-    // 排序, 值越大越靠前
-    sort: {
-      type: INTEGER,
-      defaultValue: 1,
+    // 头像地址
+    avatar: {
+      type: STRING(500),
+      defaultValue: "",
     },
 
-    // 点击数
-    clicked: {
-      type: INTEGER,
-      defaultValue: 0,
+    // 状态, DISABLE: 停用, ENABLE: 启用
+    status: {
+      type: STRING(20),
+      defaultValue: "ENABLE",
+    },
+
+    // 用户认证信息
+    token: {
+      type: STRING(255),
+      defaultValue: "",
     },
 
     createdAt: {
@@ -66,8 +73,5 @@ module.exports = (app) => {
       },
     },
   });
-  Nav.associate = function () {
-    app.model.Nav.belongsTo(app.model.Category, { foreignKey: "categoryId" });
-  };
-  return Nav;
+  return User;
 };
