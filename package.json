@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "blueimp-md5": "^2.16.0",
+    "cheerio": "^1.0.0-rc.3",
     "compressing": "^1.5.1",
     "dayjs": "^1.8.28",
     "egg": "^2.15.1",

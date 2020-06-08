@@ -37,10 +37,16 @@
       <tr>
         <th scope="row">{{ loop.index }}</th>
         <td>{{ nav.name }}</td>
-        <td>{{ nav.logo }}</td>
+        <td>
+          {% if nav.logo %}
+          <img width="18" src="{{ nav.logo }}" alt="{{ nav.name }}" />
+          {% else %}
+          <img width="18" src="/public/img/default-website-logo.png" alt="{{ nav.name }}" />
+          {% endif %}
+        </td>
         <td>{{ nav.sort }}</td>
         <td>{{ nav.clicked }}</td>
-        <td>{{ nav.desc }}</td>
+        <td style="width: 200px">{{ nav.desc }}</td>
         <td>{{ nav.createdAt }}</td>
         <td>{{ nav.updatedAt }}</td>
         <td>
@@ -77,7 +83,12 @@
             </div>
             <div class="form-group">
               <label class="control-label">地址:</label>
-              <input type="text" class="form-control" name="url" />
+              <div class="input-group">
+                <input type="text" class="form-control" name="url" />
+                <span class="input-group-btn">
+                  <button id="js_detectBtn" class="btn btn-default" type="button">探测</button>
+                </span>
+              </div>
             </div>
             <div class="form-group">
               <label class="control-label">排序:</label>
@@ -228,9 +239,7 @@
             $form.find("input[name='url']").val(res.data.url);
             $form.find("input[name='sort']").val(res.data.sort);
             $form.find("input[name='logo']").val(res.data.logo);
-            $form
-              .find("input:radio[name='categoryId'][value='" + res.data.categoryId + "']")
-              .prop("checked", true);
+            $form.find("input:radio[name='categoryId'][value='" + res.data.categoryId + "']").prop("checked", true);
             $form.find("textarea[name='desc']").val(res.data.desc);
             $("#js_updateModel").modal("show");
           } else {
@@ -263,6 +272,31 @@
         },
         function () {}
       );
+    });
+
+    $("#js_detectBtn").on("click", function () {
+      var $form = $("#js_createForm")
+      var url = $form.find("input[name='url']").val();
+      if (!url) {
+        return;
+      }
+      layer.load();
+      $.ajax({
+        type: "POST",
+        url: "/api/nav/detect",
+        data: { url: url },
+        success: function (res) {
+          layer.closeAll("loading");
+          if (res.success) {
+            $form.find("input[name='name']").val(res.data.name);
+            $form.find("input[name='url']").val(res.data.url);
+            $form.find("input[name='desc']").val(res.data.desc);
+            $form.find("input[name='logo']").val(res.data.logo);
+          } else {
+            layer.msg(res.message, { icon: 5 });
+          }
+        },
+      });
     });
   });
 </script>

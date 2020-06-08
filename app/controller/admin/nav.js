@@ -1,6 +1,7 @@
 "use strict";
 
 const Controller = require("egg").Controller;
+const cheerio = require("cheerio");
 
 class NavController extends Controller {
   async render() {
@@ -110,6 +111,44 @@ class NavController extends Controller {
       ctx.body = { success: true, message: "操作成功" };
     } catch (e) {
       ctx.logger.error("Error while NavController.clicked, stack: ", e);
+      ctx.body = { success: false, message: "内部服务器错误" };
+    }
+  }
+
+  async detect() {
+    const { ctx } = this;
+    try {
+      let { url = "" } = ctx.request.body;
+      if (url.endsWith("/")) {
+        url = url.slice(0, -1);
+      }
+      const res = await ctx.curl(url, { type: "GET", dataType: "text" });
+      const $ = cheerio.load(res.data);
+      const name = $("title").text() || "";
+      const desc = $("meta[name='description']").text() || "";
+
+      // ----- Parse Logo Url Start -----
+      let logo = $("link[rel='shortcut icon']").attr("href");
+      if (!logo) {
+        logo = $("link[rel='icon']").attr("href");
+      }
+      if (logo && !logo.includes("http")) {
+        logo = url + logo;
+      }
+      // ----- Parse Logo Url End -----
+
+      ctx.body = {
+        success: true,
+        message: "操作成功",
+        data: {
+          name: name ? name.trim() : "",
+          url,
+          logo,
+          desc: desc ? desc.trim() : "",
+        },
+      };
+    } catch (e) {
+      ctx.logger.error("Error while NavController.detect, stack: ", e);
       ctx.body = { success: false, message: "内部服务器错误" };
     }
   }

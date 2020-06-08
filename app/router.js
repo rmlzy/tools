@@ -48,4 +48,5 @@ module.exports = (app) => {
   router.put("/api/nav/:id", controller.admin.nav.update);
   router.delete("/api/nav/:id", controller.admin.nav.delete);
   router.post("/api/nav/clicked", controller.admin.nav.clicked);
+  router.post("/api/nav/detect", controller.admin.nav.detect);
 };

@@ -8,11 +8,12 @@ class HomeController extends Controller {
     let categories = [];
     try {
       await service.dict.addTotalPV();
-      categories = await service.category.findAll();
+      categories = await service.category.findAll({
+        order: [["id", "DESC"]],
+      });
     } catch (e) {
       // ignore
     }
-    console.log(categories);
     await ctx.render("nav.html", { pageTitle: "网站导航", categories });
   }
 }

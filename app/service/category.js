@@ -6,6 +6,7 @@ class CategoryService extends Service {
     return ctx.model.Category.findAll({
       ...condition,
       include: [{ model: ctx.model.Nav }],
+      order: [[ctx.model.Nav, "sort", "DESC"]],
     });
   }
 

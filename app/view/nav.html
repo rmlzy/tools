@@ -22,7 +22,9 @@
             <li class="list-group-item">
               <span class="badge">{{ nav.clicked }}</span>
               {% if nav.logo %}
-              <img width="18" src="{{ nav.logo }}" alt="{{ nav.name }}" class="img-circle" />
+              <img width="18" style="margin-top: -3px;" src="{{ nav.logo }}" alt="{{ nav.name }}" class="img-circle" />
+              {% else %}
+              <img width="18" style="margin-top: -3px;" src="/public/img/default-website-logo.png" alt="{{ nav.name }}" class="img-circle" />
               {% endif %}
               <a class="js_navLink" data-id="{{ nav.id }}" href="{{ nav.url }}" target="_blank" title="{{ nav.name }}">
                 {{ nav.name }}
