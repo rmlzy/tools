@@ -14,7 +14,7 @@ module.exports = (app) => {
     },
 
     // 网站名称
-    title: {
+    name: {
       type: STRING(100),
       defaultValue: "",
     },

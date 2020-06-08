@@ -6,11 +6,264 @@
 <!-- Body -->
 {% block body %}
 <div class="container">
+  <ol class="breadcrumb">
+    <li><a href="/admin/home.html">控制台</a></li>
+    <li class="active">网站导航</li>
+  </ol>
+
+  <p>
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#js_createModel">
+      <i class="glyphicon glyphicon-plus"></i>
+      创建
+    </button>
+  </p>
+
+  <table class="table table-striped table-bordered table-responsive">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>名称</th>
+        <th>图标</th>
+        <th>排序</th>
+        <th>点击数</th>
+        <th>描述</th>
+        <th>创建时间</th>
+        <th>更新时间</th>
+        <th>操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for nav in navs %}
+      <tr>
+        <th scope="row">{{ loop.index }}</th>
+        <td>{{ nav.name }}</td>
+        <td>{{ nav.logo }}</td>
+        <td>{{ nav.sort }}</td>
+        <td>{{ nav.clicked }}</td>
+        <td>{{ nav.desc }}</td>
+        <td>{{ nav.createdAt }}</td>
+        <td>{{ nav.updatedAt }}</td>
+        <td>
+          <a data-id="{{ nav.id }}" class="js_editBtn" style="margin-right: 10px;" href="javascript:;">
+            编辑
+          </a>
+          <a data-id="{{ nav.id }}" class="js_deleteBtn text-danger" href="javascript:;">
+            删除
+          </a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <div class="modal fade" id="js_createModel" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <form id="js_createForm" action="#">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+            <h4 class="modal-title">创建网站</h4>
+          </div>
+          <div class="modal-body">
+            <div class="form-group">
+              <label class="control-label">名称:</label>
+              <input type="text" class="form-control" name="name" />
+            </div>
+            <div class="form-group">
+              <label class="control-label">图标:</label>
+              <input type="text" class="form-control" name="logo" />
+            </div>
+            <div class="form-group">
+              <label class="control-label">地址:</label>
+              <input type="text" class="form-control" name="url" />
+            </div>
+            <div class="form-group">
+              <label class="control-label">排序:</label>
+              <input type="number" class="form-control" name="sort" />
+            </div>
+            <div class="form-group">
+              <label class="control-label">网站:</label>
+              <div class="control-group">
+                {% for category in categories %}
+                <label class="radio-inline">
+                  <input type="radio" name="categoryId" value="{{ category.id }}" />
+                  {{ category.name }}
+                </label>
+                {% endfor %}
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label">描述:</label>
+              <textarea class="form-control" name="desc"></textarea>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            <button type="submit" class="btn btn-primary">保存</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal fade" id="js_updateModel" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <form id="js_updateForm" action="#">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+            <h4 class="modal-title">更新网站</h4>
+          </div>
+          <div class="modal-body">
+            <div class="form-group hidden">
+              <label class="control-label">ID:</label>
+              <input type="text" class="form-control" name="id" />
+            </div>
+
+            <div class="form-group">
+              <label class="control-label">名称:</label>
+              <input type="text" class="form-control" name="name" />
+            </div>
+            <div class="form-group">
+              <label class="control-label">图标:</label>
+              <input type="text" class="form-control" name="logo" />
+            </div>
+            <div class="form-group">
+              <label class="control-label">地址:</label>
+              <input type="text" class="form-control" name="url" />
+            </div>
+            <div class="form-group">
+              <label class="control-label">排序:</label>
+              <input type="number" class="form-control" name="sort" />
+            </div>
+            <div class="form-group">
+              <label class="control-label">网站:</label>
+              <div class="control-group">
+                {% for category in categories %}
+                <label class="radio-inline">
+                  <input type="radio" name="categoryId" value="{{ category.id }}" />
+                  {{ category.name }}
+                </label>
+                {% endfor %}
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label">描述:</label>
+              <textarea class="form-control" name="desc"></textarea>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            <button type="submit" class="btn btn-primary">保存</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
 </div>
 {% endblock %}
 
 <!-- Foot -->
 {% block foot %}
 <script>
+  $(document).ready(function () {
+    $("#js_createForm").on("submit", function (evt) {
+      evt.preventDefault();
+      var formData = $(this).serializeJSON();
+      layer.load();
+      $.ajax({
+        type: "POST",
+        url: "/api/nav",
+        data: formData,
+        success: function (res) {
+          layer.closeAll("loading");
+          if (res.success) {
+            $("#js_createModel").modal("hide");
+            window.location.reload();
+          } else {
+            layer.msg(res.message, { icon: 5 });
+          }
+        },
+        error: function () {},
+      });
+    });
+
+    $("#js_updateForm").on("submit", function (evt) {
+      evt.preventDefault();
+      var formData = $(this).serializeJSON();
+      layer.load();
+      $.ajax({
+        type: "PUT",
+        url: "/api/nav/" + formData.id,
+        data: formData,
+        success: function (res) {
+          layer.closeAll("loading");
+          if (res.success) {
+            $("#js_createModel").modal("hide");
+            window.location.reload();
+          } else {
+            layer.msg(res.message, { icon: 5 });
+          }
+        },
+        error: function () {},
+      });
+    });
+
+    $(".js_editBtn").on("click", function () {
+      var id = $(this).data("id");
+      var $form = $("#js_updateForm");
+      layer.load();
+      $.ajax({
+        type: "GET",
+        url: "/api/nav/" + id,
+        success: function (res) {
+          layer.closeAll("loading");
+          if (res.success) {
+            $form.find("input[name='id']").val(res.data.id);
+            $form.find("input[name='name']").val(res.data.name);
+            $form.find("input[name='url']").val(res.data.url);
+            $form.find("input[name='sort']").val(res.data.sort);
+            $form.find("input[name='logo']").val(res.data.logo);
+            $form
+              .find("input:radio[name='categoryId'][value='" + res.data.categoryId + "']")
+              .prop("checked", true);
+            $form.find("textarea[name='desc']").val(res.data.desc);
+            $("#js_updateModel").modal("show");
+          } else {
+            layer.msg(res.message, { icon: 5 });
+          }
+        },
+      });
+    });
+
+    $(".js_deleteBtn").on("click", function () {
+      var id = $(this).data("id");
+      layer.confirm(
+        "是否删除",
+        {
+          btn: ["确认", "取消"],
+        },
+        function () {
+          $.ajax({
+            type: "DELETE",
+            url: "/api/nav/" + id,
+            success: function (res) {
+              layer.closeAll("loading");
+              if (res.success) {
+                window.location.reload();
+              } else {
+                layer.msg(res.message, { icon: 5 });
+              }
+            },
+          });
+        },
+        function () {}
+      );
+    });
+  });
 </script>
 {% endblock %}

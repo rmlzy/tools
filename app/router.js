@@ -42,4 +42,10 @@ module.exports = (app) => {
   router.post("/api/category", controller.admin.category.create);
   router.put("/api/category/:id", controller.admin.category.update);
   router.delete("/api/category/:id", controller.admin.category.delete);
+  // Nav
+  router.get("/api/nav/:id", controller.admin.nav.detail);
+  router.post("/api/nav", controller.admin.nav.create);
+  router.put("/api/nav/:id", controller.admin.nav.update);
+  router.delete("/api/nav/:id", controller.admin.nav.delete);
+  router.post("/api/nav/clicked", controller.admin.nav.clicked);
 };

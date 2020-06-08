@@ -6,12 +6,55 @@
 <!-- Body -->
 {% block body %}
 <div class="container">
-    <ol class="breadcrumb">
-        <li><a href="/">首页</a></li>
-        <li class="active">{{ pageTitle }}</li>
-    </ol>
+  <ol class="breadcrumb">
+    <li><a href="/">首页</a></li>
+    <li class="active">{{ pageTitle }}</li>
+  </ol>
+
+  <div class="row">
+    {% for category in categories %}
+    <div class="col-lg-12">
+      <div class="panel panel-default">
+        <div class="panel-heading">{{ category.name }}</div>
+        <div class="panel-body">
+          <ul class="list-group">
+            {% for nav in category.Navs %}
+            <li class="list-group-item">
+              <span class="badge">{{ nav.clicked }}</span>
+              {% if nav.logo %}
+              <img width="18" src="{{ nav.logo }}" alt="{{ nav.name }}" class="img-circle" />
+              {% endif %}
+              <a class="js_navLink" data-id="{{ nav.id }}" href="{{ nav.url }}" target="_blank" title="{{ nav.name }}">
+                {{ nav.name }}
+              </a>
+              <span>&nbsp;•&nbsp;</span>
+              <span>{{ nav.desc }}</span>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
 </div>
 {% endblock %}
 
 <!-- Foot -->
-{% block foot %} {% endblock %}
+{% block foot %}
+<script>
+  $(document).ready(function () {
+    $(".js_navLink").on("click", function () {
+      var id = $(this).data("id");
+      $.ajax({
+        type: "POST",
+        url: "/api/nav/clicked",
+        data: { id: id },
+        success: function (res) {
+          console.log(res);
+        },
+      });
+    });
+  });
+</script>
+{% endblock %}

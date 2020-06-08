@@ -3,12 +3,18 @@ const Service = require("egg").Service;
 class CategoryService extends Service {
   async findAll(condition) {
     const { ctx } = this;
-    return ctx.model.Category.findAll(condition);
+    return ctx.model.Category.findAll({
+      ...condition,
+      include: [{ model: ctx.model.Nav }],
+    });
   }
 
   async findOne(condition) {
     const { ctx } = this;
-    return ctx.model.Category.findOne(condition);
+    return ctx.model.Category.findOne({
+      ...condition,
+      include: [{ model: ctx.model.Nav }],
+    });
   }
 
   async create(row, condition) {
