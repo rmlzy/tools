@@ -1,0 +1,44 @@
+{% extends "./base.html" %}
+
+<!-- Head -->
+{% block head %} {% endblock %}
+
+<!-- Body -->
+{% block body %}
+<div class="container">
+  <ol class="breadcrumb">
+    <li><a href="/">首页</a></li>
+    <li class="active">{{ pageTitle }}</li>
+  </ol>
+
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="panel panel-default">
+        <div class="panel-heading">历史上的今天</div>
+        <div class="panel-body">
+          {% for item in toh %}
+          <div class="media">
+            <div class="media-body">
+              <h4 class="media-heading">{{ loop.index }}.&nbsp;{{ item.title }}</h4>
+              <p class="text-success">
+                <span>{{ item.year }}年{{ item.month }}月{{ item.day }}日</span>
+                <span>&nbsp;•&nbsp;</span>
+                <span>{{ item.lunar }}</span>
+              </p>
+              <p>{{ item.des }}</p>
+            </div>
+            {% if item.pic %}
+            <div class="media-left"><img class="media-object" src="{{ item.pic }}" style="height: 64px;" /></div>
+            {% endif %}
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+<!-- Foot -->
+{% block foot %}
+{% endblock %}

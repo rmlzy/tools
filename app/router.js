@@ -23,6 +23,9 @@ module.exports = (app) => {
   // HTTP Code
   router.get("/tool/http-code.html", controller.httpCode.render);
 
+  // 历史上的今天
+  router.get("/tool/toh.html", controller.toh.render);
+
   // MD5
   router.get("/tool/md5.html", controller.md5.render);
   router.post("/api/md5/encrypt", controller.md5.encrypt);
