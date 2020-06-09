@@ -6,7 +6,7 @@
     <meta name="description" content="{{ description }}" />
     <meta name="author" content="{{ author.name }}<{{ author.email }}>" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-    <link rel="shortcut icon" href="/public/front/img/favicon.ico" />
+    <link rel="shortcut icon" href="/public/img/favicon.png" />
     <link rel="stylesheet" href="/public/lib/bootstrap/css/theme.min.css" />
     <link rel="stylesheet" href="/public/css/tools.css?v={{ version }}" />
     {% block head %}{% endblock %}
@@ -22,11 +22,14 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a href="/" class="navbar-brand">{{ title }}</a>
+          <a href="/" class="navbar-brand">
+            <img width="20" src="/public/img/favicon.png" alt="{{ title }}" />
+          </a>
         </div>
 
         <div class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
+            <li><a href="/">在线工具</a></li>
             <li><a href="/nav.html">网站导航</a></li>
             <li><a href="https://rmlzy.com">博客</a></li>
             <li><a href="/i-need-this.html">申请收录</a></li>
