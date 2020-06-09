@@ -5,66 +5,16 @@ const Controller = require("egg").Controller;
 class HomeController extends Controller {
   async render() {
     const { ctx, service } = this;
-    const onlineTools = [
-      {
-        name: "PNG转JPG",
-        url: "/png2jpg.html",
-        desc: "在线转换图片格式",
-        used: "200k",
-      },
-      {
-        name: "HTTP状态码对照表",
-        url: "/http-code.html",
-        desc: "HTTP Code",
-        used: "200k",
-      },
-      {
-        name: "在线MD5加密",
-        url: "/md5.html",
-        desc: "在线加密字符串",
-        used: "0",
-      },
-    ];
-    const comingTools = [
-      {
-        name: "JavaScript工具",
-        url: "/javascript.html",
-        desc: "在线js美化、解压缩、混淆",
-        used: "200k",
-      },
-      {
-        name: "CSS工具",
-        url: "/css.html",
-        desc: "在线css美化、格式化、压缩",
-        used: "10k",
-      },
-      {
-        name: "时间格式化",
-        url: "/dayjs.html",
-        desc: "在线格式化时间",
-        used: "0",
-      },
-      {
-        name: "图片压缩",
-        url: "/tiny-image.html",
-        desc: "一个免费的图片转换工具",
-        used: "0",
-      },
-      {
-        name: "JSON格式化",
-        url: "/json-formatter.html",
-        desc: "JSON格式验证、序列化",
-        used: "0",
-      },
-      {
-        name: "放假安排",
-        url: "/holiday.html",
-        desc: "放假安排",
-        used: "0",
-      },
-    ];
+    let doneTools = [];
+    let workingTools = [];
+    try {
+      doneTools = await service.tool.findAll({ where: { status: "DONE" } });
+      workingTools = await service.tool.findAll({ where: { status: "WORKING" } });
+    } catch (e) {
+      // ignore
+    }
     await service.dict.addTotalPV();
-    await ctx.render("home.html", { onlineTools, comingTools });
+    await ctx.render("home.html", { doneTools, workingTools });
   }
 }
 

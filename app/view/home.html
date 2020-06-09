@@ -6,33 +6,18 @@
 <!-- Body -->
 {% block body %}
 <div class="container">
-<!--  <div class="alert alert-warning alert-dismissible fade in" role="alert">-->
-<!--    <button type="button" class="close" data-dismiss="alert" aria-label="Close">-->
-<!--      <span aria-hidden="true">×</span>-->
-<!--    </button>-->
-<!--    <h4>欢迎使用程序员工具箱</h4>-->
-<!--    <p>本站所有的工具都是开源免费的, 源代码托管在 <a href="{{ repoUrl }}" target="_blank">Github</a>.</p>-->
-<!--    <p>-->
-<!--      <button type="button" class="btn btn-danger">申请收录</button>-->
-<!--      <button type="button" class="btn btn-default" data-dismiss="alert">关闭</button>-->
-<!--    </p>-->
-<!--  </div>-->
-
   <h2 class="page-header">所有工具</h2>
   <div class="row">
-    {% for tool in onlineTools %}
+    {% for tool in doneTools %}
     <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
       <div class="panel panel-primary">
         <div class="panel-heading">
-          <a href="{{ tool.url }}">{{ tool.name }}</a>
+          <a href="{{ tool.url }}?id={{ tool.id }}">{{ tool.name }}</a>
         </div>
         <div class="panel-body">{{ tool.desc }}</div>
         <div class="panel-footer">
-          <span>
-            <i class="glyphicon glyphicon-heart"></i>
-            {{ tool.used }}
-          </span>
-          <a class="pull-right" href="{{ tool.url }}" target="_blank">进入</a>
+          <span>已使用{{ tool.used }}次</span>
+          <a class="pull-right" href="{{ tool.url }}?id={{ tool.id }}" target="_blank">进入</a>
         </div>
       </div>
     </div>
@@ -41,7 +26,7 @@
 
   <h2 class="page-header">开发中&nbsp;<small><a href="/i-need-this.html">申请收录</a></small></h2>
   <div class="row">
-    {% for tool in comingTools %}
+    {% for tool in workingTools %}
     <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
       <div class="panel panel-default">
         <div class="panel-heading">{{ tool.name }}</div>

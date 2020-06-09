@@ -16,15 +16,15 @@ module.exports = (app) => {
   router.get("/nav.html", controller.nav.render);
 
   // PNG to JPG
-  router.get("/png2jpg.html", controller.png2Jpg.render);
+  router.get("/tool/png2jpg.html", controller.png2Jpg.render);
   router.get("/api/png2jpg/downloadAll", controller.png2Jpg.downloadAll);
   router.post("/api/png2jpg/convert", controller.png2Jpg.convert);
 
   // HTTP Code
-  router.get("/http-code.html", controller.httpCode.render);
+  router.get("/tool/http-code.html", controller.httpCode.render);
 
   // MD5
-  router.get("/md5.html", controller.md5.render);
+  router.get("/tool/md5.html", controller.md5.render);
   router.post("/api/md5/encrypt", controller.md5.encrypt);
 
   // Admin
@@ -49,4 +49,9 @@ module.exports = (app) => {
   router.delete("/api/nav/:id", controller.admin.nav.delete);
   router.post("/api/nav/clicked", controller.admin.nav.clicked);
   router.post("/api/nav/detect", controller.admin.nav.detect);
+  // Tool
+  router.get("/api/tool/:id", controller.admin.tool.detail);
+  router.post("/api/tool", controller.admin.tool.create);
+  router.put("/api/tool/:id", controller.admin.tool.update);
+  router.delete("/api/tool/:id", controller.admin.tool.delete);
 };

@@ -30,6 +30,18 @@ class ToolService extends Service {
     const { ctx } = this;
     return ctx.model.Tool.destroy(condition);
   }
+
+  async addUsed(id) {
+    try {
+      const existed = await this.findOne({ where: { id } });
+      if (!existed) {
+        return;
+      }
+      await this.update({ used: existed.used + 1 }, { where: { id } });
+    } catch (e) {
+      // ignore
+    }
+  }
 }
 
 module.exports = ToolService;
