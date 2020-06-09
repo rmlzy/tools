@@ -10,11 +10,9 @@ const compressing = require("compressing");
 class Png2JpgController extends Controller {
   async render() {
     const { ctx, service } = this;
-    const { id } = ctx.request.query;
     const uuid = uuidv4();
     await service.dict.addTotalPV();
     await ctx.render("png2jpg.html", {
-      id,
       pageTitle: "PNG 转 JPG",
       key: uuid,
     });
@@ -38,7 +36,7 @@ class Png2JpgController extends Controller {
   async convert() {
     const { ctx, app, service } = this;
     const { files } = ctx.request;
-    const { key, id } = ctx.request.headers;
+    const { key } = ctx.request.headers;
     if (files.length === 0) {
       ctx.body = { success: false, data: "未检测到附件" };
       return;
@@ -48,7 +46,7 @@ class Png2JpgController extends Controller {
       await fs.ensureDir(outputDir);
       for (let i = 0; i < files.length; i++) {
         await this._fire(files[i], outputDir);
-        await service.tool.addUsed(id);
+        await service.tool.addUsed("png2jpg");
       }
       ctx.body = { success: true, data: "SUCCESS" };
     } catch (e) {

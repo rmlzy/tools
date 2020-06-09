@@ -31,13 +31,13 @@ class ToolService extends Service {
     return ctx.model.Tool.destroy(condition);
   }
 
-  async addUsed(id) {
+  async addUsed(code) {
     try {
-      const existed = await this.findOne({ where: { id } });
+      const existed = await this.findOne({ where: { code } });
       if (!existed) {
         return;
       }
-      await this.update({ used: existed.used + 1 }, { where: { id } });
+      await this.update({ used: existed.used + 1 }, { where: { code } });
     } catch (e) {
       // ignore
     }

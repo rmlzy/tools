@@ -36,7 +36,9 @@
       {% for nav in navs %}
       <tr>
         <th scope="row">{{ loop.index }}</th>
-        <td>{{ nav.name }}</td>
+        <td>
+          <a href="{{ nav.url }}" target="_blank">{{ nav.name }}</a>
+        </td>
         <td>
           {% if nav.logo %}
           <img width="18" src="{{ nav.logo }}" alt="{{ nav.name }}" />

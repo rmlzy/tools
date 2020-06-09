@@ -36,7 +36,7 @@
       <tr>
         <th scope="row">{{ loop.index }}</th>
         <td>
-          <a href="{{ tool.url }}" target="_blank">{{ tool.name }}</a>
+          <a href="/tool/{{ tool.code }}.html" target="_blank">{{ tool.name }}</a>
         </td>
         <td>
           {% if tool.status == 'DONE' %}
@@ -84,8 +84,8 @@
               <input type="text" class="form-control" name="name" />
             </div>
             <div class="form-group">
-              <label class="control-label">URL:</label>
-              <input type="text" class="form-control" name="url" />
+              <label class="control-label">Code:</label>
+              <input type="text" class="form-control" name="code" />
             </div>
             <div class="form-group">
               <label class="control-label">状态:</label>
@@ -138,8 +138,8 @@
               <input type="text" class="form-control" name="name" />
             </div>
             <div class="form-group">
-              <label class="control-label">URL:</label>
-              <input type="text" class="form-control" name="url" />
+              <label class="control-label">Code:</label>
+              <input type="text" class="form-control" name="code" />
             </div>
             <div class="form-group">
               <label class="control-label">状态:</label>
@@ -232,7 +232,7 @@
           if (res.success) {
             $form.find("input[name='id']").val(res.data.id);
             $form.find("input[name='name']").val(res.data.name);
-            $form.find("input[name='url']").val(res.data.url);
+            $form.find("input[name='code']").val(res.data.code);
             $form.find("input:radio[name='status'][value='" + res.data.status + "']").prop("checked", true);
             $form.find("textarea[name='desc']").val(res.data.desc);
             $("#js_updateModel").modal("show");

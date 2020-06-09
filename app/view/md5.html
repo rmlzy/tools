@@ -77,7 +77,7 @@
       $.ajax({
         type: "POST",
         url: "/api/md5/encrypt",
-        data: { id: "{{ id }}",source: source },
+        data: { source: source },
         success: function (res) {
           if (res.success) {
             $("#js_32Upper").val(res.data.upper32);

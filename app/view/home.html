@@ -12,12 +12,12 @@
     <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
       <div class="panel panel-primary">
         <div class="panel-heading">
-          <a href="{{ tool.url }}?id={{ tool.id }}">{{ tool.name }}</a>
+          <a href="/tool/{{ tool.code }}.html">{{ tool.name }}</a>
         </div>
         <div class="panel-body">{{ tool.desc }}</div>
         <div class="panel-footer">
           <span>已使用{{ tool.used }}次</span>
-          <a class="pull-right" href="{{ tool.url }}?id={{ tool.id }}" target="_blank">进入</a>
+          <a class="pull-right" href="/tool/{{ tool.code }}.html" target="_blank">进入</a>
         </div>
       </div>
     </div>

@@ -19,8 +19,8 @@ module.exports = (app) => {
       defaultValue: "",
     },
 
-    // 地址
-    url: {
+    // 唯一的CODE
+    code: {
       type: STRING(255),
       defaultValue: "",
       unique: true,

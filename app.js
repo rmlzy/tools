@@ -1,5 +1,5 @@
 module.exports = (app) => {
   app.beforeStart(async function () {
-    await app.model.sync({ force: false });
+    await app.model.sync({ alter: true });
   });
 };

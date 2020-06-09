@@ -5,10 +5,9 @@ const Controller = require("egg").Controller;
 class HttpCodeController extends Controller {
   async render() {
     const { ctx, service } = this;
-    const { id } = ctx.request.query;
     try {
       await service.dict.addTotalPV();
-      await service.tool.addUsed(id);
+      await service.tool.addUsed("http-code");
     } catch (e) {
       // ignore
     }

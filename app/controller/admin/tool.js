@@ -34,14 +34,14 @@ class ToolController extends Controller {
 
   async create() {
     const { ctx, service } = this;
-    const { name, url, desc, status } = ctx.request.body;
+    const { name, code, desc, status } = ctx.request.body;
     try {
       const existed = await service.tool.findOne({ where: { name } });
       if (existed) {
         ctx.body = { success: false, message: "工具已存在" };
         return;
       }
-      const created = await service.tool.create({ name, url, desc, status });
+      const created = await service.tool.create({ name, code, desc, status });
       ctx.body = { success: true, message: "操作成功" };
     } catch (e) {
       ctx.logger.error("Error while ToolController.create, stack: ", e);
@@ -53,24 +53,24 @@ class ToolController extends Controller {
     const { ctx, service, app } = this;
     const { Op } = app.Sequelize;
     const { id } = ctx.params;
-    const { name, url, desc, status } = ctx.request.body;
+    const { name, code, desc, status } = ctx.request.body;
     try {
       const idExisted = await service.tool.findOne({ where: { id: Number(id) } });
       if (!idExisted) {
         ctx.body = { success: false, message: "工具不存在" };
         return;
       }
-      const urlExisted = await service.tool.findOne({
+      const codeExisted = await service.tool.findOne({
         where: {
-          url,
+          code,
           id: { [Op.ne]: id },
         },
       });
-      if (urlExisted) {
-        ctx.body = { success: false, message: "URL已存在" };
+      if (codeExisted) {
+        ctx.body = { success: false, message: "Code已存在" };
         return;
       }
-      const updated = await service.tool.update({ name, url, desc, status }, { where: { id } });
+      const updated = await service.tool.update({ name, code, desc, status }, { where: { id } });
       ctx.body = { success: true, message: "操作成功" };
     } catch (e) {
       ctx.logger.error("Error while ToolController.update, stack: ", e);
