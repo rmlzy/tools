@@ -7,7 +7,6 @@ class Md2HtmlController extends Controller {
     const { ctx, service } = this;
     try {
       await service.dict.addTotalPV();
-      await service.tool.addUsed("md2html");
     } catch (e) {
       // ignore
     }
@@ -15,10 +14,11 @@ class Md2HtmlController extends Controller {
   }
 
   async convert() {
-    const { ctx } = this;
+    const { ctx, service } = this;
     const { md } = ctx.request.body;
     try {
       const html = ctx.helper.md2html(md);
+      await service.tool.addUsed("md2html");
       ctx.body = { success: true, message: "操作成功", data: html };
     } catch (e) {
       ctx.logger.error("Error while Md2HtmlController.convert, stack: ", e);
