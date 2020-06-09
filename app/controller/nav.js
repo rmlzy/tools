@@ -2,7 +2,7 @@
 
 const Controller = require("egg").Controller;
 
-class HomeController extends Controller {
+class NavController extends Controller {
   async render() {
     const { ctx, service } = this;
     let categories = [];
@@ -18,4 +18,4 @@ class HomeController extends Controller {
   }
 }
 
-module.exports = HomeController;
+module.exports = NavController;

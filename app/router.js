@@ -30,6 +30,10 @@ module.exports = (app) => {
   router.get("/tool/md5.html", controller.md5.render);
   router.post("/api/md5/encrypt", controller.md5.encrypt);
 
+  // Markdown转HTML
+  router.get("/tool/md2html.html", controller.md2html.render);
+  router.post("/api/md2html/convert", controller.md2html.convert);
+
   // Admin
   router.get("/admin/login.html", controller.admin.login.render);
   router.get("/admin/home.html", controller.admin.home.render);

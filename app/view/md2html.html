@@ -1,0 +1,86 @@
+{% extends "./base.html" %}
+
+<!-- Head -->
+{% block head %}
+<style>
+  .editor-wrapper {
+    border: 1px solid #ededed;
+    border-radius: 5px;
+    min-height: 500px;
+  }
+  .preview-wrapper {
+    border: 1px solid #ededed;
+    border-radius: 5px;
+    min-height: 500px;
+    padding: 0 10px;
+  }
+</style>
+{% endblock %}
+
+<!-- Body -->
+{% block body %}
+<div class="container">
+  <ol class="breadcrumb">
+    <li><a href="/">首页</a></li>
+    <li class="active">Markdown 转 HTML</li>
+  </ol>
+
+  <div class="row">
+    <div class="col-md-6">
+      <p>
+        <span>Markdown:</span>
+        <button id="js_convertBtn" class="btn btn-xs btn-primary pull-right">转换 -></button>
+      </p>
+      <div class="editor-wrapper">
+        <div id="js_mdEditor" style="height: 500px;"></div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <p>HTML:</p>
+      <div class="preview-wrapper">
+        <div id="js_preview"></div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+<!-- Foot -->
+{% block foot %}
+<script src="/public/lib/ace/ace.js"></script>
+<script src="/public/lib/ace/mode-html.js"></script>
+<script src="/public/lib/ace/mode-markdown.js"></script>
+<script src="/public/lib/ace/theme-github.js"></script>
+<script>
+  $(document).ready(function () {
+    var initialValue = "# 欢迎使用\n\n## Markdown 转 HTML\n";
+    var editor = ace.edit("js_mdEditor");
+    editor.setTheme("github");
+    editor.session.setMode("markdown");
+    editor.setValue(initialValue);
+    convert(initialValue);
+
+    function convert(md) {
+      layer.load();
+      $.ajax({
+        type: "POST",
+        url: "/api/md2html/convert",
+        data: { md: md },
+        success: function (res) {
+          layer.closeAll("loading");
+          if (res.success) {
+            $("#js_preview").html(res.data);
+          } else {
+            layer.msg(res.message, { icon: 5 });
+          }
+        },
+      });
+    }
+
+    $("#js_convertBtn").on("click", function () {
+      var md = editor.getSession().getValue();
+      convert(md);
+    });
+  });
+</script>
+{% endblock %}

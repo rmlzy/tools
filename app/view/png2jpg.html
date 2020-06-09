@@ -82,7 +82,6 @@
     });
     $uploader.on("complete", function (evt, args) {
       var files = args.files;
-      console.log(files.length);
       if (files.length) {
         $downloadBtn.removeClass("disabled");
       } else {
