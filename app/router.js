@@ -30,6 +30,9 @@ module.exports = (app) => {
   router.get("/tool/md5.html", controller.md5.render);
   router.post("/api/md5/encrypt", controller.md5.encrypt);
 
+  // Base64
+  router.get("/tool/base64.html", controller.base64.render);
+
   // Markdown转HTML
   router.get("/tool/md2html.html", controller.md2html.render);
 
