@@ -2,6 +2,9 @@
 
 <!-- Head -->
 {% block head %}
+<link rel="stylesheet" href="/public/lib/toastui-editor/codemirror.min.css" />
+<link rel="stylesheet" href="/public/lib/toastui-editor/toastui-editor.min.css" />
+<link rel="stylesheet" href="/public/css/github-markdown.css" />
 <style>
   .editor-wrapper {
     border: 1px solid #ededed;
@@ -12,7 +15,7 @@
     border: 1px solid #ededed;
     border-radius: 5px;
     min-height: 500px;
-    padding: 0 10px;
+    padding: 10px;
   }
 </style>
 {% endblock %}
@@ -25,61 +28,34 @@
     <li class="active">Markdown 转 HTML</li>
   </ol>
 
-  <div class="row">
-    <div class="col-md-6">
-      <p>
-        <span>Markdown:</span>
-        <button id="js_convertBtn" class="btn btn-xs btn-primary pull-right">转换 -></button>
-      </p>
-      <div class="editor-wrapper">
-        <div id="js_mdEditor" style="height: 500px;"></div>
-      </div>
-    </div>
-    <div class="col-md-6">
-      <p>HTML:</p>
-      <div class="preview-wrapper">
-        <div id="js_preview"></div>
-      </div>
-    </div>
-  </div>
+  <h2>说明:</h2>
+  <ol>
+    <li>Markdown 是一种轻量级标记语言，它允许人们使用易读易写的纯文本格式编写文档；</li>
+    <li>
+      Markdown使用说明可以参考
+      <a href="https://www.runoob.com/markdown/md-tutorial.html" target="_blank">Markdown 教程</a> 或者
+      <a href="https://www.markdownguide.org/" target="_blank">Markdown Guide</a>；
+    </li>
+    <li>本工具基于<a href="https://ui.toast.com/tui-editor/" target="_blank">toastui-editor</a>实现；</li>
+    <li>本工具不采集您的任何数据；</li>
+  </ol>
+  <br />
+
+  <div id="js_mdEditor" style="height: 500px;"></div>
 </div>
 {% endblock %}
 
 <!-- Foot -->
 {% block foot %}
-<script src="/public/lib/ace/ace.js"></script>
-<script src="/public/lib/ace/mode-html.js"></script>
-<script src="/public/lib/ace/mode-markdown.js"></script>
-<script src="/public/lib/ace/theme-github.js"></script>
+<script src="/public/lib/toastui-editor/toastui-editor-all.min.js"></script>
 <script>
   $(document).ready(function () {
-    var initialValue = "# 欢迎使用\n\n## Markdown 转 HTML\n";
-    var editor = ace.edit("js_mdEditor");
-    editor.setTheme("github");
-    editor.session.setMode("markdown");
-    editor.setValue(initialValue);
-    convert(initialValue);
-
-    function convert(md) {
-      layer.load();
-      $.ajax({
-        type: "POST",
-        url: "/api/md2html/convert",
-        data: { md: md },
-        success: function (res) {
-          layer.closeAll("loading");
-          if (res.success) {
-            $("#js_preview").html(res.data);
-          } else {
-            layer.msg(res.message, { icon: 5 });
-          }
-        },
-      });
-    }
-
-    $("#js_convertBtn").on("click", function () {
-      var md = editor.getSession().getValue();
-      convert(md);
+    var editor = new toastui.Editor({
+      el: document.querySelector("#js_mdEditor"),
+      previewStyle: "tab",
+      height: "500px",
+      initialValue: "",
+      hideModeSwitch: true,
     });
   });
 </script>

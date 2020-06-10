@@ -32,7 +32,6 @@ module.exports = (app) => {
 
   // Markdown转HTML
   router.get("/tool/md2html.html", controller.md2html.render);
-  router.post("/api/md2html/convert", controller.md2html.convert);
 
   // Admin
   router.get("/admin/login.html", controller.admin.login.render);
