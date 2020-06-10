@@ -6,7 +6,9 @@ const md5 = require("blueimp-md5");
 class Md5Controller extends Controller {
   async render() {
     const { ctx, service } = this;
-    await service.dict.addTotalPV();
+    ctx.runInBackground(async () => {
+      await service.dict.addTotalPV();
+    });
     await ctx.render("md5.html", {
       pageTitle: "在线MD5加密",
     });

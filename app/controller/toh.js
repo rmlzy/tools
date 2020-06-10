@@ -7,8 +7,6 @@ class TohController extends Controller {
     const { ctx, service } = this;
     let toh = [];
     try {
-      await service.dict.addTotalPV();
-      await service.tool.addUsed("toh");
       const res = await service.third.todayOfHistory();
       if (res.success) {
         toh = res.data;
@@ -16,6 +14,10 @@ class TohController extends Controller {
     } catch (e) {
       // ignore
     }
+    ctx.runInBackground(async () => {
+      await service.dict.addTotalPV();
+      await service.tool.addUsed("toh");
+    });
     await ctx.render("toh.html", { pageTitle: "历史上的今天", toh });
   }
 }

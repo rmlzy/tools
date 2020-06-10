@@ -5,12 +5,10 @@ const Controller = require("egg").Controller;
 class Base64Controller extends Controller {
   async render() {
     const { ctx, service } = this;
-    try {
+    ctx.runInBackground(async () => {
       await service.dict.addTotalPV();
       await service.tool.addUsed("base64");
-    } catch (e) {
-      // ignore
-    }
+    });
     await ctx.render("base64.html");
   }
 }

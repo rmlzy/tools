@@ -39,6 +39,9 @@ module.exports = (app) => {
   // Markdown转HTML
   router.get("/tool/md2html.html", controller.md2html.render);
 
+  // 摩斯密码加密解密
+  router.get("/tool/morse.html", controller.morse.render);
+
   // Admin
   router.get("/admin/login.html", controller.admin.login.render);
   router.get("/admin/home.html", controller.admin.home.render);

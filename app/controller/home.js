@@ -13,7 +13,9 @@ class HomeController extends Controller {
     } catch (e) {
       // ignore
     }
-    await service.dict.addTotalPV();
+    ctx.runInBackground(async () => {
+      await service.dict.addTotalPV();
+    });
     await ctx.render("home.html", { doneTools, workingTools });
   }
 }
