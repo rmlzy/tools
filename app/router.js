@@ -48,6 +48,11 @@ module.exports = (app) => {
   // JSON格式化
   router.get("/tool/json-format.html", controller.jsonFormat.render);
 
+  // XML to JSON
+  router.get("/tool/xml2json.html", controller.xml2json.render);
+  router.post("/api/xml2json/toXml", controller.xml2json.toXml);
+  router.post("/api/xml2json/toJson", controller.xml2json.toJson);
+
   // Admin
   router.get("/admin/login.html", controller.admin.login.render);
   router.get("/admin/home.html", controller.admin.home.render);

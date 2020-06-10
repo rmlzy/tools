@@ -23,7 +23,8 @@
     "markdown-it": "^11.0.0",
     "mysql2": "^2.1.0",
     "svg-captcha": "^1.4.0",
-    "uuid": "^8.1.0"
+    "uuid": "^8.1.0",
+    "xml2json": "^0.12.0"
   },
   "devDependencies": {
     "autod": "^3.0.1",

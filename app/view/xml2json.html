@@ -1,0 +1,120 @@
+{% extends "./base.html" %}
+
+<!-- Head -->
+{% block head %}
+<style>
+  .editor {
+    width: 100%;
+    height: calc(100vh - 320px);
+    border: 1px solid #ededed;
+  }
+</style>
+{% endblock %}
+
+<!-- Body -->
+{% block body %}
+<div class="container">
+  <ol class="breadcrumb">
+    <li><a href="/">首页</a></li>
+    <li class="active">XML-JSON互转</li>
+  </ol>
+
+  <div class="row">
+    <div class="col-md-6">
+      <p>
+        <span>XML:</span>
+        <button id="js_xml2jsonBtn" class="btn btn-xs btn-primary pull-right">转JSON -></button>
+      </p>
+      <div id="js_xmlEditor" class="editor"></div>
+    </div>
+    <div class="col-md-6">
+      <p>
+        <span>JSON:</span>
+        <span class="btn-group pull-right">
+          <button id="js_json2xmlBtn" class="btn btn-xs btn-primary"><- 转XML</button>
+          <button id="js_formatJsonBtn" class="btn btn-xs btn-default">格式化</button>
+        </span>
+      </p>
+      <div id="js_jsonEditor" class="editor"></div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+<!-- Foot -->
+{% block foot %}
+<script src="/public/lib/ace/ace.js"></script>
+<script>
+  $(document).ready(function () {
+    // Init Xml Editor
+    var xmlEditor = ace.edit("js_xmlEditor");
+    xmlEditor.setTheme("ace/theme/github");
+    xmlEditor.session.setMode("ace/mode/xml");
+    xmlEditor.setShowPrintMargin(false);
+    xmlEditor.setOption("showLineNumbers", true);
+
+    // Init Json Editor
+    var jsonEditor = ace.edit("js_jsonEditor");
+    jsonEditor.setTheme("ace/theme/github");
+    jsonEditor.session.setMode("ace/mode/json");
+    jsonEditor.setShowPrintMargin(false);
+    jsonEditor.setOption("showLineNumbers", true);
+
+    $("#js_xml2jsonBtn").on("click", function () {
+      var xml = xmlEditor.getValue();
+      if (xml === "") return;
+      layer.load();
+      $.ajax({
+        type: "POST",
+        url: "/api/xml2json/toJson",
+        data: { xml: xml },
+        success: function (res) {
+          layer.closeAll("loading");
+          if (res.success) {
+            jsonEditor.setValue(res.data);
+          } else {
+            layer.msg(res.message, { icon: 5 });
+          }
+        },
+      });
+    });
+
+    $("#js_formatJsonBtn").on("click", function () {
+      var source = jsonEditor.getValue();
+      var err;
+      var output;
+      try {
+        var json = JSON.parse(source);
+        output = JSON.stringify(json, null, "\t");
+      } catch (e) {
+        err = e.message;
+      }
+      if (err) {
+        layer.msg(err, { icon: 5 });
+        return;
+      }
+      jsonEditor.setValue(output);
+    });
+
+    $("#js_json2xmlBtn").on("click", function () {
+      var json = jsonEditor.getValue();
+      if (json === "") return;
+      layer.load();
+      $.ajax({
+        type: "POST",
+        url: "/api/xml2json/toXml",
+        data: { json: json },
+        success: function (res) {
+          console.log(res);
+          layer.closeAll("loading");
+          if (res.success) {
+            xmlEditor.setValue(res.data);
+          } else {
+            layer.msg(res.message, { icon: 5 });
+          }
+        },
+      });
+    });
+  });
+</script>
+{% endblock %}
