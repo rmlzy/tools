@@ -33,6 +33,9 @@ module.exports = (app) => {
   // Base64
   router.get("/tool/base64.html", controller.base64.render);
 
+  // Aes Des
+  router.get("/tool/aesdes.html", controller.aesdes.render);
+
   // Markdown转HTML
   router.get("/tool/md2html.html", controller.md2html.render);
 

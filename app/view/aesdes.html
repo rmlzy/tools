@@ -1,0 +1,94 @@
+{% extends "./base.html" %}
+
+<!-- Head -->
+{% block head %} {% endblock %}
+
+<!-- Body -->
+{% block body %}
+<div class="container">
+  <ol class="breadcrumb">
+    <li><a href="/">首页</a></li>
+    <li class="active">DES, AES等对称加密解密</li>
+  </ol>
+
+  <textarea id="js_sourceArea" class="form-control" rows="10" placeholder="这里输入明文"></textarea>
+
+  <div class="clearfix" style="padding: 20px 0;">
+    <div class="form-inline">
+      <div class="form-group form-group-sm">
+        <select id="js_encType" class="form-control" style="width: 75px; margin-right: 20px;">
+          <option value="AES">AES</option>
+          <option value="DES">DES</option>
+          <option value="RC4">RC4</option>
+          <option value="Rabbit">Rabbit</option>
+          <option value="TripleDES">TripleDES</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <div class="input-group input-group-sm" style="margin-right: 20px;">
+          <span class="input-group-addon">秘钥</span>
+          <input id="js_encKey" type="text" class="form-control" aria-label="Amount (to the nearest dollar)" />
+        </div>
+      </div>
+      <div class="form-group input-group-sm">
+        <div class="btn-group pull-left" role="group">
+          <button id="js_encryptBtn" class="btn btn-sm btn-primary">加密</button>
+          <button id="js_decryptBtn" class="btn btn-sm btn-primary">解密</button>
+          <button id="js_clearBtn" class="btn btn-sm btn-default">清空</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <textarea id="js_outputArea" class="form-control" rows="10" placeholder="这里输入密文"></textarea>
+
+  <h2>工具说明:</h2>
+  <ol>
+    <li>本工具基于<a href="https://github.com/brix/crypto-js" target="_blank">crypto-js</a>实现；</li>
+    <li>本工具不采集您的任何数据；</li>
+  </ol>
+</div>
+{% endblock %}
+
+<!-- Foot -->
+{% block foot %}
+<script src="/public/lib/crypto/crypto.js"></script>
+<script>
+  $(document).ready(function () {
+    var $sourceArea = $("#js_sourceArea");
+    var $outputArea = $("#js_outputArea");
+    var $encryptBtn = $("#js_encryptBtn");
+    var $decryptBtn = $("#js_decryptBtn");
+    var $clearBtn = $("#js_clearBtn");
+    var $type = $("#js_encType");
+    var $key = $("#js_encKey");
+
+    $encryptBtn.on("click", function () {
+      var type = $type.val();
+      var key = $key.val();
+      var source = $sourceArea.val();
+      var ciphertext = CryptoJS[type].encrypt(source, key).toString();
+      $outputArea.val(ciphertext);
+    });
+
+    $decryptBtn.on("click", function () {
+      var type = $type.val();
+      var key = $key.val();
+      var source = $sourceArea.val();
+      var bytes = CryptoJS[type].decrypt(source, key);
+      var output = bytes.toString(CryptoJS.enc.Utf8);
+      $outputArea.val(output);
+      if (output === "") {
+        layer.msg("解密失败, 请检查解密方式", { icon: 5 });
+      }
+    });
+
+    $clearBtn.on("click", function () {
+      $sourceArea.val("");
+      $outputArea.val("");
+      $key.val("");
+      $type.val("AES");
+    });
+  });
+</script>
+{% endblock %}
