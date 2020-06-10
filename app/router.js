@@ -45,6 +45,9 @@ module.exports = (app) => {
   // URL编码
   router.get("/tool/urlencode.html", controller.urlencode.render);
 
+  // JSON格式化
+  router.get("/tool/json-format.html", controller.jsonFormat.render);
+
   // Admin
   router.get("/admin/login.html", controller.admin.login.render);
   router.get("/admin/home.html", controller.admin.home.render);

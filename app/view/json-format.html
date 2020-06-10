@@ -1,0 +1,92 @@
+{% extends "./base.html" %}
+
+<!-- Head -->
+{% block head %}
+<style>
+  .json-editor {
+    width: 100%;
+    height: calc(100vh - 320px);
+    border: 1px solid #ededed;
+  }
+</style>
+{% endblock %}
+
+<!-- Body -->
+{% block body %}
+<div class="container">
+  <ol class="breadcrumb">
+    <li><a href="/">首页</a></li>
+    <li class="active">JSON格式化</li>
+  </ol>
+
+  <div id="js_editor" class="json-editor"></div>
+  <br />
+  <div class="btn-group">
+    <button id="js_formatBtn" class="btn btn-sm btn-primary">格式化校验</button>
+    <button id="js_minifyBtn" class="btn btn-sm btn-default">压缩</button>
+    <button id="js_clearBtn" class="btn btn-sm btn-default">清空</button>
+  </div>
+
+  <div id="js_err" class="alert alert-danger alert-dismissible fade in" role="alert" style="display: none;">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">×</span>
+    </button>
+    <h4>解析出错</h4>
+    <p id="js_errContent"></p>
+  </div>
+</div>
+{% endblock %}
+
+<!-- Foot -->
+{% block foot %}
+<script src="/public/lib/ace/ace.js"></script>
+<script>
+  $(document).ready(function () {
+    var editor = ace.edit("js_editor");
+    editor.setTheme("ace/theme/github");
+    editor.session.setMode("ace/mode/json");
+    editor.setShowPrintMargin(false);
+    editor.setOption("showLineNumbers", true);
+
+    $("#js_formatBtn").on("click", function () {
+      var source = editor.getValue();
+      var err;
+      var output;
+      try {
+        var json = JSON.parse(source);
+        output = JSON.stringify(json, null, "\t");
+      } catch (e) {
+        err = e.message;
+      }
+      if (err) {
+        $("#js_errContent").text(err);
+        $("#js_err").show();
+        return;
+      }
+      editor.setValue(output);
+    });
+
+    $("#js_minifyBtn").on("click", function () {
+      var source = editor.getValue();
+      var err;
+      var output;
+      try {
+        var json = JSON.parse(source);
+        output = JSON.stringify(json);
+      } catch (e) {
+        err = e.message;
+      }
+      if (err) {
+        $("#js_errContent").text(err);
+        $("#js_err").show();
+        return;
+      }
+      editor.setValue(output);
+    });
+
+    $("#js_clearBtn").on("click", function () {
+      editor.setValue("");
+    });
+  });
+</script>
+{% endblock %}
