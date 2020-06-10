@@ -1,0 +1,64 @@
+{% extends "./base.html" %}
+
+<!-- Head -->
+{% block head %} {% endblock %}
+
+<!-- Body -->
+{% block body %}
+<div class="container">
+  <ol class="breadcrumb">
+    <li><a href="/">首页</a></li>
+    <li class="active">URL编码</li>
+  </ol>
+
+  <textarea id="js_sourceArea" class="form-control" rows="10" placeholder="这里输入URL"></textarea>
+  <div class="btn-group" role="group" style="padding: 20px 0;">
+    <button id="js_encryptBtn" class="btn btn-sm btn-primary">URL编码</button>
+    <button id="js_decryptBtn" class="btn btn-sm btn-primary">URL解码</button>
+    <button id="js_clearBtn" class="btn btn-sm btn-default">清空</button>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6">
+      <p>encodeURI编码,不会对特殊符号编码</p>
+      <textarea id="js_uriArea" class="form-control" rows="10"></textarea>
+    </div>
+    <div class="col-md-6">
+      <p>encodeURIComponent编码方式，<span class="text-danger">会对特殊符号编码</span></p>
+      <textarea id="js_uricArea" class="form-control" rows="10"></textarea>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+<!-- Foot -->
+{% block foot %}
+<script>
+  $(document).ready(function () {
+    var $sourceArea = $("#js_sourceArea");
+    var $uriArea = $("#js_uriArea");
+    var $uricArea = $("#js_uricArea");
+    var $encryptBtn = $("#js_encryptBtn");
+    var $decryptBtn = $("#js_decryptBtn");
+    var $clearBtn = $("#js_clearBtn");
+
+    $encryptBtn.on("click", function () {
+      var source = $sourceArea.val();
+      $uriArea.val(encodeURI(source));
+      $uricArea.val(encodeURIComponent(source));
+    });
+
+    $decryptBtn.on("click", function () {
+      var source = $sourceArea.val();
+      $uriArea.val(decodeURI(source));
+      $uricArea.val(decodeURIComponent(source));
+    });
+
+    $clearBtn.on("click", function () {
+      $sourceArea.val("");
+      $uriArea.val("");
+      $uricArea.val("");
+    });
+  });
+</script>
+{% endblock %}

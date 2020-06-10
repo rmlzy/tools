@@ -42,6 +42,9 @@ module.exports = (app) => {
   // 摩斯密码加密解密
   router.get("/tool/morse.html", controller.morse.render);
 
+  // URL编码
+  router.get("/tool/urlencode.html", controller.urlencode.render);
+
   // Admin
   router.get("/admin/login.html", controller.admin.login.render);
   router.get("/admin/home.html", controller.admin.home.render);
