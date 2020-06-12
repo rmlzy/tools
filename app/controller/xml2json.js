@@ -13,12 +13,15 @@ class Xml2jsonController extends Controller {
   }
 
   async toJson() {
-    const { ctx } = this;
+    const { ctx, service } = this;
     const { xml } = ctx.request.body;
     if (xml === "") {
       ctx.body = { success: false, message: "请输入xml" };
       return;
     }
+    ctx.runInBackground(async () => {
+      await service.tool.addUsed("xml2json");
+    });
     try {
       const json = parser.xml2json(xml, { compact: true, spaces: 4 });
       ctx.body = { success: true, message: "操作成功", data: json };
@@ -29,12 +32,15 @@ class Xml2jsonController extends Controller {
   }
 
   async toXml() {
-    const { ctx } = this;
+    const { ctx, service } = this;
     const { json } = ctx.request.body;
     if (json === "") {
       ctx.body = { success: false, message: "请输入json" };
       return;
     }
+    ctx.runInBackground(async () => {
+      await service.tool.addUsed("xml2json");
+    });
     try {
       const xml = parser.json2xml(json, { compact: true, spaces: 4 });
       ctx.body = { success: true, message: "操作成功", data: xml };
