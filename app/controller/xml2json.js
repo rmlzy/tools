@@ -1,7 +1,7 @@
 "use strict";
 
 const Controller = require("egg").Controller;
-const parser = require("xml2json");
+const parser = require("xml-js");
 
 class Xml2jsonController extends Controller {
   async render() {
@@ -20,7 +20,7 @@ class Xml2jsonController extends Controller {
       return;
     }
     try {
-      const json = parser.toJson(xml, {});
+      const json = parser.xml2json(xml, { compact: true, spaces: 4 });
       ctx.body = { success: true, message: "操作成功", data: json };
     } catch (e) {
       ctx.logger.error("Error while Xml2jsonController.toJson, stack: ", e);
@@ -36,7 +36,7 @@ class Xml2jsonController extends Controller {
       return;
     }
     try {
-      const xml = parser.toXml(json, { sanitize_values: true });
+      const xml = parser.json2xml(json, { compact: true, spaces: 4 });
       ctx.body = { success: true, message: "操作成功", data: xml };
     } catch (e) {
       ctx.logger.error("Error while Xml2jsonController.toXml, stack: ", e);
