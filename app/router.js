@@ -23,8 +23,17 @@ module.exports = (app) => {
   // HTTP Code
   router.get("/tool/http-code.html", controller.httpCode.render);
 
+  // ASCII码对照表
+  router.get("/tool/ascii.html", controller.ascii.render);
+
+  // 浏览器信息
+  router.get("/tool/client-info.html", controller.clientInfo.render);
+
   // 历史上的今天
   router.get("/tool/toh.html", controller.toh.render);
+
+  // 条形码生成器
+  router.get("/tool/barcode.html", controller.barcode.render);
 
   // MD5
   router.get("/tool/md5.html", controller.md5.render);

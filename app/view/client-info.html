@@ -1,0 +1,242 @@
+{% extends "./base.html" %}
+
+<!-- Head -->
+{% block head %} {% endblock %}
+
+<!-- Body -->
+{% block body %}
+<div class="container">
+  <ol class="breadcrumb">
+    <li><a href="/">首页</a></li>
+    <li class="active">获取您的浏览器信息</li>
+  </ol>
+
+  <table class="table table-bordered t-big-margin">
+    <thead>
+      <tr>
+        <th width="25%">名称</th>
+        <th width="25%">描述</th>
+        <th>结果</th>
+      </tr>
+    </thead>
+    <tr>
+      <td>navigator.platform</td>
+      <td>客户端系统</td>
+      <td style="color: #158cba;" id="js_os"></td>
+    </tr>
+    <tr>
+      <td>navigator.appName</td>
+      <td>返回浏览器名称</td>
+      <td style="color: #158cba;">
+        <script>
+          document.write(navigator.appName);
+        </script>
+      </td>
+    </tr>
+    <tr>
+      <td>navigator.appVersion</td>
+      <td>返回浏览器版本信息</td>
+      <td style="color: #158cba;">
+        <script>
+          document.write(navigator.appVersion);
+        </script>
+      </td>
+    </tr>
+    <tr>
+      <td>window.screen.height</td>
+      <td>显示器高度</td>
+      <td style="color: #158cba;">
+        <script>
+          document.write(window.screen.height);
+        </script>
+        px
+      </td>
+    </tr>
+    <tr>
+      <td>window.screen.width</td>
+      <td>显示器宽度</td>
+      <td style="color: #158cba;">
+        <script>
+          document.write(window.screen.width);
+        </script>
+        px
+      </td>
+    </tr>
+    <tr>
+      <td>window.screen.colorDepth</td>
+      <td>屏幕设置色彩位数</td>
+      <td style="color: #158cba;">
+        <script>
+          document.write(window.screen.colorDepth);
+        </script>
+      </td>
+    </tr>
+    <tr>
+      <td>navigator.appCodeName</td>
+      <td>返回浏览器代码名称</td>
+      <td style="color: #158cba;">
+        <script>
+          document.write(navigator.appCodeName);
+        </script>
+      </td>
+    </tr>
+    <tr>
+      <td>navigator.vendor</td>
+      <td>返回浏览器厂家信息</td>
+      <td style="color: #158cba;">
+        <script>
+          document.write(navigator.vendor);
+        </script>
+      </td>
+    </tr>
+    <tr>
+      <td>navigator.userAgent</td>
+      <td>返回浏览器及版本信息,包含navigator.appVersion信息</td>
+      <td style="color: #158cba;">
+        <script>
+          document.write(navigator.userAgent);
+        </script>
+      </td>
+    </tr>
+    <tr>
+      <td>navigator.onLine</td>
+      <td>返回浏览器是否连接到网络</td>
+      <td style="color: #158cba;">
+        <script>
+          document.write(navigator.onLine);
+        </script>
+      </td>
+    </tr>
+    <tr>
+      <td>navigator.language</td>
+      <td>返回浏览器默认语言</td>
+      <td style="color: #158cba;">
+        <script>
+          document.write(navigator.language);
+        </script>
+      </td>
+    </tr>
+    <tr>
+      <td>navigator.product</td>
+      <td>返回浏览器产品名称</td>
+      <td style="color: #158cba;">
+        <script>
+          document.write(navigator.product);
+        </script>
+      </td>
+    </tr>
+    <tr>
+      <td>navigator.productSub</td>
+      <td>返回浏览器产品其他信息</td>
+      <td style="color: #158cba;">
+        <script>
+          document.write(navigator.productSub);
+        </script>
+      </td>
+    </tr>
+    <tr>
+      <td>navigator.cookieEnabled</td>
+      <td>浏览器是否开启cookie</td>
+      <td style="color: #158cba;">
+        <script>
+          document.write(navigator.cookieEnabled);
+        </script>
+      </td>
+    </tr>
+    <tr>
+      <td>navigator.mimeTypes.length</td>
+      <td>浏览器的MIME类型数量</td>
+      <td style="color: #158cba;">
+        <script>
+          document.write(navigator.mimeTypes.length);
+        </script>
+      </td>
+    </tr>
+    <tr>
+      <td>navigator.mimeTypes</td>
+      <td>浏览器MIME支持类型列表</td>
+      <td style="color: #158cba;">
+        <script>
+          for (x in navigator.mimeTypes) {
+            if (Object.prototype.toString.call(navigator.mimeTypes[x]) === "[object MimeType]") {
+              document.write("类型: " + navigator.mimeTypes[x].type + "<br/>");
+              document.write("描述: " + navigator.mimeTypes[x].description + "<br/>");
+              document.write("扩展名: " + navigator.mimeTypes[x].suffixes + "<br/>");
+              document.write("附注: " + navigator.mimeTypes[x].enabledPlugin.name + "<br/>");
+              document.write("<br/>");
+            }
+          }
+        </script>
+      </td>
+    </tr>
+    <tr>
+      <td>navigator.plugins.length</td>
+      <td>浏览器安装插件数量</td>
+      <td style="color: #158cba;">
+        <script>
+          document.write(navigator.plugins.length);
+        </script>
+      </td>
+    </tr>
+    <tr>
+      <td>navigator.plugins</td>
+      <td>浏览器安装插件信息列表</td>
+      <td style="color: #158cba;">
+        <script>
+          for (x in navigator.plugins) {
+            if (Object.prototype.toString.call(navigator.mimeTypes[x]) === "[object MimeType]") {
+              document.write(
+                "名称：" +
+                  navigator.plugins[x].name +
+                  "<br/> 描述：" +
+                  navigator.plugins[x].description +
+                  "<br/> 文件名称：" +
+                  navigator.plugins[x].filename +
+                  "<br/><br/>"
+              );
+            }
+          }
+        </script>
+      </td>
+    </tr>
+  </table>
+</div>
+{% endblock %}
+
+<!-- Foot -->
+{% block foot %}
+<script>
+  function detectOS() {
+    var e = navigator.userAgent,
+      t = "Win32" === navigator.platform || "Windows" === navigator.platform,
+      n =
+        "Mac68K" === navigator.platform ||
+        "MacPPC" === navigator.platform ||
+        "Macintosh" === navigator.platform ||
+        "MacIntel" === navigator.platform;
+    if (n) return "Mac";
+    var i = "X11" === navigator.platform && !t && !n;
+    if (i) return "Unix";
+    var o = String(navigator.platform).indexOf("Linux") > -1;
+    if (o) return "Linux";
+    if (t) {
+      var r = e.indexOf("Windows NT 5.0") > -1 || e.indexOf("Windows 2000") > -1;
+      if (r) return "Win2000";
+      var a = e.indexOf("Windows NT 5.1") > -1 || e.indexOf("Windows XP") > -1;
+      if (a) return "WinXP";
+      var s = e.indexOf("Windows NT 5.2") > -1 || e.indexOf("Windows 2003") > -1;
+      if (s) return "Win2003";
+      var l = e.indexOf("Windows NT 6.0") > -1 || e.indexOf("Windows Vista") > -1;
+      if (l) return "WinVista";
+      var c = e.indexOf("Windows NT 6.1") > -1 || e.indexOf("Windows 7") > -1;
+      if (c) return "Win7";
+      var d = e.indexOf("Windows NT 8") > -1 || e.indexOf("Windows 8") > -1;
+      if (d) return "Win8";
+      var u = e.indexOf("Windows NT 10") > -1 || e.indexOf("Windows 10") > -1;
+      if (u) return "Win10";
+    }
+    return "other";
+  }
+  $("#js_os").html(detectOS());
+</script>
+{% endblock %}

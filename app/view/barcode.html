@@ -1,0 +1,145 @@
+{% extends "./base.html" %}
+
+<!-- Head -->
+{% block head %} {% endblock %}
+
+<!-- Body -->
+{% block body %}
+<div class="container">
+  <ol class="breadcrumb">
+    <li><a href="/">首页</a></li>
+    <li class="active">条形码生成器</li>
+  </ol>
+
+  <div class="row">
+    <div class="col-md-6">
+      <form id="js_barcodeForm" action="#">
+        <div class="panel panel-primary">
+          <div class="panel-heading">必填项</div>
+          <div class="panel-body">
+            <div class="form-group">
+              <label>条形码</label>
+              <input name="source" value="012345678" type="text" class="form-control" placeholder="请输入条形码" />
+            </div>
+            <div class="form-group">
+              <label>格式</label>
+              <select name="format" class="form-control" placeholder="请选择">
+                <option value="CODE128A">CODE128A</option>
+                <option value="CODE128B">CODE128B</option>
+                <option value="CODE128C">CODE128C</option>
+                <option selected="selected" value="CODE128">Code128 自动</option>
+                <option value="EAN13">EAN13</option>
+                <option value="UPC">UPC</option>
+                <option value="EAN8">EAN8</option>
+                <option value="EAN5">EAN5</option>
+                <option value="EAN2">EAN2</option>
+                <option value="CODE39">CODE39</option>
+                <option value="ITF14">ITF14</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-heading">选填项</div>
+          <div class="panel-body">
+            <div class="form-group">
+              <label>是否展示码值</label>
+              <div>
+                <label class="radio-inline"> <input type="radio" name="displayValue" value="1" checked /> 是 </label>
+                <label class="radio-inline"> <input type="radio" name="displayValue" value="0" /> 否 </label>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="row">
+                <div class="col-xs-6">
+                  <label>宽</label>
+                  <input name="width" value="4" type="number" class="form-control" />
+                </div>
+                <div class="col-xs-6">
+                  <label>高</label>
+                  <input name="height" value="40" type="number" class="form-control" />
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="row">
+                <div class="col-xs-6">
+                  <label>背景颜色</label>
+                  <input name="background" type="text" value="#ffffff" class="form-control" placeholder="请输入" />
+                </div>
+                <div class="col-xs-6">
+                  <label>文字颜色</label>
+                  <input name="lineColor" type="text" value="#000000" class="form-control" placeholder="请输入" />
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>文字对齐</label>
+              <select name="textAlign" class="form-control" placeholder="请选择">
+                <option value="left">左对齐</option>
+                <option value="center" selected="selected">居中对齐</option>
+                <option value="right">右对齐</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="btn-group">
+          <button id="js_generateBtn" type="button" class="btn btn-primary">生成条形码</button>
+          <button id="js_downloadBtn" type="button" class="btn btn-default">下载</button>
+        </div>
+        <br />
+        <br />
+
+        <div class="panel panel-default">
+          <div class="panel-heading">输出区域</div>
+          <div class="panel-body">
+            <img id="js_output" />
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+<!-- Foot -->
+{% block foot %}
+<script src="/public/lib/js-barcode/JsBarcode.all.min.js"></script>
+<script>
+  $(document).ready(function () {
+    function generate() {
+      var formData = $("#js_barcodeForm").serializeJSON();
+      if (!formData.source) {
+        layer.alert("请输入条形码");
+        return;
+      }
+      JsBarcode("#js_output", formData.source, {
+        format: formData.format,
+        background: formData.background,
+        lineColor: formData.lineColor,
+        displayValue: formData.displayValue === "1",
+        textAlign: formData.textAlign,
+        width: Number(formData.width),
+        height: Number(formData.height),
+      });
+    }
+    generate();
+
+    $("#js_generateBtn").on("click", generate);
+
+    $("#js_downloadBtn").on("click", function () {
+      var formData = $("#js_barcodeForm").serializeJSON();
+      var base64 = $("#js_output").attr("src");
+      var link = document.createElement("a");
+      if (!base64) {
+        return;
+      }
+      document.body.appendChild(link);
+      link.setAttribute("href", base64);
+      link.setAttribute("download", formData.source + ".jpg");
+      link.click();
+    });
+  });
+</script>
+{% endblock %}
