@@ -14,8 +14,8 @@ module.exports = (appInfo) => {
   config.middleware = ["locals"];
 
   // TDK
-  config.title = "在线工具";
-  config.description = "一些常用的在线工具";
+  config.title = "开发试验田";
+  config.description = "远子的开发试验田, 存储了一些常用的在线工具";
   config.keywords = "远子";
   config.author = {
     name: "Jason Liu",
