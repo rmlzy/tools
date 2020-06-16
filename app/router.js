@@ -15,6 +15,10 @@ module.exports = (app) => {
   // 导航
   router.get("/nav.html", controller.nav.render);
 
+  // 速查表
+  router.get("/cheatsheet.html", controller.cheatsheet.renderList);
+  router.get("/cheatsheet/:id.html", controller.cheatsheet.renderDetail);
+
   // PNG to JPG
   router.get("/tool/png2jpg.html", controller.png2Jpg.render);
   router.get("/api/png2jpg/downloadAll", controller.png2Jpg.downloadAll);
@@ -69,14 +73,19 @@ module.exports = (app) => {
   router.get("/admin/category.html", controller.admin.category.render);
   router.get("/admin/nav.html", controller.admin.nav.render);
   router.get("/admin/tool.html", controller.admin.tool.render);
+  router.get("/admin/cheatsheet.html", controller.admin.cheatsheet.renderList);
+  router.get("/admin/cheatsheet/:id.html", controller.admin.cheatsheet.renderUpdate);
+
   // Admin API
   router.get("/api/generateImageCaptcha", controller.admin.login.generateImageCaptcha);
   router.post("/api/login", controller.admin.login.login);
+
   // Category
   router.get("/api/category/:id", controller.admin.category.detail);
   router.post("/api/category", controller.admin.category.create);
   router.put("/api/category/:id", controller.admin.category.update);
   router.delete("/api/category/:id", controller.admin.category.delete);
+
   // Nav
   router.get("/api/nav/:id", controller.admin.nav.detail);
   router.post("/api/nav", controller.admin.nav.create);
@@ -84,9 +93,16 @@ module.exports = (app) => {
   router.delete("/api/nav/:id", controller.admin.nav.delete);
   router.post("/api/nav/clicked", controller.admin.nav.clicked);
   router.post("/api/nav/detect", controller.admin.nav.detect);
+
   // Tool
   router.get("/api/tool/:id", controller.admin.tool.detail);
   router.post("/api/tool", controller.admin.tool.create);
   router.put("/api/tool/:id", controller.admin.tool.update);
   router.delete("/api/tool/:id", controller.admin.tool.delete);
+
+  // CheatSheet
+  router.get("/api/cheatsheet/:id", controller.admin.cheatsheet.detail);
+  router.post("/api/cheatsheet", controller.admin.cheatsheet.create);
+  router.put("/api/cheatsheet/:id", controller.admin.cheatsheet.update);
+  router.delete("/api/cheatsheet/:id", controller.admin.cheatsheet.delete);
 };

@@ -1,0 +1,186 @@
+{% extends "./base.html" %}
+
+<!-- Head -->
+{% block head %}
+<link rel="stylesheet" href="/public/lib/toastui-editor/codemirror.min.css" />
+<link rel="stylesheet" href="/public/lib/toastui-editor/toastui-editor.min.css" />
+<script>
+  window.initialId = "{{ id }}";
+</script>
+{% endblock %}
+
+<!-- Body -->
+{% block body %}
+<div class="container">
+  <ol class="breadcrumb">
+    <li><a href="/admin/home.html">控制台</a></li>
+    <li><a href="/admin/cheatsheet.html">速查表</a></li>
+    <li class="active">新增</li>
+  </ol>
+
+  <form id="js_writeForm" action="#">
+    <input type="hidden" name="id" value="{{ id }}" />
+    <div class="form-group">
+      <div class="row">
+        <div class="col-xs-8">
+          <input type="text" class="form-control" name="name" value="{{ sheet.name }}" placeholder="标题" />
+        </div>
+        <div class="col-xs-2"></div>
+        <div class="col-xs-2 text-right">
+          <button id="js_showModalBtn" type="button" class="btn btn-primary">提交</button>
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <div id="editor"></div>
+    </div>
+  </form>
+
+  <div class="modal fade" id="js_writeModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <form id="js_modalForm" action="#">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+            <h4 class="modal-title">补充信息</h4>
+          </div>
+          <div class="modal-body">
+            <div class="form-group">
+              <label class="control-label">状态:</label>
+              <div class="control-group">
+                <label class="radio-inline"><input type="radio" checked name="status" value="ENABLE" /> 启用 </label>
+                <label class="radio-inline"><input type="radio" name="status" value="DISABLE" /> 停用 </label>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label">备注:</label>
+              <textarea class="form-control" name="desc" cols="30" rows="5" maxlength="200"></textarea>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            <button type="submit" class="btn btn-primary">保存</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+<!-- Foot -->
+{% block foot %}
+<script src="/public/lib/toastui-editor/toastui-editor-all.min.js"></script>
+<script>
+  $(document).ready(function () {
+    var $writeForm = $("#js_writeForm");
+    var $modalForm = $("#js_modalForm");
+    var $writeModal = $("#js_writeModal");
+    var editor = new toastui.Editor({
+      el: document.querySelector("#editor"),
+      previewStyle: "tab",
+      height: "calc(100vh - 305px)",
+      initialValue: "",
+      hideModeSwitch: true,
+      hooks: {
+        addImageBlobHook: function (fileOrBlob, callback, source) {
+          var fd = new FormData();
+          fd.append("file", fileOrBlob);
+          layer.load();
+          $.ajax({
+            type: "POST",
+            url: "/api/v1/upload",
+            data: fd,
+            processData: false,
+            contentType: false,
+            success: function (res) {
+              layer.closeAll("loading");
+              if (res.success) {
+                callback(res.data.url, res.data.name);
+              } else {
+                layer.msg(res.message, { icon: 5 });
+              }
+            },
+            error: function (jqXHR, textStatus, errorMessage) {
+              console.log(errorMessage); // Optional
+            },
+          });
+          return false;
+        },
+      },
+    });
+
+    setInitialData();
+
+    $("#js_showModalBtn").on("click", function () {
+      var formData = $writeForm.serializeJSON();
+      var content = editor.getMarkdown();
+      if (!formData.name) {
+        layer.msg("请输入标题", { icon: 2 });
+        return;
+      }
+      if (!content) {
+        layer.msg("请输入正文", { icon: 2 });
+        return;
+      }
+      if (window.initialId) {
+        $writeModal.modal("show");
+        return;
+      }
+      $writeModal.modal("show");
+    });
+
+    $modalForm.on("submit", function (evt) {
+      evt.preventDefault();
+      var writeFormData = $writeForm.serializeJSON();
+      var modalFormData = $modalForm.serializeJSON();
+      writeFormData.content = editor.getMarkdown();
+      var isCreate = window.initialId === "0";
+      $.ajax({
+        type: isCreate ? "POST" : "PUT",
+        url: isCreate ? "/api/cheatsheet" : "/api/cheatsheet/" + window.initialId,
+        data: Object.assign(modalFormData, writeFormData),
+        success: function (res) {
+          if (res.success) {
+            layer.alert(
+              res.message,
+              {
+                closeBtn: 0,
+              },
+              function () {
+                window.location.href = "/admin/cheatsheet/" + res.data + ".html";
+              }
+            );
+          } else {
+            layer.msg(res.message, { icon: 5 });
+          }
+        },
+      });
+    });
+
+    function setInitialData() {
+      if (window.initialId === "0") {
+        return;
+      }
+      layer.load();
+      $.ajax({
+        type: "GET",
+        url: "/api/cheatsheet/" + window.initialId,
+        success: function (res) {
+          layer.closeAll("loading");
+          if (!res.success) {
+            layer.msg(res.message, { icon: 5 });
+            return;
+          }
+          editor.setMarkdown(res.data.content);
+          $writeForm.find("input[name='name']").val(res.data.name);
+          $modalForm.find("textarea[name='desc']").val(res.data.desc);
+          $modalForm.find("input:radio[name='status'][value='" + res.data.status + "']").prop("checked", true);
+        },
+      });
+    }
+  });
+</script>
+{% endblock %}
