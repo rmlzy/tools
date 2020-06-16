@@ -1,0 +1,52 @@
+{% extends "./base.html" %}
+
+<!-- Head -->
+{% block head %}
+<style>
+  .article-wrap {
+    height: 400px;
+    overflow-y: scroll;
+  }
+</style>
+{% endblock %}
+
+<!-- Body -->
+{% block body %}
+<div class="container">
+  <ol class="breadcrumb">
+    <li><a href="/">首页</a></li>
+    <li class="active">今日热榜</li>
+  </ol>
+
+  <div class="row">
+    {% for node in nodes %}
+    <div class="col-xs-12 col-sm-6 col-md-4">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <img style="margin-top: -3px;" width="18" class="img-circle" src="{{ node.logo }}" alt="{{ node.name }}" />
+          <span>{{ node.name }}</span>
+          <span class="pull-right">{{ node.desc }}</span>
+        </div>
+        <div class="panel-body">
+          <ul class="list-group article-wrap">
+            {% for article in node.articles %}
+            <li class="list-group-item">
+              <a href="{{ article.url }}" title="{{ article.title }}" target="_blank">
+                {{ loop.index}}.&nbsp; {{ article.title }}
+              </a>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <h4>说明:</h4>
+  <p>本页内容采集自 <a href="https://tophub.today/c/tech">今日热榜</a>, 如果侵权请联系我删除</p>
+</div>
+{% endblock %}
+
+<!-- Foot -->
+{% block foot %} {% endblock %}

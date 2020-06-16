@@ -67,6 +67,7 @@ module.exports = (app) => {
   router.post("/api/xml2json/toJson", controller.xml2json.toJson);
 
   // https://tophub.today 爬虫
+  router.get("/tophub.html", controller.tophub.render);
   router.get("/api/tophub/topics", controller.tophub.topics);
   router.get("/api/tophub/nodes", controller.tophub.nodes);
 
