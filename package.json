@@ -23,6 +23,7 @@
     "markdown-it": "^11.0.0",
     "mysql2": "^2.1.0",
     "svg-captcha": "^1.4.0",
+    "ua-parser-js": "^0.7.21",
     "uuid": "^8.1.0",
     "xml-js": "^1.6.11"
   },

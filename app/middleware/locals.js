@@ -15,6 +15,9 @@ module.exports = () => {
     const pv = await ctx.service.dict.get("totalPV");
     ctx.locals.totalPV = pv;
 
+    const ips = await ctx.service.visitor.findAll();
+    ctx.locals.ipNum = ips.length + 100;
+
     const deployedDate = dayjs(ctx.app.config.firstDeployDate);
     ctx.locals.systemRunning = today.diff(deployedDate, "day");
     await next();
