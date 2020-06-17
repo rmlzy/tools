@@ -6,7 +6,7 @@
     <meta name="description" content="{{ description }}" />
     <meta name="author" content="{{ author.name }}<{{ author.email }}>" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-    <meta name="baidu_union_verify" content="4b54dcaba062592079fdde4574ccb3ac">
+    <meta name="baidu_union_verify" content="4b54dcaba062592079fdde4574ccb3ac" />
     <link rel="shortcut icon" href="/public/img/favicon.png" />
     <link rel="stylesheet" href="/public/lib/bootstrap/css/theme.min.css" />
     <link rel="stylesheet" href="/public/css/tools.css?v={{ version }}" />
@@ -33,7 +33,7 @@
             <li><a href="/">在线工具</a></li>
             <li><a href="/nav.html">网站导航</a></li>
             <li><a href="/cheatsheet.html">速查表</a></li>
-            <li><a style="color: orangered" href="/tophub.html">今日热榜</a></li>
+            <li><a style="color: orangered;" href="/tophub.html">今日热榜</a></li>
             <li><a href="http://poppython.com" target="_blank">博客</a></li>
             <li><a href="/i-need-this.html">申请收录</a></li>
           </ul>
@@ -54,7 +54,10 @@
     <footer class="well" style="margin: 30px 0 0; border-radius: 0;">
       <div class="container">
         <p>本站已经稳定运行 {{ systemRunning }} 天, 总访问量 {{ totalPV }} 次, 累计用户 {{ ipNum }} 位</p>
-        <p>源代码托管在 <a href="{{ repoUrl }}" >Github</a>.</p>
+        <p>
+          源代码托管在 <a href="{{ repoUrl }}" target="_blank">Github</a>,
+          <a href="https://github.com/rmlzy/tools/commits/master" target="_blank">更新日志</a>
+        </p>
       </div>
     </footer>
 
