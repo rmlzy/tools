@@ -66,6 +66,9 @@ module.exports = (app) => {
   router.post("/api/xml2json/toXml", controller.xml2json.toXml);
   router.post("/api/xml2json/toJson", controller.xml2json.toJson);
 
+  // Regex
+  router.get("/tool/regex.html", controller.regex.render);
+
   // https://tophub.today 爬虫
   router.get("/tophub.html", controller.tophub.render);
   router.get("/api/tophub/topics", controller.tophub.topics);

@@ -1,0 +1,143 @@
+{% extends "./base.html" %}
+
+<!-- Head -->
+{% block head %}
+<style>
+  .mb10 {
+    margin-bottom: 10px;
+  }
+</style>
+{% endblock %}
+
+<!-- Body -->
+{% block body %}
+<div class="container">
+  <ol class="breadcrumb">
+    <li><a href="/">首页</a></li>
+    <li class="active">正则表达式</li>
+  </ol>
+
+  <textarea id="js_sourceArea" class="form-control" rows="10" placeholder="这里输入待匹配文本"></textarea>
+
+  <div style="padding: 20px 0;">
+    <div class="row">
+      <div class="col-xs-12 col-xs-6 col-md-4">
+        <div class="input-group mb10">
+          <span class="input-group-addon">正则表达式</span>
+          <input id="js_regex" type="text" class="form-control" />
+        </div>
+      </div>
+
+      <div class="col-xs-12 col-xs-6 col-md-2">
+        <select id="js_type" class="form-control mb10">
+          <option value="">常用正则表达式</option>
+          <option value="[\u4e00-\u9fa5]">匹配中文字符</option>
+          <option value="[^\x00-\xff]">匹配双字节字符(包括汉字在内)</option>
+          <option value="\n\s*\r">匹配空白行</option>
+          <option
+            value="[\w!#$%&amp;'*+/=?^_`{|}~-]+(?:\.[\w!#$%&amp;'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?"
+          >
+            匹配Email地址
+          </option>
+          <option value="[a-zA-z]+://[^\s]*">匹配网址URL</option>
+          <option value="\d{3}-\d{8}|\d{4}-\{7,8}">匹配国内电话号码</option>
+          <option value="[1-9][0-9]{4,}">匹配腾讯QQ号</option>
+          <option value="[1-9]\d{5}(?!\d)">匹配中国邮政编码</option>
+          <option value="^(\d{6})(\d{4})(\d{2})(\d{2})(\d{3})([0-9]|X)$">匹配18位身份证号</option>
+          <option
+            value="([0-9]{3}[1-9]|[0-9]{2}[1-9][0-9]{1}|[0-9]{1}[1-9][0-9]{2}|[1-9][0-9]{3})-(((0[13578]|1[02])-(0[1-9]|[12][0-9]|3[01]))|((0[469]|11)-(0[1-9]|[12][0-9]|30))|(02-(0[1-9]|[1][0-9]|2[0-8])))"
+          >
+            匹配(年-月-日)格式日期
+          </option>
+          <option value="^[1-9]\d*$">匹配正整数</option>
+          <option value="^-[1-9]\d*$">匹配负整数</option>
+          <option value="^-?[1-9]\d*$">匹配整数</option>
+          <option value="^[1-9]\d*|0$">匹配非负整数（正整数 + 0）</option>
+          <option value="^-[1-9]\d*|0$">匹配非正整数（负整数 + 0）</option>
+          <option value="^(0|[1-9]+[0-9]*)(\.[0-9]{1,4})?$">匹配正浮点数</option>
+          <option value="^-(0|[1-9]+[0-9]*)(\.[0-9]{1,4})?$">匹配负浮点数</option>
+        </select>
+      </div>
+
+      <div class="col-xs-6 col-xs-3 col-md-2">
+        <div class="checkbox mb10">
+          <label>
+            <input id="js_global" type="checkbox" />
+            <span>全局搜索</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="col-xs-6 col-xs-3 col-md-2">
+        <div class="checkbox mb10">
+          <label>
+            <input id="js_ignore" type="checkbox" />
+            <span>忽略大小写</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="col-xs-12 col-xs-6 col-md-2">
+        <div class="btn-group">
+          <button id="js_matchBtn" class="btn btn-primary">测试匹配</button>
+          <button id="js_clearBtn" class="btn btn-default">清空</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <textarea id="js_outputArea" class="form-control" rows="10" placeholder="匹配结果"></textarea>
+
+  <h2>工具说明:</h2>
+  <ol>
+    <li>本工具不采集您的任何数据；</li>
+  </ol>
+</div>
+{% endblock %}
+
+<!-- Foot -->
+{% block foot %}
+<script src="/public/lib/base64/base64.js"></script>
+<script>
+  $(document).ready(function () {
+    var $sourceArea = $("#js_sourceArea");
+    var $outputArea = $("#js_outputArea");
+
+    $("#js_matchBtn").on("click", function () {
+      var source = $sourceArea.val();
+      var regex = $("#js_regex").val();
+      var isGlobal = $("#js_global").prop("checked");
+      var isIgnore = $("#js_ignore").prop("checked");
+      var mode = "";
+      if (isGlobal) {
+        mode += "g";
+      }
+      if (isIgnore) {
+        mode += "i";
+      }
+      var re = new RegExp(regex, mode);
+      var matched = source.match(re);
+      var output = [];
+      console.log(matched);
+      if (matched.length === 0) {
+        output.push("匹配位置：");
+      } else {
+        output.push("共找到 " + matched.length + " 处匹配：");
+      }
+      output.push(matched.join("\n"));
+      $outputArea.val(output.join("\n"));
+    });
+
+    $("#js_type").on("change", function () {
+      var regex = $(this).val();
+      $("#js_regex").val(regex);
+    });
+
+    $("#js_clearBtn").on("click", function () {
+      $sourceArea.val("");
+      $outputArea.val("");
+      $("#js_type").val("");
+    });
+  });
+</script>
+{% endblock %}
