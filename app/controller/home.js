@@ -19,6 +19,10 @@ class HomeController extends Controller {
     });
     await ctx.render("home.html", { doneTools, workingTools });
   }
+
+  async fuckWechat() {
+    this.ctx.body = "3146667439605983502";
+  }
 }
 
 module.exports = HomeController;

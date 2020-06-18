@@ -8,6 +8,8 @@ module.exports = (app) => {
 
   router.get("/", controller.home.render);
 
+  router.get("/tencent10516259534700430925.txt", controller.home.fuckWechat)
+
   // Demand
   router.get("/i-need-this.html", controller.demand.render);
   router.post("/api/demand", controller.demand.create);
