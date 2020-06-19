@@ -8,7 +8,7 @@ module.exports = (app) => {
 
   router.get("/", controller.home.render);
 
-  router.get("/tencent10516259534700430925.txt", controller.home.fuckWechat)
+  router.get("/tencent10516259534700430925.txt", controller.home.fuckWechat);
 
   // Demand
   router.get("/i-need-this.html", controller.demand.render);
@@ -16,6 +16,9 @@ module.exports = (app) => {
 
   // 导航
   router.get("/nav.html", controller.nav.render);
+
+  // 设计工具
+  router.get("/design.html", controller.design.render);
 
   // 速查表
   router.get("/cheatsheet.html", controller.cheatsheet.renderList);

@@ -1,0 +1,56 @@
+{% extends "./base.html" %}
+
+<!-- Head -->
+{% block head %}
+<style>
+  .overflow3 {
+    display: block;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+</style>
+{% endblock %}
+
+<!-- Body -->
+{% block body %}
+<div class="container">
+  <ol class="breadcrumb">
+    <li><a href="/">首页</a></li>
+    <li class="active">设计资源</li>
+  </ol>
+
+  {% for section in sections %}
+  <h2>{{ section.title }}</h2>
+  <p>{{ section.subTitle }}</p>
+  <div class="row">
+    {% for site in section.links %}
+    <div class="col-xs-12 col-sm-6 col-md-4">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <a href="{{ site.href }}" target="_blank" title="{{ site.title }}"><b>{{ site.title }}</b></a>
+        </div>
+        <div class="panel-body" style="min-height: 310px;">
+          <p><img src="{{ site.img }}" alt="{{ site.title }}" style="width: 100%"></p>
+          <div title="{{ site.desc }}" class="overflow3">{{ site.desc }}</div>
+        </div>
+        <div class="panel-footer">
+          <span>{{ site.slogan }}</span>
+          <a href="{{ site.href }}" class="pull-right" target="_blank" title="{{ site.title }}">进入</a>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% endfor %}
+
+
+  <h4>说明:</h4>
+  <p>本页内容采集自 <a href="https://design.maliquankai.com/">码力全开</a>, 如果侵权请联系我删除</p>
+</div>
+{% endblock %}
+
+<!-- Foot -->
+{% block foot %} {% endblock %}
