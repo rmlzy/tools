@@ -20,6 +20,10 @@ module.exports = () => {
 
     const deployedDate = dayjs(ctx.app.config.firstDeployDate);
     ctx.locals.systemRunning = today.diff(deployedDate, "day");
+
+    ctx.runInBackground(async () => {
+      await ctx.service.visitor.create();
+    });
     await next();
   };
 };

@@ -15,7 +15,6 @@ class HomeController extends Controller {
     }
     ctx.runInBackground(async () => {
       await service.dict.addTotalPV();
-      await service.visitor.create();
     });
     await ctx.render("home.html", { doneTools, workingTools });
   }
