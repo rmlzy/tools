@@ -3,6 +3,11 @@
 <!-- Head -->
 {% block head %}
 <style>
+  .scroll-body {
+    height: calc(100vh - 270px);
+    overflow-y: auto;
+  }
+
   .stage {
     display: block;
     margin: 0 auto;
@@ -18,14 +23,14 @@
   }
 
   .bg-demo {
-    display: inline-block;
+    float: left;
     width: 40px;
     height: 40px;
     border-radius: 10px;
-    margin-right: 5px;
-    margin-bottom: 5px;
     cursor: pointer;
     background: #333;
+    margin-right: 5px;
+    margin-bottom: 5px;
   }
 
   .bg-demo svg {
@@ -36,7 +41,7 @@
   }
 
   .panel-body {
-    min-height: 440px;
+    min-height: 290px;
   }
 </style>
 {% endblock %}
@@ -49,256 +54,275 @@
     <li class="active">在线制作Logo</li>
   </ol>
 
-  <canvas
-    ref="stage"
-    class="stage"
-    :width="option.size"
-    :height="option.size"
-    :style="'border-radius: ' + option.radius"
-  ></canvas>
-  <br />
-
-  <div class="clearfix">
-    <span style="line-height: 30px;">简单三步, 10秒钟轻松制作!</span>
-    <div class="btn-group pull-right">
-      <button type="button" class="btn btn-sm btn-primary" @click="draw">生成</button>
-      <button type="button" class="btn btn-sm btn-default" @click="exportToImage">下载</button>
-    </div>
-  </div>
-  <br />
-
   <div class="row">
     <div class="col-md-4">
-      <div class="panel panel-default">
-        <div class="panel-heading">STEP1. 配置背景</div>
-        <div class="panel-body">
-          <div class="form-group">
-            <label class="control-label">背景：</label>
-            <div class="form-control">
-              <label class="radio-inline">
-                <input type="radio" v-model="option.bgType" value="linear" @change="changeBgType" />
-                <span>渐变</span>
-              </label>
-              <label class="radio-inline">
-                <input type="radio" v-model="option.bgType" value="transparent" @change="changeBgType" />
-                <span>透明</span>
-              </label>
-              <label class="radio-inline">
-                <input type="radio" v-model="option.bgType" value="plain" @change="changeBgType" />
-                <span>纯色</span>
-              </label>
-            </div>
-          </div>
+      <canvas
+        ref="stage"
+        class="stage"
+        :width="option.size"
+        :height="option.size"
+        :style="'border-radius: ' + option.radius"
+      ></canvas>
+      <br />
 
-          <div class="form-group">
-            <label class="control-label">圆角：</label>
-            <div class="form-control">
-              <label class="radio-inline">
-                <input type="radio" v-model="option.radius" value="0" />
-                <span>无</span>
-              </label>
-              <label class="radio-inline">
-                <input type="radio" v-model="option.radius" value="50%" />
-                <span>圆形</span>
-              </label>
-              <label class="radio-inline">
-                <input type="radio" v-model="option.radius" value="100px" />
-                <span>圆角</span>
-              </label>
-            </div>
-          </div>
+      <div class="clearfix">
+        <span style="line-height: 30px;">简单三步, 10秒钟轻松制作!</span>
+        <div class="btn-group pull-right">
+          <button type="button" class="btn btn-sm btn-primary" @click="draw">生成</button>
+          <button type="button" class="btn btn-sm btn-default" @click="setRotate">旋转</button>
+          <button type="button" class="btn btn-sm btn-default" @click="exportToImage">下载</button>
+        </div>
+      </div>
+      <br />
+    </div>
+    <div class="col-md-8 scroll-body">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="panel panel-default">
+            <div class="panel-heading">STEP1. 配置背景</div>
+            <div class="panel-body">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label class="control-label">背景：</label>
+                    <div class="form-control">
+                      <label class="radio-inline">
+                        <input type="radio" v-model="option.bgType" value="linear" @change="changeBgType" />
+                        <span>渐变</span>
+                      </label>
+                      <label class="radio-inline">
+                        <input type="radio" v-model="option.bgType" value="transparent" @change="changeBgType" />
+                        <span>透明</span>
+                      </label>
+                      <label class="radio-inline">
+                        <input type="radio" v-model="option.bgType" value="plain" @change="changeBgType" />
+                        <span>纯色</span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
 
-          <template v-if="option.bgType === 'linear'">
-            <div class="form-group">
-              <label class="control-label" style="display: block;">
-                <span>渐变类型：</span>
-                <a href="javascript:;" class="pull-right">自定义渐变</a>
-              </label>
-              <div class="form-control-static">
-                <div
-                  class="bg-demo"
-                  v-for="(item, idx) in linearColorMap"
-                  :key="idx"
-                  v-if="item.mid"
-                  :style="'background: linear-gradient(to bottom, ' + item.from + ', ' + item.mid + ', ' + item.to + ');'"
-                  @click="setLinearColor(item)"
-                ></div>
-                <div
-                  class="bg-demo"
-                  v-for="(item, idx) in linearColorMap"
-                  :key="idx"
-                  v-if="!item.mid"
-                  :style="'background: linear-gradient(to bottom, ' + item.from + ', ' + item.to + ');'"
-                  @click="setLinearColor(item)"
-                ></div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label class="control-label">圆角：</label>
+                    <div class="form-control">
+                      <label class="radio-inline">
+                        <input type="radio" v-model="option.radius" value="0" />
+                        <span>无</span>
+                      </label>
+                      <label class="radio-inline">
+                        <input type="radio" v-model="option.radius" value="50%" />
+                        <span>圆形</span>
+                      </label>
+                      <label class="radio-inline">
+                        <input type="radio" v-model="option.radius" value="100px" />
+                        <span>圆角</span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
               </div>
-            </div>
-          </template>
 
-          <template v-if="option.bgType === 'plain'">
-            <div class="form-group">
-              <label class="control-label">背景色：</label>
-              <div class="form-control-static">
-                <div
-                  class="bg-demo"
-                  v-for="(item, idx) in backgroundMap"
-                  :key="idx"
-                  :style="'background: ' + item"
-                  @click="setBackgroundColor(item)"
-                ></div>
-              </div>
-            </div>
-          </template>
+              <template v-if="option.bgType === 'linear'">
+                <div class="form-group">
+                  <label class="control-label" style="display: block;">
+                    <span>渐变类型：</span>
+                    <a v-if="showAllColor" href="javascript:;" class="pull-right" @click="toggleShowAllColor">收起</a>
+                    <a v-else href="javascript:;" class="pull-right" @click="toggleShowAllColor">展开</a>
+                  </label>
+                  <div class="form-control-static clearfix">
+                    <template
+                      v-for="(item, idx) in linearColors"
+                      :key="idx"
+                      v-if="showAllColor || (!showAllColor && idx < 45)"
+                    >
+                      <div
+                        class="bg-demo"
+                        v-if="item.colors.length === 3"
+                        :style="'background: linear-gradient(to bottom, ' + item.colors[0] + ', ' + item.colors[1] + ', ' + item.colors[2] + ');'"
+                        @click="setLinearColor(item)"
+                      ></div>
+                      <div
+                        class="bg-demo"
+                        v-if="item.colors.length === 2"
+                        :style="'background: linear-gradient(to bottom, ' + item.colors[0] + ', ' + item.colors[1]+ ');'"
+                        @click="setLinearColor(item)"
+                      ></div>
+                    </template>
+                  </div>
+                </div>
+              </template>
 
-          <div class="form-group">
-            <label class="control-label">渐变方向：</label>
-            <div class="form-control">
-              <span>{{ option.rotate }} deg</span>
-              &nbsp;&nbsp;
-              <a href="javascript:;" @click="setRotate">旋转</a>
+              <template v-if="option.bgType === 'transparent'">
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label class="control-label">透明度：</label>
+                      <div class="form-control-static">
+                        <input type="text" class="form-control" v-model="option.opacity" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </template>
+
+              <template v-if="option.bgType === 'plain'">
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label class="control-label">背景色：</label>
+                      <div class="form-control-static">
+                        <input type="text" class="form-control" v-model="option.background" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </template>
             </div>
           </div>
         </div>
       </div>
-    </div>
-    <div class="col-md-4">
-      <div class="panel panel-default">
-        <div class="panel-heading">STEP2. 配置图标</div>
-        <div class="panel-body">
-          <div class="form-group">
-            <label class="control-label">类型：</label>
-            <div class="form-control">
-              <label class="radio-inline">
-                <input type="radio" v-model="option.fontType" value="svg" />
-                <span>图标</span>
-              </label>
-              <label class="radio-inline">
-                <input type="radio" v-model="option.fontType" value="text" />
-                <span>文字</span>
-              </label>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="panel panel-default">
+            <div class="panel-heading">STEP2. 配置图标</div>
+            <div class="panel-body">
+              <div class="form-group">
+                <label class="control-label">类型：</label>
+                <div class="form-control">
+                  <label class="radio-inline">
+                    <input type="radio" v-model="option.fontType" value="svg" />
+                    <span>图标</span>
+                  </label>
+                  <label class="radio-inline">
+                    <input type="radio" v-model="option.fontType" value="text" />
+                    <span>文字</span>
+                  </label>
+                </div>
+              </div>
+
+              <template v-if="option.fontType === 'text'">
+                <div class="row">
+                  <div class="col-sm-6">
+                    <div class="form-group">
+                      <label class="control-label">文字：</label>
+                      <input type="text" class="form-control" v-model="option.text" @input="changeText" />
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="form-group">
+                      <label class="control-label">颜色：</label>
+                      <input type="text" class="form-control" v-model="option.fontColor" @input="changeColor" />
+                    </div>
+                  </div>
+                </div>
+              </template>
+
+              <template v-if="option.fontType === 'svg'">
+                <div class="form-group">
+                  <label class="control-label" style="display: block;">
+                    <span>图标：</span>
+                    <a href="javascript:;" class="pull-right">自定义图标</a>
+                  </label>
+                  <div class="form-control-static">
+                    <div
+                      class="bg-demo"
+                      v-for="(val, key, idx) in svgMap"
+                      :key="idx"
+                      @click="setSvg(val)"
+                      v-html="val"
+                    ></div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-6">
+                    <div class="form-group">
+                      <label class="control-label">填充色：</label>
+                      <input type="text" class="form-control" v-model="option.fillColor" />
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="form-group">
+                      <label class="control-label">边框色：</label>
+                      <input type="text" class="form-control" v-model="option.stokeColor" />
+                    </div>
+                  </div>
+                </div>
+              </template>
             </div>
           </div>
-
-          <template v-if="option.fontType === 'text'">
-            <div class="row">
-              <div class="col-sm-6">
-                <div class="form-group">
-                  <label class="control-label">文字：</label>
-                  <input type="text" class="form-control" v-model="option.text" @input="changeText" />
-                </div>
-              </div>
-              <div class="col-sm-6">
-                <div class="form-group">
-                  <label class="control-label">颜色：</label>
-                  <input type="text" class="form-control" v-model="option.fontColor" @input="changeColor" />
-                </div>
-              </div>
-            </div>
-          </template>
-
-          <template v-if="option.fontType === 'svg'">
-            <div class="form-group">
-              <label class="control-label" style="display: block;">
-                <span>图标：</span>
-                <a href="javascript:;" class="pull-right">自定义图标</a>
-              </label>
-              <div class="form-control-static">
-                <div
-                  class="bg-demo"
-                  v-for="(val, key, idx) in svgMap"
-                  :key="idx"
-                  @click="setSvg(val)"
-                  v-html="val"
-                ></div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-sm-6">
-                <div class="form-group">
-                  <label class="control-label">填充色：</label>
-                  <input type="text" class="form-control" v-model="option.fillColor" />
-                </div>
-              </div>
-              <div class="col-sm-6">
-                <div class="form-group">
-                  <label class="control-label">边框色：</label>
-                  <input type="text" class="form-control" v-model="option.stokeColor" />
-                </div>
-              </div>
-            </div>
-          </template>
         </div>
-      </div>
-    </div>
-    <div class="col-md-4">
-      <div class="panel panel-default">
-        <div class="panel-heading">STEP3. 徽章</div>
-        <div class="panel-body">
-          <div class="form-group">
-            <label class="control-label">展示徽章：</label>
-            <div class="form-control">
-              <label class="radio-inline">
-                <input type="radio" v-model="option.showBadge" value="1" />
-                <span>是</span>
-              </label>
-              <label class="radio-inline">
-                <input type="radio" v-model="option.showBadge" value="0" />
-                <span>否</span>
-              </label>
-            </div>
-          </div>
+        <div class="col-md-6">
+          <div class="panel panel-default">
+            <div class="panel-heading">STEP3. 徽章</div>
+            <div class="panel-body">
+              <div class="form-group">
+                <label class="control-label">展示徽章：</label>
+                <div class="form-control">
+                  <label class="radio-inline">
+                    <input type="radio" v-model="option.showBadge" value="1" />
+                    <span>是</span>
+                  </label>
+                  <label class="radio-inline">
+                    <input type="radio" v-model="option.showBadge" value="0" />
+                    <span>否</span>
+                  </label>
+                </div>
+              </div>
 
-          <template v-if="option.showBadge === '1'">
-            <div class="row">
-              <div class="col-xs-6">
-                <div class="form-group">
-                  <label class="control-label">文字：</label>
-                  <input type="text" class="form-control" v-model="option.badgeText" @input="changeColor" />
+              <template v-if="option.showBadge === '1'">
+                <div class="row">
+                  <div class="col-xs-6">
+                    <div class="form-group">
+                      <label class="control-label">文字：</label>
+                      <input type="text" class="form-control" v-model="option.badgeText" @input="changeColor" />
+                    </div>
+                  </div>
+                  <div class="col-xs-6">
+                    <div class="form-group">
+                      <label class="control-label">字号：</label>
+                      <input type="text" class="form-control" v-model="option.badgeSize" @input="changeColor" />
+                    </div>
+                  </div>
                 </div>
-              </div>
-              <div class="col-xs-6">
-                <div class="form-group">
-                  <label class="control-label">字号：</label>
-                  <input type="text" class="form-control" v-model="option.badgeSize" @input="changeColor" />
-                </div>
-              </div>
-            </div>
 
-            <div class="row">
-              <div class="col-xs-6">
-                <div class="form-group">
-                  <label class="control-label">背景色：</label>
-                  <input type="text" class="form-control" v-model="option.badgeBackground" @input="changeColor" />
+                <div class="row">
+                  <div class="col-xs-6">
+                    <div class="form-group">
+                      <label class="control-label">背景色：</label>
+                      <input type="text" class="form-control" v-model="option.badgeBackground" @input="changeColor" />
+                    </div>
+                  </div>
+                  <div class="col-xs-6">
+                    <div class="form-group">
+                      <label class="control-label">文字颜色：</label>
+                      <input type="text" class="form-control" v-model="option.badgeColor" @input="changeColor" />
+                    </div>
+                  </div>
                 </div>
-              </div>
-              <div class="col-xs-6">
-                <div class="form-group">
-                  <label class="control-label">文字颜色：</label>
-                  <input type="text" class="form-control" v-model="option.badgeColor" @input="changeColor" />
-                </div>
-              </div>
-            </div>
-          </template>
+              </template>
 
-          <div class="form-group">
-            <label class="control-label">导出：</label>
-            <div class="form-control">
-              <label class="radio-inline">
-                <input type="radio" v-model="option.exportType" value="osx" />
-                <span>OS X</span>
-              </label>
-              <label class="radio-inline">
-                <input type="radio" v-model="option.exportType" value="ios" />
-                <span>iOS</span>
-              </label>
-              <label class="radio-inline">
-                <input type="radio" v-model="option.exportType" value="watchOS" />
-                <span>watchOS</span>
-              </label>
-              <label class="radio-inline">
-                <input type="radio" v-model="option.exportType" value="android" />
-                <span>Android</span>
-              </label>
+              <div class="form-group">
+                <label class="control-label">导出：</label>
+                <div class="form-control">
+                  <label class="radio-inline">
+                    <input type="radio" v-model="option.exportType" value="osx" />
+                    <span>OS X</span>
+                  </label>
+                  <label class="radio-inline">
+                    <input type="radio" v-model="option.exportType" value="ios" />
+                    <span>iOS</span>
+                  </label>
+                  <label class="radio-inline">
+                    <input type="radio" v-model="option.exportType" value="watchOS" />
+                    <span>watchOS</span>
+                  </label>
+                  <label class="radio-inline">
+                    <input type="radio" v-model="option.exportType" value="android" />
+                    <span>Android</span>
+                  </label>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -317,18 +341,8 @@
       el: "#GenLogoApp",
       data() {
         return {
-          linearColorMap: {
-            dawn: { from: "#F3904F", to: "#3B4371" },
-            gradeGrey: { from: "#bdc3c7", to: "#2c3e50" },
-            piggyPink: { from: "#ee9ca7", to: "#ffdde1" },
-            coolBlue: { from: "#2193b0", to: "#6dd5ed" },
-            megaTron: { from: "#C6FFDD", mid: "#FBD786", to: "#f7797d" },
-            moonlit: { from: "#0F2027", mid: "#203A43", to: "#f7797d" },
-            jshine: { from: "#12c2e9", mid: "#c471ed", to: "#f7797d" },
-            eveningSunshine: { from: "#b92b27", to: "#1565C0" },
-            darkOcean: { from: "#373B44", to: "#4286f4" },
-            coolSky: { from: "#2980B9", mid: "#6DD5FA", to: "#FFFFFF" },
-          },
+          showAllColor: false,
+          linearColors: {},
           backgroundMap: ["red", "blue"],
           svgMap: {
             demo1:
@@ -348,9 +362,8 @@
             radius: "100px",
             bgType: "linear",
             background: "",
-            from: "",
-            mid: "",
-            to: "",
+            opacity: 1, // 透明度
+            colors: [], // 渐变背景
             rotate: 0,
 
             // 文字
@@ -379,16 +392,33 @@
       },
       mounted() {
         this.ctx = this.$refs.stage.getContext("2d");
-        // 默认渐变类型
-        this.option.from = this.linearColorMap.megaTron.from;
-        this.option.mid = this.linearColorMap.megaTron.mid;
-        this.option.to = this.linearColorMap.megaTron.to;
 
         // 默认SVG
         this.option.svg = this.svgMap.demo1;
-        this.draw();
+        this.getLinearColorMap();
       },
       methods: {
+        toggleShowAllColor: function () {
+          this.showAllColor = !this.showAllColor;
+        },
+
+        getLinearColorMap: function () {
+          var that = this;
+          $.ajax({
+            type: "GET",
+            url: "/api/genLogo/colors",
+            success: function (res) {
+              if (res.success) {
+                that.linearColors = res.data;
+                that.option.colors = res.data[0].colors;
+                that.draw();
+              } else {
+                layer.msg(res.message, { icon: 5 });
+              }
+            },
+          });
+        },
+
         setRotate: function () {
           this.option.rotate += 45;
           if (this.option.rotate > 360) {
@@ -397,12 +427,8 @@
           this.draw();
         },
 
-        setLinearColor: function (color) {
-          this.option.from = color.from;
-          this.option.to = color.to;
-          if (color.mid) {
-            this.option.mid = color.mid;
-          }
+        setLinearColor: function (row) {
+          this.option.colors = row.colors;
           this.draw();
         },
 
@@ -478,13 +504,13 @@
             if (this.option.rotate === 360) {
               grd = this.ctx.createLinearGradient(size / 2, size, size / 2, 0);
             }
-            if (this.option.mid) {
-              grd.addColorStop(0, this.option.from);
-              grd.addColorStop(0.5, this.option.mid);
-              grd.addColorStop(1, this.option.to);
+            if (this.option.colors.length === 3) {
+              grd.addColorStop(0, this.option.colors[0]);
+              grd.addColorStop(0.5, this.option.colors[1]);
+              grd.addColorStop(1, this.option.colors[2]);
             } else {
-              grd.addColorStop(0, this.option.from);
-              grd.addColorStop(1, this.option.to);
+              grd.addColorStop(0, this.option.colors[0]);
+              grd.addColorStop(1, this.option.colors[1]);
             }
             this.ctx.fillStyle = grd;
             this.ctx.fillRect(0, 0, size, size);
