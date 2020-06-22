@@ -74,6 +74,9 @@ module.exports = (app) => {
   // Regex
   router.get("/tool/regex.html", controller.regex.render);
 
+  // 没什么意义的加密
+  router.get("/tool/treasure.html", controller.treasure.render);
+
   // https://tophub.today 爬虫
   router.get("/tophub.html", controller.tophub.render);
   router.get("/api/tophub/topics", controller.tophub.topics);
