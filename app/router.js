@@ -83,7 +83,7 @@ module.exports = (app) => {
   router.get("/api/tophub/nodes", controller.tophub.nodes);
 
   // Logo 生成
-  router.get("/gen-logo.html", controller.genLogo.render);
+  router.get("/tool/gen-logo.html", controller.genLogo.render);
 
   // Admin
   router.get("/admin/login.html", controller.admin.login.render);
