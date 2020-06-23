@@ -1583,6 +1583,15 @@ class GenLogoController extends Controller {
     ctx.body = { success: true, message: "OK", data: svgs };
   }
 
+  async getUuid() {
+    const { ctx, service } = this;
+    const uuid = uuidv4();
+    ctx.runInBackground(async () => {
+      await service.tool.addUsed("gen-logo");
+    });
+    ctx.body = { success: true, message: "OK", data: uuid };
+  }
+
   // async _genZip(sourcePath, options) {
   //   const { app } = this;
   //   const zipName = uuidv4();

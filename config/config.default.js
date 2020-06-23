@@ -14,9 +14,9 @@ module.exports = (appInfo) => {
   config.middleware = ["locals"];
 
   // TDK
-  config.title = "在线工具";
-  config.description = "远子的开发试验田, 用于尝试新奇的网站开发技术";
-  config.keywords = "远子";
+  config.title = "工具城";
+  config.description = "开源免费的在线工具, 让你事半功倍";
+  config.keywords = "在线工具, JSON格式化, LOGO制作";
   config.author = {
     name: "Jason Liu",
     email: "rmlzy@outlook.com",
@@ -31,7 +31,7 @@ module.exports = (appInfo) => {
   config.firstDeployDate = "2020-02-18 17:42:45";
 
   // 静态文件版本
-  config.version = "2020-06-23";
+  config.version = "2020-06-22";
 
   // 模板引擎配置
   // https://mozilla.github.io/nunjucks/

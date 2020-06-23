@@ -361,9 +361,18 @@ $(document).ready(function () {
 
       exportToImage: function () {
         var that = this;
-        var ts = +new Date();
-        that.$refs.stage.toBlob(function (blob) {
-          that.download(blob, ts + ".jpg");
+        $.ajax({
+          type: "GET",
+          url: "/api/genLogo/uuid",
+          success: function (res) {
+            if (res.success) {
+              that.$refs.stage.toBlob(function (blob) {
+                that.download(blob, res.data + ".jpg");
+              });
+            } else {
+              layer.msg(res.message, { icon: 5 });
+            }
+          },
         });
       },
 
