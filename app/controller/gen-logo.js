@@ -1,6 +1,10 @@
 "use strict";
 
 const Controller = require("egg").Controller;
+const fs = require("fs-extra");
+const path = require("path");
+const favicons = require("favicons");
+const { v4: uuidv4 } = require("uuid");
 
 class GenLogoController extends Controller {
   async render() {
@@ -8,10 +12,10 @@ class GenLogoController extends Controller {
     await ctx.render("gen-logo.html");
   }
 
-  async getLinearColorMap() {
+  async getColors() {
     const { ctx } = this;
     // Fetch From https://github.com/ghosh/uiGradients
-    const colorMap = [
+    const colors = [
       {
         name: "Omolon",
         colors: ["#091E3A", "#2F80ED", "#2D9EE0"],
@@ -1543,8 +1547,93 @@ class GenLogoController extends Controller {
         colors: ["#003d4d", "#00c996"],
       },
     ];
-    ctx.body = { success: true, message: "OK", data: colorMap };
+    ctx.body = { success: true, message: "OK", data: colors };
   }
+
+  async _readSvgs(dirName) {
+    const { ctx, app, service } = this;
+    const dir = path.join(app.baseDir, `app/public/img/logo-svg/${dirName}`);
+    const exist = await fs.pathExists(dir);
+    if (!exist) {
+      console.log(`${dirName} 不存在, 请检查`);
+      return;
+    }
+    const svgNames = await fs.readdir(dir);
+    const svgs = [];
+    for (let i = 0; i < svgNames.length; i++) {
+      try {
+        let file = await fs.readFile(path.join(dir, svgNames[i]), "utf8");
+        svgs.push(file);
+      } catch (e) {
+        // ignore
+      }
+    }
+    return svgs;
+  }
+
+  async getIcons() {
+    const { ctx } = this;
+    const { name } = ctx.request.query;
+    let svgs = [];
+    try {
+      svgs = await this._readSvgs(name);
+    } catch (e) {
+      // ignore
+    }
+    ctx.body = { success: true, message: "OK", data: svgs };
+  }
+
+  // async _genZip(sourcePath, options) {
+  //   const { app } = this;
+  //   const zipName = uuidv4();
+  //   const source = path.join(app.baseDir, sourcePath);
+  //   const outputDir = path.join(app.baseDir, `app/public/gen-logo/${zipName}`);
+  //   return new Promise((resolve, reject) => {
+  //     favicons(source, options, async (err, res) => {
+  //       if (err) {
+  //         reject(err);
+  //         return;
+  //       }
+  //       let writeErr;
+  //       for (let i = 0; i < res.images.length; i++) {
+  //         const img = res.images[i];
+  //         try {
+  //           await fs.writeFile(path.join(outputDir, img.name), img.contents, "binary");
+  //         } catch (e) {
+  //           writeErr = e;
+  //         }
+  //       }
+  //       if (writeErr) {
+  //         reject(writeErr);
+  //         return;
+  //       }
+  //       resolve(`/public/gen-logo/${zipName}.zip`);
+  //     });
+  //   });
+  // }
+  //
+  // async download() {
+  //   const { ctx } = this;
+  //   try {
+  //     // https://github.com/itgalaxy/favicons
+  //     const opt = {
+  //       icons: {
+  //         android: false,
+  //         appleIcon: true,
+  //         appleStartup: false,
+  //         coast: false,
+  //         favicons: false,
+  //         firefox: false,
+  //         windows: false,
+  //         yandex: false,
+  //       },
+  //     };
+  //     const zip = await this._genZip("/app/public/demo.jpg", opt);
+  //     ctx.body = { success: true, message: "OK", data: zip };
+  //   } catch (e) {
+  //     ctx.body = { success: false, message: e.message };
+  //   }
+  // }
 }
 
 module.exports = GenLogoController;

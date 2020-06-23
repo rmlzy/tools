@@ -84,7 +84,8 @@ module.exports = (app) => {
 
   // Logo 生成
   router.get("/tool/gen-logo.html", controller.genLogo.render);
-  router.get("/api/genLogo/colors", controller.genLogo.getLinearColorMap);
+  router.get("/api/genLogo/colors", controller.genLogo.getColors);
+  router.get("/api/genLogo/icons", controller.genLogo.getIcons);
 
   // Admin
   router.get("/admin/login.html", controller.admin.login.render);

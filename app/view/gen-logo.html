@@ -1,54 +1,8 @@
 {% extends "./base.html" %}
 
-<!-- Head -->
-{% block head %}
-<style>
-  .scroll-body {
-    height: calc(100vh - 270px);
-    overflow-y: auto;
-  }
-
-  .stage {
-    display: block;
-    margin: 0 auto;
-    zoom: 0.25;
-    background-image: linear-gradient(45deg, #eee 25%, transparent 0, transparent 75%, #eee 0),
-      linear-gradient(45deg, #eee 25%, transparent 0, transparent 75%, #eee 0);
-    background-position: 0 0, 60px 60px;
-    background-size: 120px 120px;
-  }
-
-  .stage--round {
-    border-radius: 50%;
-  }
-
-  .bg-demo {
-    float: left;
-    width: 40px;
-    height: 40px;
-    border-radius: 10px;
-    cursor: pointer;
-    background: #333;
-    margin-right: 5px;
-    margin-bottom: 5px;
-  }
-
-  .bg-demo svg {
-    width: 30px;
-    height: 30px;
-    margin-top: 5px;
-    margin-left: 5px;
-  }
-
-  .panel-body {
-    min-height: 290px;
-  }
-</style>
-{% endblock %}
-
 <!-- Body -->
 {% block body %}
-<div class="container" id="GenLogoApp">
+<div class="container gen-logo-page" id="GenLogoApp">
   <ol class="breadcrumb">
     <li><a href="/">首页</a></li>
     <li class="active">在线制作Logo</li>
@@ -56,13 +10,7 @@
 
   <div class="row">
     <div class="col-md-4">
-      <canvas
-        ref="stage"
-        class="stage"
-        :width="option.size"
-        :height="option.size"
-        :style="'border-radius: ' + option.radius"
-      ></canvas>
+      <canvas ref="stage" class="stage" :width="option.size" :height="option.size"></canvas>
       <br />
 
       <div class="clearfix">
@@ -87,15 +35,15 @@
                     <label class="control-label">背景：</label>
                     <div class="form-control">
                       <label class="radio-inline">
-                        <input type="radio" v-model="option.bgType" value="linear" @change="changeBgType" />
+                        <input type="radio" v-model="option.bgType" value="linear" @change="draw" />
                         <span>渐变</span>
                       </label>
                       <label class="radio-inline">
-                        <input type="radio" v-model="option.bgType" value="transparent" @change="changeBgType" />
+                        <input type="radio" v-model="option.bgType" value="transparent" @change="draw" />
                         <span>透明</span>
                       </label>
                       <label class="radio-inline">
-                        <input type="radio" v-model="option.bgType" value="plain" @change="changeBgType" />
+                        <input type="radio" v-model="option.bgType" value="plain" @change="draw" />
                         <span>纯色</span>
                       </label>
                     </div>
@@ -107,15 +55,15 @@
                     <label class="control-label">圆角：</label>
                     <div class="form-control">
                       <label class="radio-inline">
-                        <input type="radio" v-model="option.radius" value="0" />
+                        <input type="radio" v-model="option.shape" value="square" @change="draw" />
                         <span>无</span>
                       </label>
                       <label class="radio-inline">
-                        <input type="radio" v-model="option.radius" value="50%" />
+                        <input type="radio" v-model="option.shape" value="circle" @change="draw" />
                         <span>圆形</span>
                       </label>
                       <label class="radio-inline">
-                        <input type="radio" v-model="option.radius" value="100px" />
+                        <input type="radio" v-model="option.shape" value="round" @change="draw" />
                         <span>圆角</span>
                       </label>
                     </div>
@@ -132,18 +80,18 @@
                   </label>
                   <div class="form-control-static clearfix">
                     <template
-                      v-for="(item, idx) in linearColors"
+                      v-for="(item, idx) in colors"
                       :key="idx"
                       v-if="showAllColor || (!showAllColor && idx < 45)"
                     >
                       <div
-                        class="bg-demo"
+                        class="block-sample"
                         v-if="item.colors.length === 3"
                         :style="'background: linear-gradient(to bottom, ' + item.colors[0] + ', ' + item.colors[1] + ', ' + item.colors[2] + ');'"
                         @click="setLinearColor(item)"
                       ></div>
                       <div
-                        class="bg-demo"
+                        class="block-sample"
                         v-if="item.colors.length === 2"
                         :style="'background: linear-gradient(to bottom, ' + item.colors[0] + ', ' + item.colors[1]+ ');'"
                         @click="setLinearColor(item)"
@@ -153,26 +101,13 @@
                 </div>
               </template>
 
-              <template v-if="option.bgType === 'transparent'">
-                <div class="row">
-                  <div class="col-md-6">
-                    <div class="form-group">
-                      <label class="control-label">透明度：</label>
-                      <div class="form-control-static">
-                        <input type="text" class="form-control" v-model="option.opacity" />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </template>
-
               <template v-if="option.bgType === 'plain'">
                 <div class="row">
-                  <div class="col-md-6">
+                  <div class="col-md-3">
                     <div class="form-group">
                       <label class="control-label">背景色：</label>
                       <div class="form-control-static">
-                        <input type="text" class="form-control" v-model="option.background" />
+                        <input type="color" class="form-control" v-model="option.background" @input="draw" />
                       </div>
                     </div>
                   </div>
@@ -191,43 +126,61 @@
                 <label class="control-label">类型：</label>
                 <div class="form-control">
                   <label class="radio-inline">
-                    <input type="radio" v-model="option.fontType" value="svg" />
+                    <input type="radio" name="logoType" v-model="option.logoType" value="svg" @change="draw" />
                     <span>图标</span>
                   </label>
                   <label class="radio-inline">
-                    <input type="radio" v-model="option.fontType" value="text" />
+                    <input type="radio" name="logoType" v-model="option.logoType" value="text" @change="draw" />
                     <span>文字</span>
                   </label>
                 </div>
               </div>
 
-              <template v-if="option.fontType === 'text'">
+              <template v-if="option.logoType === 'text'">
                 <div class="row">
                   <div class="col-sm-6">
                     <div class="form-group">
                       <label class="control-label">文字：</label>
-                      <input type="text" class="form-control" v-model="option.text" @input="changeText" />
+                      <input type="text" class="form-control" v-model="option.text" @input="draw" />
                     </div>
                   </div>
                   <div class="col-sm-6">
                     <div class="form-group">
                       <label class="control-label">颜色：</label>
-                      <input type="text" class="form-control" v-model="option.fontColor" @input="changeColor" />
+                      <input type="color" class="form-control" v-model="option.fontColor" @input="draw" />
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-6">
+                    <div class="form-group">
+                      <label class="control-label">字体：</label>
+                      <select class="form-control" v-model="option.fontFamily" @change="draw">
+                        <option v-for="(font, idx) in fontFamilies" :key="idx" :value="font" v-html="font"></option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="form-group">
+                      <label class="control-label">字号：</label>
+                      <input type="number" class="form-control" v-model="option.fontSize" @input="draw" />
                     </div>
                   </div>
                 </div>
               </template>
 
-              <template v-if="option.fontType === 'svg'">
+              <template v-if="option.logoType === 'svg'">
                 <div class="form-group">
                   <label class="control-label" style="display: block;">
                     <span>图标：</span>
-                    <a href="javascript:;" class="pull-right">自定义图标</a>
+                    <span class="pull-right a" @click="showLibModal">
+                      图标库
+                    </span>
                   </label>
-                  <div class="form-control-static">
+                  <div class="form-control-static clearfix">
                     <div
-                      class="bg-demo"
-                      v-for="(val, key, idx) in svgMap"
+                      class="block-sample"
+                      v-for="(val, idx) in icons"
                       :key="idx"
                       @click="setSvg(val)"
                       v-html="val"
@@ -237,14 +190,8 @@
                 <div class="row">
                   <div class="col-sm-6">
                     <div class="form-group">
-                      <label class="control-label">填充色：</label>
-                      <input type="text" class="form-control" v-model="option.fillColor" />
-                    </div>
-                  </div>
-                  <div class="col-sm-6">
-                    <div class="form-group">
                       <label class="control-label">边框色：</label>
-                      <input type="text" class="form-control" v-model="option.stokeColor" />
+                      <input type="color" class="form-control" v-model="option.stokeColor" @input="draw" />
                     </div>
                   </div>
                 </div>
@@ -260,28 +207,28 @@
                 <label class="control-label">展示徽章：</label>
                 <div class="form-control">
                   <label class="radio-inline">
-                    <input type="radio" v-model="option.showBadge" value="1" />
+                    <input type="radio" v-model="option.showBadge" :value="true" @change="draw" />
                     <span>是</span>
                   </label>
                   <label class="radio-inline">
-                    <input type="radio" v-model="option.showBadge" value="0" />
+                    <input type="radio" v-model="option.showBadge" :value="false" @change="draw" />
                     <span>否</span>
                   </label>
                 </div>
               </div>
 
-              <template v-if="option.showBadge === '1'">
+              <template v-if="option.showBadge">
                 <div class="row">
                   <div class="col-xs-6">
                     <div class="form-group">
                       <label class="control-label">文字：</label>
-                      <input type="text" class="form-control" v-model="option.badgeText" @input="changeColor" />
+                      <input type="text" class="form-control" v-model="option.badgeText" @input="draw" />
                     </div>
                   </div>
                   <div class="col-xs-6">
                     <div class="form-group">
                       <label class="control-label">字号：</label>
-                      <input type="text" class="form-control" v-model="option.badgeSize" @input="changeColor" />
+                      <input type="number" class="form-control" v-model="option.badgeSize" @input="draw" />
                     </div>
                   </div>
                 </div>
@@ -290,299 +237,85 @@
                   <div class="col-xs-6">
                     <div class="form-group">
                       <label class="control-label">背景色：</label>
-                      <input type="text" class="form-control" v-model="option.badgeBackground" @input="changeColor" />
+                      <input type="color" class="form-control" v-model="option.badgeBackground" @input="draw" />
                     </div>
                   </div>
                   <div class="col-xs-6">
                     <div class="form-group">
                       <label class="control-label">文字颜色：</label>
-                      <input type="text" class="form-control" v-model="option.badgeColor" @input="changeColor" />
+                      <input type="color" class="form-control" v-model="option.badgeColor" @input="draw" />
                     </div>
                   </div>
                 </div>
               </template>
-
-              <div class="form-group">
-                <label class="control-label">导出：</label>
-                <div class="form-control">
-                  <label class="radio-inline">
-                    <input type="radio" v-model="option.exportType" value="osx" />
-                    <span>OS X</span>
-                  </label>
-                  <label class="radio-inline">
-                    <input type="radio" v-model="option.exportType" value="ios" />
-                    <span>iOS</span>
-                  </label>
-                  <label class="radio-inline">
-                    <input type="radio" v-model="option.exportType" value="watchOS" />
-                    <span>watchOS</span>
-                  </label>
-                  <label class="radio-inline">
-                    <input type="radio" v-model="option.exportType" value="android" />
-                    <span>Android</span>
-                  </label>
-                </div>
-              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
+
+  <template v-if="iconLibModal">
+    <div class="modal-backdrop fade in"></div>
+    <div class="modal fade in" role="dialog" tabindex="-1">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" @click="onLibModalCancel">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <h4 class="modal-title">图标库</h4>
+          </div>
+          <div class="modal-body">
+            <ul id="js_iconTab" class="nav nav-tabs" role="tablist">
+              <li :class="{ active: activeTab === 'cssGG' }">
+                <a href="javascript:;" @click="setActiveTab('cssGG')">css.gg</a>
+              </li>
+              <li :class="{ active: activeTab === 'feather' }">
+                <a href="javascript:;" @click="setActiveTab('feather')">Feather</a>
+              </li>
+              <li :class="{ active: activeTab === 'custom' }">
+                <a href="javascript:;" @click="setActiveTab('custom')">自定义</a>
+              </li>
+            </ul>
+            <div class="tab-content" style="max-height: 500px; overflow-y: scroll;">
+              <br />
+              <div v-if="activeTab === 'cssGG'" class="tab-pane active">
+                <div
+                  v-for="(val, idx) in iconLib['css-gg']"
+                  :key="idx"
+                  :class="{ 'block-sample': true, active: val === activeIcon}"
+                  @click="chooseIconLib(val)"
+                  v-html="val"
+                ></div>
+              </div>
+              <div v-if="activeTab === 'feather'" class="tab-pane active">
+                <div
+                  v-for="(val, idx) in iconLib['feather']"
+                  :key="idx"
+                  :class="{ 'block-sample': true, active: val === activeIcon}"
+                  @click="chooseIconLib(val)"
+                  v-html="val"
+                ></div>
+              </div>
+              <div v-if="activeTab === 'custom'" class="tab-pane active">
+                <textarea class="form-control" rows="8" v-model="customSvg" placeholder="请输入SVG"></textarea>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" @click="onLibModalCancel">取消</button>
+            <button type="button" class="btn btn-primary" @click="onLibModalOk">确定</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </template>
 </div>
 {% endblock %}
 
 <!-- Foot -->
 {% block foot %}
 <script src="/public/lib/vue/vue.min.js?v={{ version }}"></script>
-<script>
-  $(document).ready(function () {
-    new Vue({
-      el: "#GenLogoApp",
-      data() {
-        return {
-          showAllColor: false,
-          linearColors: {},
-          backgroundMap: ["red", "blue"],
-          svgMap: {
-            demo1:
-              '<svg class="icon" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="128" height="128"><path d="M932.224 283.392c-4.352-.896-8.832-1.408-13.44-1.408H159.488c-38.912 0-70.4 35.072-70.4 78.208v369.92c0 2.688.128 5.376.384 7.936 3.584 39.424 33.536 70.272 70.016 70.272h759.296c38.912 0 70.4-35.072 70.4-78.208v-369.92c.128-38.016-24.448-69.76-56.96-76.8zm-417.408 20.224H664.96c43.008 0 72.96 6.144 89.856 18.432 11.648 8.192 20.608 19.072 27.008 32.512 6.272 13.44 9.472 28.288 9.472 44.288 0 32.384-7.424 57.472-22.144 75.264-9.216 10.624-21.376 18.56-36.352 24.064 12.032 4.736 20.992 9.856 27.136 15.104 6.144 5.248 11.648 13.056 16.64 23.296 3.712 8.192 6.4 16 8.064 23.552 1.664 7.552 2.944 18.56 3.968 33.28 1.792 24.576 4.352 41.856 7.424 51.712h-73.216c-2.176-7.808-4.48-24.064-6.912-48.64-1.536-19.84-4.736-34.944-9.472-45.568s-11.904-18.944-21.376-25.088c-12.032-7.168-29.312-10.624-51.968-10.24h-52.48V645.12H515.2V303.616zm-287.872 0l90.24 256.896 91.648-256.896h73.728l-134.4 341.376h-65.408L153.344 303.616h73.6zm477.568 143.36c9.856-7.552 14.72-20.608 14.72-39.424 0-20.864-7.424-34.048-22.144-39.936-5.248-2.048-13.696-3.072-25.344-3.072h-91.648v90.112h91.648c15.488 0 26.368-2.56 32.768-7.68z" fill="#fff"/><path d="M932.224 283.392c-3.584-39.424-33.536-70.272-70.016-70.272H102.912c-38.912 0-70.4 35.072-70.4 78.208v369.92c0 38.144 24.576 69.888 56.96 76.8 4.352.896 8.832 1.408 13.44 1.408h759.296c38.912 0 70.4-35.072 70.4-78.208v-369.92c0-2.56-.128-5.248-.384-7.936zm-584.064 361.6h-65.408L153.344 303.616h73.728l90.24 256.896 91.648-256.896h73.6l-134.4 341.376zm374.4 0c-2.176-7.808-4.48-24.064-6.912-48.64-1.536-19.84-4.736-34.944-9.472-45.568s-11.904-18.944-21.376-25.088c-12.032-7.168-29.312-10.624-51.968-10.24h-52.48v129.536h-65.408V303.616h150.144c43.008 0 72.96 6.144 89.856 18.432 11.648 8.192 20.608 19.072 27.008 32.512 6.272 13.44 9.472 28.288 9.472 44.288 0 32.384-7.424 57.472-22.144 75.264-9.216 10.624-21.376 18.56-36.352 24.064 12.032 4.736 20.992 9.856 27.136 15.104 6.144 5.248 11.648 13.056 16.64 23.296 3.712 8.192 6.4 16 8.064 23.552 1.664 7.552 2.944 18.56 3.968 33.28 1.792 24.576 4.352 41.856 7.424 51.712h-73.6z" fill="#fff"/><path d="M719.36 407.552c0 18.816-4.864 31.872-14.72 39.424-6.4 5.12-17.408 7.68-32.64 7.68h-91.648v-90.112H672c11.648 0 20.096 1.024 25.344 3.072 14.592 5.888 22.016 19.072 22.016 39.936z" fill="#fff"/></svg>',
-            demo2:
-              '<svg class="icon" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="128" height="128"><path d="M859.904 810.496L773.888 318.72c-4.48-25.216-36.48-45.184-71.808-45.184h-21.376c-12.544-81.536-82.816-144-167.552-144S358.144 192 345.6 273.536h-21.376c-35.328 0-67.328 19.84-71.808 45.184L166.4 810.496c-8.192 46.464 25.856 85.888 76.416 85.888h540.672c50.56-.128 84.608-39.424 76.416-85.888zM513.152 193.792c49.28 0 90.752 33.92 102.4 79.744H410.88c11.648-45.824 52.992-79.744 102.272-79.744zm-140.8 263.936c-28.928 0-52.48-21.504-52.48-48.128s23.552-48.128 52.48-48.128 52.48 21.504 52.48 48.128-23.424 48.128-52.48 48.128zm281.6 0c-28.928 0-52.48-21.504-52.48-48.128s23.552-48.128 52.48-48.128 52.48 21.504 52.48 48.128-23.424 48.128-52.48 48.128z" fill="#fff"/></svg>',
-            demo3:
-              '<svg class="icon" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="128" height="128"><path d="M770.432 486.272c40.064-37.504 75.136-75.52 96.64-109.952 58.24-93.696 48.256-183.424 48.256-183.424-48.512-56.064-210.304-26.24-255.488 8.192-38.4 29.312-79.488 83.84-120.96 148.096-125.824 28.032-308.352 68.48-331.264 73.216-35.2 7.296-79.744 55.936-79.744 85.76l314.24 2.816C404.736 576 368.64 639.488 335.744 689.152c-12.928 19.584-32.768 48.128-49.536 69.504-6.656-7.04-14.976-15.744-25.216-26.368-39.168-40.448-84.096-2.048-84.096-2.048l21.632 42.368c-3.584-.64-7.296-1.28-11.264-1.792-39.808-6.016-59.392 33.792-59.392 33.792l124.416 88.448c9.984-10.496 233.088-175.616 284.032-216.064 24.96-19.968 67.968-51.84 115.456-89.6L871.296 832c22.4-19.712 33.92-80.384 19.456-107.904-8.704-16.512-71.296-140.672-120.32-237.824zm-22.144-292.48c7.296-2.56 14.592-4.224 21.76-5.248-34.688 25.088-100.48 112.64-112.384 128.768l-12.928-10.24s71.04-101.632 103.552-113.28z" fill="#fff"/></svg>',
-            demo4:
-              '<svg class="icon" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="128" height="128"><path d="M299.187 897.536c14.323-4.646 29.965-10.483 47.027-17.715C444.211 838.234 558.9 763.686 669.158 669.9S871.411 474.88 928.166 384.819c8.96-14.144 16.525-27.328 23.04-39.603C884.851 178.944 722.394 61.44 532.48 61.44 283.648 61.44 81.92 263.168 81.92 512c0 163.443 87.04 306.547 217.267 385.536zm-78.361-487.462l7.014-17.844a372.685 372.685 0 0 1 232.32-219.187l16.397-5.299a32 32 0 1 1 19.712 60.877l-16.384 5.312A307.507 307.507 0 0 0 287.41 415.475l-6.95 17.843a32 32 0 0 1-59.635-23.244zM200.96 510.72a32 32 0 1 1 32 32 32 32 0 0 1-32-32zm509.67 207.923c-112.384 95.59-229.977 172.365-332.096 216.922A449.434 449.434 0 0 0 532.48 962.56c248.832 0 450.56-201.728 450.56-450.56a453.286 453.286 0 0 0-7.54-82.458c-60.466 92.621-154.047 194.83-264.87 289.101z" fill="#fff"/><path d="M174.848 926.016c-39.155 0-69.12-11.635-88.947-34.906-27.354-32.166-43.328-97.74 35.93-227.494a32 32 0 0 1 54.617 33.357c-52.954 86.707-55.616 136.435-41.805 152.678 14.451 16.973 66.624 21.824 166.131-20.39 97.997-41.587 212.685-116.135 322.944-209.92s202.24-195.034 259.008-285.082c57.6-91.443 61.236-143.731 46.784-160.704-13.81-16.243-63.308-21.606-157.376 16.743a32 32 0 0 1-24.153-59.264c140.8-57.396 202.931-31.104 230.285 1.05 40.41 47.513 26.099 129.28-41.396 236.3-60.16 95.386-156.608 201.818-271.68 299.7S429.58 844.121 325.773 888.165c-59.443 25.23-110.144 37.85-150.925 37.85z" fill="#fff"/></svg>',
-            demo5:
-              '<svg class="icon" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="128" height="128"><path d="M908.8 171.776h-62.976l.64-.64c21.12-22.4 30.848-49.536 27.904-78.464-2.56-25.728-17.024-46.464-40.576-58.368-51.584-26.112-133.504-4.096-172.672 19.072C612.48 82.048 545.408 135.168 512 162.304 478.592 135.04 411.392 82.048 362.88 53.376 323.712 30.336 241.792 8.32 190.208 34.304c-23.552 11.904-37.888 32.64-40.576 58.368-2.944 28.928 6.656 56.064 27.904 78.464.256.256.384.512.64.64H115.2c-38.784 0-70.4 31.616-70.4 70.4v204.8c0 31.104 20.352 57.6 48.512 66.816a76.501 76.501 0 0 0-1.792 16.384v340.608c0 42.368 34.432 76.8 76.8 76.8h687.36c42.368 0 76.8-34.432 76.8-76.8V530.176c0-5.632-.64-11.136-1.792-16.384 28.16-9.216 48.512-35.712 48.512-66.816v-204.8c0-38.784-31.616-70.4-70.4-70.4zm6.4 70.4v204.8c0 3.456-2.944 6.4-6.4 6.4H544v-217.6h364.8c3.456 0 6.4 2.944 6.4 6.4zm-221.44-133.76c33.152-19.584 89.216-28.16 111.232-17.024 4.864 2.432 5.376 4.48 5.76 7.68 4.608 44.672-88.576 67.968-117.632 72.576h-89.728c29.696-22.784 63.616-47.36 90.368-63.232zM213.248 99.2c.384-3.2.896-5.248 5.76-7.68 22.016-11.136 78.208-2.56 111.232 17.024 26.752 15.744 60.672 40.448 90.368 63.36H330.88c-29.056-4.736-122.112-28.032-117.632-72.704zM108.8 242.176c0-3.456 2.944-6.4 6.4-6.4H480v217.6H115.2c-3.456 0-6.4-2.944-6.4-6.4v-204.8zm46.72 628.736V530.176c0-6.912 5.888-12.8 12.8-12.8H480v366.336H168.32c-6.912 0-12.8-5.888-12.8-12.8zm712.96 0c0 6.912-5.888 12.8-12.8 12.8H544V517.376h311.68c6.912 0 12.8 5.888 12.8 12.8v340.736z" fill="#fff"/></svg>',
-          },
-          option: {
-            // 背景
-            size: 300 * 4,
-            radius: "100px",
-            bgType: "linear",
-            background: "",
-            opacity: 1, // 透明度
-            colors: [], // 渐变背景
-            rotate: 0,
-
-            // 文字
-            fontType: "svg",
-            svg: "",
-            fillColor: "#ffffff",
-            stokeColor: "#ffffff",
-
-            // 文字
-            text: "",
-            fontSize: "100",
-            fontColor: "#ffffff",
-
-            // 徽章
-            showBadge: "0",
-            badgeText: "",
-            badgeSize: "",
-            badgeColor: "",
-            badgeBackground: "",
-
-            // 导出配置
-            exportType: "osx",
-          },
-          ctx: null,
-        };
-      },
-      mounted() {
-        this.ctx = this.$refs.stage.getContext("2d");
-
-        // 默认SVG
-        this.option.svg = this.svgMap.demo1;
-        this.getLinearColorMap();
-      },
-      methods: {
-        toggleShowAllColor: function () {
-          this.showAllColor = !this.showAllColor;
-        },
-
-        getLinearColorMap: function () {
-          var that = this;
-          $.ajax({
-            type: "GET",
-            url: "/api/genLogo/colors",
-            success: function (res) {
-              if (res.success) {
-                that.linearColors = res.data;
-                that.option.colors = res.data[0].colors;
-                that.draw();
-              } else {
-                layer.msg(res.message, { icon: 5 });
-              }
-            },
-          });
-        },
-
-        setRotate: function () {
-          this.option.rotate += 45;
-          if (this.option.rotate > 360) {
-            this.option.rotate = 45;
-          }
-          this.draw();
-        },
-
-        setLinearColor: function (row) {
-          this.option.colors = row.colors;
-          this.draw();
-        },
-
-        setBackgroundColor: function (background) {
-          this.option.background = background;
-          this.draw();
-        },
-
-        setSvg: function (svg) {
-          this.option.svg = svg;
-          this.draw();
-        },
-
-        changeBgType: function () {
-          this.draw();
-        },
-
-        changeText: function () {
-          this.draw();
-        },
-
-        changeColor: function () {
-          this.draw();
-        },
-
-        draw: function () {
-          this.drawBg();
-          this.drawSvg();
-          this.drawText();
-        },
-
-        drawBg: function () {
-          var background = this.option.background;
-          var size = this.option.size;
-
-          this.ctx.clearRect(0, 0, size, size);
-          if (this.option.bgType === "transparent") {
-          }
-
-          if (this.option.bgType === "plain") {
-            this.ctx.fillStyle = background;
-            // fillRect(x, y, width, height)
-            this.ctx.fillRect(0, 0, size, size);
-          }
-
-          if (this.option.bgType === "linear") {
-            // createLinearGradient(x0, y0, x1, y1)
-            var grd;
-            if (this.option.rotate === 0) {
-              grd = this.ctx.createLinearGradient(size / 2, 0, size / 2, size);
-            }
-            if (this.option.rotate === 45) {
-              grd = this.ctx.createLinearGradient(0, size, size, 0);
-            }
-            if (this.option.rotate === 90) {
-              grd = this.ctx.createLinearGradient(0, size / 2, size, size / 2);
-            }
-            if (this.option.rotate === 135) {
-              grd = this.ctx.createLinearGradient(0, 0, size, size);
-            }
-            if (this.option.rotate === 180) {
-              grd = this.ctx.createLinearGradient(size / 2, 0, size / 2, size);
-            }
-            if (this.option.rotate === 225) {
-              grd = this.ctx.createLinearGradient(size, 0, 0, size);
-            }
-            if (this.option.rotate === 270) {
-              grd = this.ctx.createLinearGradient(size, size / 2, 0, size / 2);
-            }
-            if (this.option.rotate === 315) {
-              grd = this.ctx.createLinearGradient(size, size, 0, 0);
-            }
-            if (this.option.rotate === 360) {
-              grd = this.ctx.createLinearGradient(size / 2, size, size / 2, 0);
-            }
-            if (this.option.colors.length === 3) {
-              grd.addColorStop(0, this.option.colors[0]);
-              grd.addColorStop(0.5, this.option.colors[1]);
-              grd.addColorStop(1, this.option.colors[2]);
-            } else {
-              grd.addColorStop(0, this.option.colors[0]);
-              grd.addColorStop(1, this.option.colors[1]);
-            }
-            this.ctx.fillStyle = grd;
-            this.ctx.fillRect(0, 0, size, size);
-          }
-        },
-
-        drawSvg: function () {
-          if (this.option.fontType !== "svg") {
-            return;
-          }
-          var size = this.option.size;
-          var ctx = this.ctx;
-          var img = new Image();
-          var blob = new Blob([this.option.svg], { type: "image/svg+xml;charset=utf-8" });
-          var blobURL =
-            window.URL && window.URL.createObjectURL
-              ? window.URL.createObjectURL(blob)
-              : window.webkitURL.createObjectURL(blob);
-          img.src = blobURL;
-          img.onload = function () {
-            ctx.drawImage(img, size / 4, size / 4, size / 2, size / 2);
-          };
-        },
-
-        drawText: function () {
-          if (this.option.fontType !== "text") {
-            return;
-          }
-          var ctx = this.ctx;
-          var size = this.option.size;
-          ctx.font = this.option.fontSize * 4 + "px Helvetica";
-          ctx.fillStyle = this.option.fontColor;
-          ctx.textAlign = "center";
-          ctx.textBaseline = "middle";
-          ctx.fillText(this.option.text, size / 2, size / 2, size);
-          ctx.fill();
-        },
-
-        exportToImage: function () {
-          var that = this;
-          that.$refs.stage.toBlob(function (blob) {
-            that.download(blob, "Export.jpg");
-          });
-        },
-
-        download: function (data, filename, mime, bom) {
-          var blobData = typeof bom !== "undefined" ? [bom, data] : [data];
-          var blob = new Blob(blobData, { type: mime || "application/octet-stream" });
-          if (typeof window.navigator.msSaveBlob !== "undefined") {
-            window.navigator.msSaveBlob(blob, filename);
-          } else {
-            var blobURL =
-              window.URL && window.URL.createObjectURL
-                ? window.URL.createObjectURL(blob)
-                : window.webkitURL.createObjectURL(blob);
-            var tempLink = document.createElement("a");
-            tempLink.style.display = "none";
-            tempLink.href = blobURL;
-            tempLink.setAttribute("download", filename);
-            if (typeof tempLink.download === "undefined") {
-              tempLink.setAttribute("target", "_blank");
-            }
-            document.body.appendChild(tempLink);
-            tempLink.click();
-            setTimeout(function () {
-              document.body.removeChild(tempLink);
-              window.URL.revokeObjectURL(blobURL);
-            }, 200);
-          }
-        },
-      },
-    });
-  });
-</script>
+<script src="/public/js/gen-logo.js?v={{ version }}"></script>
 {% endblock %}
