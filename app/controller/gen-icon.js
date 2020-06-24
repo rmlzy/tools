@@ -3,7 +3,7 @@
 const Controller = require("egg").Controller;
 const fs = require("fs-extra");
 const path = require("path");
-const favicons = require("favicons");
+// const favicons = require("favicons");
 const { v4: uuidv4 } = require("uuid");
 
 class GenLogoController extends Controller {
