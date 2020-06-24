@@ -1,0 +1,144 @@
+{% extends "./base.html" %}
+
+<!-- Body -->
+{% block body %}
+<div class="container page code2img-page">
+  <ol class="breadcrumb">
+    <li><a href="/">首页</a></li>
+    <li class="active">代码转图片</li>
+  </ol>
+
+  <div class="row">
+    <div class="col-md-12">
+      <form action="#">
+        <div class="row">
+          <div class="col-sm-4">
+            <div class="form-group">
+              <label class="control-label">主题:</label>
+              <select id="js_themeSelect" class="form-control">
+                <option value="ambiance">ambiance</option>
+                <option value="chaos">chaos</option>
+                <option value="chrome">chrome</option>
+                <option value="clouds">clouds</option>
+                <option value="cobalt">cobalt</option>
+                <option value="dawn">dawn</option>
+                <option value="dracula">dracula</option>
+                <option value="dreamweaver">dreamweaver</option>
+                <option value="eclipse">eclipse</option>
+                <option value="github">github</option>
+                <option value="gob">gob</option>
+                <option value="gruvbox">gruvbox</option>
+                <option value="monokai">monokai</option>
+                <option value="terminal">terminal</option>
+                <option value="textmate">textmate</option>
+                <option value="tomorrow">tomorrow</option>
+                <option value="twilight">twilight</option>
+                <option value="xcode">xcode</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="col-sm-4">
+            <div class="form-group">
+              <label class="control-label">背景色:</label>
+              <input id="js_bgInput" type="color" class="form-control" />
+            </div>
+          </div>
+
+          <div class="col-sm-4">
+            <div class="form-group">
+              <label class="control-label">模式:</label>
+              <select id="js_modeSelect" class="form-control">
+                <option value="javascript">javascript</option>
+                <option value="typescript">typescript</option>
+                <option value="html">html</option>
+                <option value="css">css</option>
+                <option value="ruby">ruby</option>
+                <option value="python">python</option>
+                <option value="java">java</option>
+                <option value="markdown">markdown</option>
+                <option value="json">json</option>
+                <option value="lua">lua</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </form>
+      <br />
+
+      <div id="js_code" class="code-area__wrap">
+        <div class="code-area">
+          <div class="code-area__hd">
+            <div class="icon is-red"></div>
+            <div class="icon is-orange"></div>
+            <div class="icon is-green"></div>
+          </div>
+          <div id="js_editor" class="code-area__editor"></div>
+        </div>
+      </div>
+      <br />
+      <div class="btn-group" role="group">
+        <button id="js_genBtn" class="btn btn-primary">生成</button>
+        <button id="js_downloadBtn" class="btn btn-default">下载</button>
+      </div>
+      <br />
+      <br />
+      <div id="js_output"></div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+<!-- Foot -->
+{% block foot %}
+<script src="/public/lib/dom2image/dom-to-image.min.js"></script>
+<script src="/public/lib/download/download.min.js"></script>
+<script src="/public/lib/ace/ace.js"></script>
+<script>
+  $(document).ready(function () {
+    var source = document.getElementById("js_code");
+    var editor = ace.edit("js_editor");
+    editor.setTheme("ace/theme/monokai");
+    editor.session.setMode("ace/mode/javascript");
+    editor.setShowPrintMargin(false);
+    editor.setOption("showLineNumbers", false);
+    editor.setValue('function hi() {\n    console.log("Hello World!");\n}');
+
+    $("#js_themeSelect").on("change", function () {
+      var theme = $(this).val();
+      editor.setTheme("ace/theme/" + theme);
+    });
+
+    $("#js_modeSelect").on("change", function () {
+      var mode = $(this).val();
+      editor.session.setMode("ace/mode/" + mode);
+    });
+
+    $("#js_bgInput").on("change", function () {
+      var bgColor = $(this).val();
+      console.log(bgColor);
+      $("#js_code .code-area").css("background", bgColor);
+    });
+
+    $("#js_genBtn").on("click", function () {
+      domtoimage
+        .toPng(source)
+        .then(function (dataUrl) {
+          var img = new Image();
+          img.src = dataUrl;
+          $("#js_output").html(img);
+        })
+        .catch(function (error) {
+          console.error("oops, something went wrong!", error);
+        });
+    });
+
+    $("#js_downloadBtn").on("click", function () {
+      var ts = +new Date();
+      domtoimage.toBlob(source).then(function (blob) {
+        window.download(blob, ts + ".png");
+      });
+    });
+  });
+</script>
+{% endblock %}

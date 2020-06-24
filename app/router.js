@@ -94,6 +94,9 @@ module.exports = (app) => {
   // 壁纸
   router.get("/tool/bg.html", controller.bg.render);
 
+  // Code 2 Image
+  router.get("/tool/code2img.html", controller.code2img.render);
+
   // Admin
   router.get("/admin/login.html", controller.admin.login.render);
   router.get("/admin/home.html", controller.admin.home.render);

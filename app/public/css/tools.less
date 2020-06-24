@@ -61,3 +61,61 @@
     display: block;
   }
 }
+
+.code2img-page {
+  .code-area {
+    color: #cfd2d1;
+    background-color: #151718;
+    padding: 0 18px 18px 12px;
+    box-shadow: rgba(0, 0, 0, 0.55) 0px 20px 68px;
+    border-radius: 5px;
+
+    &__wrap {
+      padding: 40px;
+      background: rgb(171, 184, 195);
+      border-radius: 5px;
+    }
+
+    &__hd {
+      position: relative;
+      padding-top: 48px;
+
+      .icon {
+        position: absolute;
+        top: 14px;
+        display: inline-block;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+
+        &.is-red {
+          background: #ff5e56;
+          left: 0;
+        }
+
+        &.is-orange {
+          background: #ffbd2e;
+          left: 20px;
+        }
+
+        &.is-green {
+          background: #27c93f;
+          left: 40px;
+        }
+      }
+    }
+
+    &__editor {
+      min-height: 300px;
+      background: transparent !important;
+
+      .ace_gutter {
+        width: 0 !important;
+      }
+
+      .ace_active-line {
+        background: transparent !important;
+      }
+    }
+  }
+}
