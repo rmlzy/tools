@@ -15,7 +15,6 @@
     "egg-scripts": "^2.11.0",
     "egg-sequelize": "^5.2.1",
     "egg-view-nunjucks": "^2.2.0",
-    "favicons": "^6.1.0",
     "fs-extra": "^9.0.1",
     "ip": "^1.1.5",
     "jimp": "^0.13.0",
