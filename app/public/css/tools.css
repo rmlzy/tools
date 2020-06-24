@@ -1,6 +1,12 @@
 .panel-heading a {
   color: inherit;
 }
+.form-control {
+  background: rgba(255, 255, 255, 0.8) !important;
+}
+.page {
+  min-height: calc(100vh - 202px);
+}
 .a {
   color: #158cba;
   cursor: pointer;

@@ -13,22 +13,41 @@
 
   <div class="row">
     <div class="col-md-6">
+      <div class="panel panel-default">
+        <div class="panel-heading">输出区域</div>
+        <div class="panel-body">
+          <img id="js_output" />
+        </div>
+      </div>
+
+      <div class="btn-group">
+        <button id="js_generateBtn" type="button" class="btn btn-primary">生成条形码</button>
+        <button id="js_downloadBtn" type="button" class="btn btn-default">下载</button>
+      </div>
+    </div>
+    <div class="col-md-6">
       <form id="js_barcodeForm" action="#">
         <div class="panel panel-primary">
           <div class="panel-heading">必填项</div>
           <div class="panel-body">
-            <div class="form-group">
-              <label>条形码</label>
-              <input name="source" value="012345678" type="text" class="form-control" placeholder="请输入条形码" />
-            </div>
-            <div class="form-group">
-              <label>格式</label>
-              <select name="format" class="form-control" placeholder="请选择">
-                <option value="CODE128A">CODE128A</option>
-                <option value="CODE128B">CODE128B</option>
-                <option value="CODE128C">CODE128C</option>
-                <option selected="selected" value="CODE128">Code128 自动</option>
-              </select>
+            <div class="row">
+              <div class="col-xs-6">
+                <div class="form-group">
+                  <label>条形码</label>
+                  <input name="source" value="012345678" type="text" class="form-control" placeholder="请输入条形码" />
+                </div>
+              </div>
+              <div class="col-xs-6">
+                <div class="form-group">
+                  <label>格式</label>
+                  <select name="format" class="form-control" placeholder="请选择">
+                    <option value="CODE128A">CODE128A</option>
+                    <option value="CODE128B">CODE128B</option>
+                    <option value="CODE128C">CODE128C</option>
+                    <option selected="selected" value="CODE128">Code128 自动</option>
+                  </select>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -54,40 +73,34 @@
                 </div>
               </div>
             </div>
-            <div class="form-group">
-              <div class="row">
-                <div class="col-xs-6">
+
+            <div class="row">
+              <div class="col-xs-6">
+                <div class="form-group">
                   <label>背景颜色</label>
                   <input name="background" type="text" value="#ffffff" class="form-control" placeholder="请输入" />
                 </div>
-                <div class="col-xs-6">
+              </div>
+              <div class="col-xs-6">
+                <div class="form-group">
                   <label>文字颜色</label>
                   <input name="lineColor" type="text" value="#000000" class="form-control" placeholder="请输入" />
                 </div>
               </div>
             </div>
-            <div class="form-group">
-              <label>文字对齐</label>
-              <select name="textAlign" class="form-control" placeholder="请选择">
-                <option value="left">左对齐</option>
-                <option value="center" selected="selected">居中对齐</option>
-                <option value="right">右对齐</option>
-              </select>
+
+            <div class="row">
+              <div class="col-xs-6">
+                <div class="form-group">
+                  <label>文字对齐</label>
+                  <select name="textAlign" class="form-control" placeholder="请选择">
+                    <option value="left">左对齐</option>
+                    <option value="center" selected="selected">居中对齐</option>
+                    <option value="right">右对齐</option>
+                  </select>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-
-        <div class="btn-group">
-          <button id="js_generateBtn" type="button" class="btn btn-primary">生成条形码</button>
-          <button id="js_downloadBtn" type="button" class="btn btn-default">下载</button>
-        </div>
-        <br />
-        <br />
-
-        <div class="panel panel-default">
-          <div class="panel-heading">输出区域</div>
-          <div class="panel-body">
-            <img id="js_output" />
           </div>
         </div>
       </form>

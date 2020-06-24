@@ -5,26 +5,33 @@
 
 <!-- Body -->
 {% block body %}
-<div class="container">
-    <ol class="breadcrumb">
-        <li><a href="/">首页</a></li>
-        <li class="active">摩斯密码加密解密</li>
-    </ol>
+<div class="container page">
+  <ol class="breadcrumb">
+    <li><a href="/">首页</a></li>
+    <li class="active">摩斯密码加密解密</li>
+  </ol>
 
-    <textarea id="js_sourceArea" class="form-control" rows="10" placeholder="这里输入明文"></textarea>
-    <div class="btn-group" role="group" style="padding: 20px 0;">
-        <button id="js_encryptBtn" class="btn btn-sm btn-primary">生成摩斯密码</button>
-        <button id="js_decryptBtn" class="btn btn-sm btn-primary">解密摩斯密码</button>
-        <button id="js_clearBtn" class="btn btn-sm btn-default">清空</button>
+  <div class="row">
+    <div class="col-md-6">
+      <textarea id="js_sourceArea" class="form-control" rows="10" placeholder="这里输入明文"></textarea>
+
+      <div class="btn-group" role="group" style="padding: 20px 0;">
+        <button id="js_encryptBtn" class="btn btn-primary">生成摩斯密码</button>
+        <button id="js_decryptBtn" class="btn btn-primary">解密摩斯密码</button>
+        <button id="js_clearBtn" class="btn btn-default">清空</button>
+      </div>
     </div>
-    <textarea id="js_outputArea" class="form-control" rows="10" placeholder="这里输入密文"></textarea>
+    <div class="col-md-6">
+      <textarea id="js_outputArea" class="form-control" rows="10" placeholder="这里输入密文"></textarea>
+    </div>
+  </div>
 
-    <h2>工具说明:</h2>
-    <ol>
-        <li>本工具支持中文；</li>
-        <li>本工具基于<a href="https://github.com/hustcc/xmorse" >xmorse</a>实现；</li>
-        <li>本工具不采集您的任何数据；</li>
-    </ol>
+  <h2>工具说明:</h2>
+  <ol>
+    <li>本工具支持中文；</li>
+    <li>本工具基于<a href="https://github.com/hustcc/xmorse">xmorse</a>实现；</li>
+    <li>本工具不采集您的任何数据；</li>
+  </ol>
 </div>
 {% endblock %}
 
@@ -47,10 +54,10 @@
       $outputArea.val(xmorse.decode($sourceArea.val()));
     });
 
-    $clearBtn.on("click", function() {
+    $clearBtn.on("click", function () {
       $sourceArea.val("");
       $outputArea.val("");
-    })
+    });
   });
 </script>
 {% endblock %}

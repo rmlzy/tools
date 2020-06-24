@@ -11,18 +11,26 @@
     <li class="active">Base64加密、解密</li>
   </ol>
 
-  <textarea id="js_sourceArea" class="form-control" rows="10" placeholder="这里输入明文"></textarea>
-  <div class="btn-group" role="group" style="padding: 20px 0;">
-    <button id="js_encryptBtn" class="btn btn-sm btn-primary">Base64加密</button>
-    <button id="js_decryptBtn" class="btn btn-sm btn-primary">Base64解密</button>
-    <button id="js_clearBtn" class="btn btn-sm btn-default">清空</button>
+  <div class="row">
+    <div class="col-md-6">
+      <textarea id="js_sourceArea" class="form-control" rows="14" placeholder="这里输入明文"></textarea>
+      <br />
+      <div class="btn-group" role="group">
+        <button id="js_encryptBtn" class="btn btn-primary">Base64加密</button>
+        <button id="js_decryptBtn" class="btn btn-primary">Base64解密</button>
+        <button id="js_clearBtn" class="btn btn-default">清空</button>
+      </div>
+      <br />
+    </div>
+    <div class="col-md-6">
+      <textarea id="js_outputArea" class="form-control" rows="14" placeholder="这里输入密文"></textarea>
+    </div>
   </div>
-  <textarea id="js_outputArea" class="form-control" rows="10" placeholder="这里输入密文"></textarea>
 
   <h2>工具说明:</h2>
   <ol>
     <li>Base64是网络上最常见的用于传输8Bit字节码的编码方式之一；</li>
-    <li>本工具基于<a href="https://github.com/dankogai/js-base64" >js-base64</a>实现；</li>
+    <li>本工具基于<a href="https://github.com/dankogai/js-base64">js-base64</a>实现；</li>
     <li>本工具不采集您的任何数据；</li>
   </ol>
 </div>
@@ -47,10 +55,10 @@
       $outputArea.val(Base64.decode($sourceArea.val()));
     });
 
-    $clearBtn.on("click", function() {
+    $clearBtn.on("click", function () {
       $sourceArea.val("");
       $outputArea.val("");
-    })
+    });
   });
 </script>
 {% endblock %}

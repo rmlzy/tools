@@ -5,8 +5,7 @@
 <style>
   .json-editor {
     width: 100%;
-    height: calc(100vh - 320px);
-    border: 1px solid #ededed;
+    height: calc(100vh - 310px);
   }
 </style>
 {% endblock %}
@@ -43,7 +42,7 @@
 <script>
   $(document).ready(function () {
     var editor = ace.edit("js_editor");
-    editor.setTheme("ace/theme/github");
+    editor.setTheme("ace/theme/monokai");
     editor.session.setMode("ace/mode/json");
     editor.setShowPrintMargin(false);
     editor.setOption("showLineNumbers", true);

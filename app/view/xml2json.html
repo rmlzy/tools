@@ -6,7 +6,6 @@
   .editor {
     width: 100%;
     height: calc(100vh - 320px);
-    border: 1px solid #ededed;
   }
 </style>
 {% endblock %}
@@ -48,14 +47,14 @@
   $(document).ready(function () {
     // Init Xml Editor
     var xmlEditor = ace.edit("js_xmlEditor");
-    xmlEditor.setTheme("ace/theme/github");
+    xmlEditor.setTheme("ace/theme/monokai");
     xmlEditor.session.setMode("ace/mode/xml");
     xmlEditor.setShowPrintMargin(false);
     xmlEditor.setOption("showLineNumbers", true);
 
     // Init Json Editor
     var jsonEditor = ace.edit("js_jsonEditor");
-    jsonEditor.setTheme("ace/theme/github");
+    jsonEditor.setTheme("ace/theme/monokai");
     jsonEditor.session.setMode("ace/mode/json");
     jsonEditor.setShowPrintMargin(false);
     jsonEditor.setOption("showLineNumbers", true);
