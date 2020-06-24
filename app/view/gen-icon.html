@@ -1,0 +1,67 @@
+{% extends "./base.html" %}
+
+<!-- Head -->
+{% block head %} {% endblock %}
+
+<!-- Body -->
+{% block body %}
+<div class="container page">
+  <ol class="breadcrumb">
+    <li><a href="/">首页</a></li>
+    <li class="active">在线生成APP图标</li>
+  </ol>
+
+  <div class="row">
+    <div class="col-md-6">
+      <form id="js_uploadForm" action="#">
+        <input type="file" class="form-control" />
+      </form>
+
+      <div class="btn-group" role="group" style="padding: 20px 0;">
+        <button id="js_encryptBtn" class="btn btn-primary">生成</button>
+        <button id="js_clearBtn" class="btn btn-default">清空</button>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="panel panel-default">
+        <div class="panel-heading">配置</div>
+        <div class="panel-body">
+          <form id="js_settingForm" action="#">
+            <div class="form-group">
+              <label class="control-label">类型</label>
+              <div class="form-control-static">
+                <label class="checkbox-inline">
+                  <input type="checkbox" name="type" value="android"> Android
+                </label>
+                <label class="checkbox-inline">
+                  <input type="checkbox" name="type" value="appleIcon"> Apple Icon
+                </label>
+                <label class="checkbox-inline">
+                  <input type="checkbox" name="type" value="appleStartup"> Apple Startup
+                </label>
+                <label class="checkbox-inline">
+                  <input type="checkbox" name="type" value="coast"> Opera Coast
+                </label>
+                <label class="checkbox-inline">
+                  <input type="checkbox" name="type" value="firefox"> Firefox OS
+                </label>
+                <label class="checkbox-inline">
+                  <input type="checkbox" name="type" value="windows"> Windows 8
+                </label>
+                <label class="checkbox-inline">
+                  <input type="checkbox" name="type" value="yandex"> Yandex browser
+                </label>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+<!-- Foot -->
+{% block foot %}
+<script></script>
+{% endblock %}

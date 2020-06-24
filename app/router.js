@@ -88,6 +88,9 @@ module.exports = (app) => {
   router.get("/api/genLogo/icons", controller.genLogo.getIcons);
   router.get("/api/genLogo/uuid", controller.genLogo.getUuid);
 
+  // Icon 生成
+  router.get("/tool/gen-icon.html", controller.genIcon.render);
+
   // Admin
   router.get("/admin/login.html", controller.admin.login.render);
   router.get("/admin/home.html", controller.admin.home.render);
