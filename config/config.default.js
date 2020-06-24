@@ -53,6 +53,10 @@ module.exports = (appInfo) => {
     csrf: false,
   };
 
+  config.static = {
+    gzip: true,
+  };
+
   // 文件上传
   config.multipart = {
     mode: "file",
