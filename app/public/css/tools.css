@@ -11,9 +11,14 @@
   color: #158cba;
   cursor: pointer;
 }
-.gen-logo-page .scroll-body {
-  height: calc(100vh - 270px);
-  overflow-y: auto;
+@media (min-width: 768px) {
+  .gen-logo-page .scroll-body {
+    height: calc(100vh - 260px);
+    overflow-y: auto;
+  }
+  .gen-logo-page .panel-body {
+    min-height: 290px;
+  }
 }
 .gen-logo-page .stage {
   display: block;
@@ -40,9 +45,6 @@
 }
 .gen-logo-page .block-sample.active {
   outline-color: #127ba3;
-}
-.gen-logo-page .panel-body {
-  min-height: 290px;
 }
 .gen-logo-page .modal {
   display: block;

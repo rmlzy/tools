@@ -3,7 +3,7 @@
 }
 
 .form-control {
-  background: rgba(255, 255, 255, 0.8)!important;
+  background: rgba(255, 255, 255, 0.8) !important;
 }
 
 .page {
@@ -16,9 +16,15 @@
 }
 
 .gen-logo-page {
-  .scroll-body {
-    height: calc(100vh - 270px);
-    overflow-y: auto;
+  @media (min-width: 768px) {
+    .scroll-body {
+      height: calc(100vh - 260px);
+      overflow-y: auto;
+    }
+
+    .panel-body {
+      min-height: 290px;
+    }
   }
 
   .stage {
@@ -49,10 +55,6 @@
     &.active {
       outline-color: #127ba3;
     }
-  }
-
-  .panel-body {
-    min-height: 290px;
   }
 
   .modal {
