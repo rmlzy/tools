@@ -1,0 +1,49 @@
+{% extends "./base.html" %}
+
+<!-- Head -->
+{% block head %}
+<style>
+  .bg-demo {
+    width: 100%;
+    height: 100px;
+  }
+</style>
+{% endblock %}
+
+<!-- Body -->
+{% block body %}
+<div class="container">
+  <ol class="breadcrumb">
+    <li><a href="/">首页</a></li>
+    <li class="active">纹理背景图片</li>
+  </ol>
+
+  <div class="row">
+    {% for name in names %}
+    <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <a href="/public/bg/{{ name }}">{{ name }}</a>
+        </div>
+        <div class="panel-body" style="padding: 0;">
+          <a href="/public/bg/{{ name }}" download>
+            <div class="bg-demo lazyload" data-src="/public/bg/{{ name }}" style="background-image: url('/public/img/placeholder.png')"></div>
+          </a>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <h4>说明:</h4>
+  <p>本页内容采集自 <a href="https://www.hituyu.com/">图鱼</a>, 如果侵权请联系我删除</p>
+</div>
+{% endblock %}
+
+<!-- Foot -->
+{% block foot %}
+<script src="/public/lib/jquery/lazyload.min.js"></script>
+<script>
+  lazyload();
+</script>
+{% endblock %}

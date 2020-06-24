@@ -91,6 +91,9 @@ module.exports = (app) => {
   // Icon 生成
   router.get("/tool/gen-icon.html", controller.genIcon.render);
 
+  // 壁纸
+  router.get("/tool/bg.html", controller.bg.render);
+
   // Admin
   router.get("/admin/login.html", controller.admin.login.render);
   router.get("/admin/home.html", controller.admin.home.render);
