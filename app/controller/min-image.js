@@ -13,9 +13,21 @@ class MinImageController extends Controller {
   async render() {
     const { ctx, service } = this;
     const uuid = uuidv4();
+    const minImageTotal = (await ctx.service.dict.get("minImageTotal")) || 0;
+    const minImageMined = (await ctx.service.dict.get("minImageMined")) || 0;
     await ctx.render("min-image.html", {
       folder: uuid,
+      minImageTotal,
+      minImageMined: this.bytesToSize(minImageMined),
     });
+  }
+
+  bytesToSize(bytes) {
+    if (!bytes) return "";
+    var sizes = ["Bytes", "KB", "MB", "GB", "TB"];
+    if (bytes === 0) return "0 Byte";
+    var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
+    return Math.round(bytes / Math.pow(1024, i), 2) + " " + sizes[i];
   }
 
   getFilesizeInBytes(filename) {
@@ -25,7 +37,7 @@ class MinImageController extends Controller {
   }
 
   async upload() {
-    const { ctx, app } = this;
+    const { ctx, app, service } = this;
     const { files } = ctx.request;
     if (files.length === 0) {
       ctx.body = { success: false, message: "未检测到附件" };
@@ -37,6 +49,7 @@ class MinImageController extends Controller {
 
     // 压缩图片
     const file = files[0];
+    console.log(file);
     const fileName = file.filepath.replace(/^.*[\\\/]/, "");
     try {
       const minedFile = await imagemin([file.filepath], {
@@ -49,7 +62,16 @@ class MinImageController extends Controller {
         ],
       });
       const url = `/public/min-image/${folder}/${fileName}`;
+      const originSize = this.getFilesizeInBytes(file.filepath);
       const size = this.getFilesizeInBytes(path.join(destPath, fileName));
+      const minImageTotal = (await ctx.service.dict.get("minImageTotal")) || 0;
+      const minImageMined = (await ctx.service.dict.get("minImageMined")) || 0;
+      ctx.runInBackground(async () => {
+        await service.tool.addUsed("min-image");
+        await service.dict.set("minImageTotal", Number(minImageTotal) + 1);
+        const minedSize = originSize - size;
+        await service.dict.set("minImageMined", Number(minImageMined) + minedSize);
+      });
       ctx.body = {
         success: true,
         message: "OK",

@@ -9,8 +9,6 @@
 
   .dropzone {
     position: relative;
-    width: 80%;
-    margin: 0 auto;
     height: 180px;
     text-align: center;
     border: 1px solid rgba(0, 0, 0, 0.6);
@@ -51,6 +49,10 @@
     <li><a href="/">首页</a></li>
     <li class="active">图片压缩</li>
   </ol>
+
+  <h4>说明:</h4>
+  <p>1. 已累计压缩 {{ minImageTotal }} 个文件, 节约 {{ minImageMined }}；</p>
+  <p>2. 本工具不采集您的任何数据；</p>
 
   <form id="js_fileUpload" action="/api/minImage/upload">
     <div id="js_dropZone" class="dropzone">
