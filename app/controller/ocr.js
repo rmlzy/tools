@@ -70,7 +70,6 @@ class OcrController extends Controller {
       });
       let words = res.data.words_result;
       words = words.map((item) => item.words);
-      words = words.join("\n");
       ctx.runInBackground(async () => {
         await service.tool.addUsed("oc");
         await service.dict.set("bdOcrUsed", Number(bdOcrUsed) + 1);

@@ -105,7 +105,7 @@
         layer.closeAll("loading");
         var res = data.result;
         if (res.success) {
-          $("#js_output").val(res.data.words);
+          $("#js_output").attr("rows", res.data.words.length).val(res.data.words.join("\n"));
           $("#js_preview").attr("src", "data:image/png;base64," + res.data.base64);
           $("#js_result").show();
         } else {
