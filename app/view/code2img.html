@@ -135,9 +135,19 @@
 
     $("#js_downloadBtn").on("click", function () {
       var ts = +new Date();
-      domtoimage.toBlob(source).then(function (blob) {
-        window.download(blob, ts + ".png");
-      });
+      var scale = 5;
+      domtoimage
+        .toBlob(source, {
+          width: source.clientWidth * scale,
+          height: source.clientHeight * scale,
+          style: {
+            transform: "scale(" + scale + ")",
+            transformOrigin: "top left",
+          },
+        })
+        .then(function (blob) {
+          window.download(blob, ts + ".png");
+        });
     });
   });
 </script>
