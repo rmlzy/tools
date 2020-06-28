@@ -79,8 +79,6 @@ module.exports = (app) => {
 
   // https://tophub.today 爬虫
   router.get("/tophub.html", controller.tophub.render);
-  router.get("/api/tophub/topics", controller.tophub.topics);
-  router.get("/api/tophub/nodes", controller.tophub.nodes);
 
   // Logo 生成
   router.get("/tool/gen-logo.html", controller.genLogo.render);
