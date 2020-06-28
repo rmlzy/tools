@@ -47,11 +47,24 @@
   .stage {
     display: block;
     margin: 0 auto;
-    zoom: 0.25;
+    transform: scale(0.25);
+    -moz-transform: scale(0.25);
+    -ms-transform: scale(0.25);
+    -o-transform: scale(0.25);
+    transform-origin: top left;
+    -moz-transform-origin: top left;
+    -ms-transform-origin: top left;
+    -o-transform-origin: top left;
     background-image: linear-gradient(45deg, #eee 25%, transparent 0, transparent 75%, #eee 0),
       linear-gradient(45deg, #eee 25%, transparent 0, transparent 75%, #eee 0);
     background-position: 0 0, 60px 60px;
     background-size: 120px 120px;
+
+    &__wrap {
+      width: 300px;
+      height: 300px;
+      overflow: hidden;
+    }
   }
 
   .block-sample {
