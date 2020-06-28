@@ -1,5 +1,17 @@
 {% extends "./base.html" %}
 
+<!-- Head -->
+{% block head %}
+<style>
+  .ace_hidden-cursors {
+    opacity: 0;
+  }
+  .ace_marker-layer .ace_bracket {
+    border-color: transparent !important;
+  }
+</style>
+{% endblock %}
+
 <!-- Body -->
 {% block body %}
 <div class="container page code2img-page">
@@ -103,6 +115,7 @@
     editor.setShowPrintMargin(false);
     editor.setOption("showLineNumbers", false);
     editor.setValue('function hi() {\n    console.log("Hello World!");\n}');
+    editor.session.selection.clearSelection();
 
     $("#js_themeSelect").on("change", function () {
       var theme = $(this).val();
