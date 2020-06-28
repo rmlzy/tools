@@ -296,7 +296,9 @@ $(document).ready(function () {
         var size = this.option.size;
         var ctx = this.ctx;
         var img = new Image();
-        var svgWithColor = this.option.svg.replace(/fill="currentColor"/g, 'fill="' + this.option.stokeColor + '"');
+        var svgWithColor = this.option.svg
+          .replace(/fill="currentColor"/g, 'fill="' + this.option.stokeColor + '"')
+          .replace(/stroke="currentColor"/g, 'stroke="' + this.option.stokeColor + '"');
         var blob = new Blob([svgWithColor], { type: "image/svg+xml;charset=utf-8" });
         var blobURL =
           window.URL && window.URL.createObjectURL
