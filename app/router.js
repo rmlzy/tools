@@ -97,6 +97,11 @@ module.exports = (app) => {
   // Code 2 Image
   router.get("/tool/code2img.html", controller.code2img.render);
 
+  // Minify Image
+  router.get("/tool/min-image.html", controller.minImage.render);
+  router.post("/api/minImage/upload", controller.minImage.upload);
+  router.get("/api/minImage/downloadZip", controller.minImage.downloadZip);
+
   // Admin
   router.get("/admin/login.html", controller.admin.login.render);
   router.get("/admin/home.html", controller.admin.home.render);

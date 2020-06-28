@@ -7,6 +7,7 @@
     "declarations": true
   },
   "dependencies": {
+    "baidu-aip-sdk": "^2.4.6",
     "blueimp-md5": "^2.16.0",
     "cheerio": "^1.0.0-rc.3",
     "compressing": "^1.5.1",
@@ -18,6 +19,9 @@
     "egg-view-nunjucks": "^2.2.0",
     "fs-extra": "^9.0.1",
     "iconv-lite": "^0.6.0",
+    "imagemin": "^7.0.1",
+    "imagemin-jpegtran": "^7.0.0",
+    "imagemin-pngquant": "^9.0.0",
     "ip": "^1.1.5",
     "jimp": "^0.13.0",
     "jsonwebtoken": "^8.5.1",

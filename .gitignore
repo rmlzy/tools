@@ -20,3 +20,4 @@ deploy.sh
 /app/public/tophub
 /app/public/cached
 /app/public/gen-logo
+/app/public/min-image
