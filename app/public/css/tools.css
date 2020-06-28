@@ -46,9 +46,6 @@
   -moz-transform-origin: top left;
   -ms-transform-origin: top left;
   -o-transform-origin: top left;
-  background-image: linear-gradient(45deg, #eee 25%, transparent 0, transparent 75%, #eee 0), linear-gradient(45deg, #eee 25%, transparent 0, transparent 75%, #eee 0);
-  background-position: 0 0, 60px 60px;
-  background-size: 120px 120px;
 }
 .gen-logo-page .stage__wrap {
   width: 300px;
