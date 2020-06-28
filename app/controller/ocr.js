@@ -72,7 +72,7 @@ class OcrController extends Controller {
       words = words.map((item) => item.words);
       words = words.join("\n");
       ctx.runInBackground(async () => {
-        await service.tool.addUsed("ocr");
+        await service.tool.addUsed("oc");
         await service.dict.set("bdOcrUsed", Number(bdOcrUsed) + 1);
       });
       ctx.body = { success: true, message: "OK", data: { words, base64 } };
