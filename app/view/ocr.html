@@ -1,0 +1,118 @@
+{% extends "./base.html" %}
+
+<!-- Head -->
+{% block head %}
+<style>
+  .progress {
+    margin-bottom: 0;
+  }
+
+  .dropzone {
+    position: relative;
+    height: 180px;
+    text-align: center;
+    border: 1px solid rgba(0, 0, 0, 0.6);
+    border-radius: 10px;
+    background-image: linear-gradient(#484e55, #3a3f44 60%, #313539);
+    padding-top: 30px;
+  }
+
+  .dropzone i {
+    font-size: 50px;
+  }
+
+  .dropzone .upload-input {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 0;
+    height: 100%;
+    opacity: 0;
+    filter: alpha(opacity=0);
+    font-size: 200px !important;
+    direction: ltr;
+    cursor: pointer;
+  }
+
+  .preview-image {
+    max-width: 100%;
+  }
+</style>
+{% endblock %}
+
+<!-- Body -->
+{% block body %}
+<div class="container page">
+  <ol class="breadcrumb">
+    <li><a href="/">首页</a></li>
+    <li class="active">文字识别</li>
+  </ol>
+
+  <h4>说明:</h4>
+  <p>
+    1. 本工具基于<a href="https://ai.baidu.com/ai-doc/OCR/zk3h7xz52" target="_blank">百度通用文字识别</a>接口实现,
+    <span class="text-danger">今天还剩余 <b>{{ freeNum }}</b> 次免费额度</span>；
+  </p>
+  <p>2. 本工具不采集您的任何数据；</p>
+
+  <form id="js_fileUpload" action="/api/minImage/upload">
+    <div id="js_dropZone" class="dropzone">
+      <p>
+        <i class="glyphicon glyphicon-cloud-upload"></i>
+      </p>
+      <p>点击上传图片, 或将图片拖拽到此处!</p>
+      <p><small>支持 jpg, png 等格式的图片.</small></p>
+      <input type="file" name="files[]" multiple class="upload-input" />
+    </div>
+  </form>
+
+  <br />
+  <div id="js_result" class="row" style="display: none;">
+    <div class="col-md-6">
+      <p>您的图片:</p>
+      <img id="js_preview" class="thumbnail preview-image" src="" alt="" />
+    </div>
+    <div class="col-md-6">
+      <p>识别结果:</p>
+      <textarea id="js_output" class="form-control" rows="10"></textarea>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+<!-- Foot -->
+{% block foot %}
+<script src="/public/lib/uuid/uuidv4.min.js"></script>
+<script src="/public/lib/jquery-file-upload/vendor/jquery.ui.widget.js"></script>
+<script src="/public/lib/jquery-file-upload/jquery.fileupload.js"></script>
+<script>
+  $(document).ready(function () {
+    var $uploadInput = $("#js_fileUpload");
+
+    $uploadInput.fileupload({
+      url: "/api/ocr/upload",
+      dropZone: $("#js_dropZone"),
+      dataType: "json",
+      maxNumberOfFiles: 100, // 100 个
+      maxFileSize: 10000000, // 10 Mb
+      acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
+      add: function (e, data) {
+        layer.load();
+        $("#js_result").hide();
+        data.submit();
+      },
+      done: function (e, data) {
+        layer.closeAll("loading");
+        var res = data.result;
+        if (res.success) {
+          $("#js_output").val(res.data.words);
+          $("#js_preview").attr("src", "data:image/png;base64," + res.data.base64);
+          $("#js_result").show();
+        } else {
+          layer.msg(res.message, { icon: 5 });
+        }
+      },
+    });
+  });
+</script>
+{% endblock %}

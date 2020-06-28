@@ -97,6 +97,10 @@ module.exports = (app) => {
   // Code 2 Image
   router.get("/tool/code2img.html", controller.code2img.render);
 
+  // OCR
+  router.get("/tool/ocr.html", controller.ocr.render);
+  router.post("/api/ocr/upload", controller.ocr.upload);
+
   // Minify Image
   router.get("/tool/min-image.html", controller.minImage.render);
   router.post("/api/minImage/upload", controller.minImage.upload);

@@ -34,4 +34,8 @@ module.exports = {
     const jwtSecret = this.config.keys;
     return jwt.sign(payload, jwtSecret, options);
   },
+
+  getFileExt(filename) {
+    return filename.split(".").pop();
+  },
 };

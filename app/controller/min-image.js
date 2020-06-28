@@ -49,7 +49,6 @@ class MinImageController extends Controller {
 
     // 压缩图片
     const file = files[0];
-    console.log(file);
     const fileName = file.filepath.replace(/^.*[\\\/]/, "");
     try {
       const minedFile = await imagemin([file.filepath], {

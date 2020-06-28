@@ -60,7 +60,7 @@ module.exports = (appInfo) => {
   // 文件上传
   config.multipart = {
     mode: "file",
-    fileExtensions: [".pdf", ".png", ".jpg", ".jpeg", ".doc", ".excel"],
+    fileExtensions: [".pdf", ".png", ".jpg", ".jpeg", ".doc", ".excel", ".ppt"],
     fileSize: "20mb",
   };
 
