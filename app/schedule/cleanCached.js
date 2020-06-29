@@ -14,11 +14,11 @@ class CleanCached extends Subscription {
     const { ctx, config, service } = this;
     try {
       // 图片压缩工具产生的缓存
-      const minImagePath = path.join(config.baseDir, "min-image");
+      const minImagePath = path.join(config.baseDir, "app/public/min-image");
       await fs.remove(minImagePath);
 
       // Logo生成工具产生的缓存
-      const genLogoPath = path.join(config.baseDir, "gen-logo");
+      const genLogoPath = path.join(config.baseDir, "app/public/gen-logo");
       await fs.remove(genLogoPath);
 
       // 重置百度OCR使用次数
