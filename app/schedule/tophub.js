@@ -1,5 +1,6 @@
 const Subscription = require("egg").Subscription;
 const fs = require("fs-extra");
+const path = require("path");
 
 class TopHub extends Subscription {
   static get schedule() {
