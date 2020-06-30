@@ -1,8 +1,47 @@
 const Service = require("egg").Service;
 const cheerio = require("cheerio");
 const dayjs = require("dayjs");
-const langs = require("../public/data/trending-langs.json");
+
 const GITHUB_URL = "https://github.com";
+const langs = [
+  {
+    "urlParam": "",
+    "name": "All Language"
+  },
+  {
+    "urlParam": "html",
+    "name": "HTML"
+  },
+  {
+    "urlParam": "shell",
+    "name": "Shell"
+  },
+  {
+    "urlParam": "css",
+    "name": "CSS"
+  },
+  {
+    "urlParam": "typescript",
+    "name": "TypeScript"
+  },
+  {
+    "urlParam": "python",
+    "name": "Python"
+  },
+  {
+    "urlParam": "ruby",
+    "name": "Ruby"
+  },
+  {
+    "urlParam": "java",
+    "name": "Java"
+  },
+  {
+    "urlParam": "javascript",
+    "name": "JavaScript"
+  },
+]
+const sinces = ["daily", "weekly", "monthly"];
 
 class TrendingService extends Service {
   async findAll(condition) {
@@ -168,7 +207,7 @@ class TrendingService extends Service {
   }
 
   async fetchAllAndSave() {
-    const sinces = ["daily", "weekly", "monthly"];
+    const { ctx } = this;
     for (let i = 0; i < langs.length; i++) {
       const language = langs[i].urlParam;
       for (let j = 0; j < sinces.length; j++) {
