@@ -24,6 +24,10 @@ class TrendingController extends Controller {
     } catch (e) {
       ctx.logger.error("Error while TrendingController.render, stack: ", e);
     }
+    ctx.runInBackground(async () => {
+      await service.dict.addTotalPV();
+      await service.tool.addUsed("trending");
+    });
     await ctx.render("trending.html", entity);
   }
 
