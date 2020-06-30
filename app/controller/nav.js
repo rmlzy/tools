@@ -13,9 +13,6 @@ class NavController extends Controller {
     } catch (e) {
       // ignore
     }
-    ctx.runInBackground(async () => {
-      await service.dict.addTotalPV();
-    });
     await ctx.render("nav.html", { pageTitle: "网站导航", categories });
   }
 }

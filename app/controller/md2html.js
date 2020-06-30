@@ -6,7 +6,6 @@ class Md2HtmlController extends Controller {
   async render() {
     const { ctx, service } = this;
     ctx.runInBackground(async () => {
-      await service.dict.addTotalPV();
       await service.tool.addUsed("md2html");
     });
     await ctx.render("md2html.html");

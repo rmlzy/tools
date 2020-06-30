@@ -12,9 +12,6 @@ class TophubController extends Controller {
     } else {
       nodes = await service.tophub.fetchNodes("tech");
     }
-    ctx.runInBackground(async () => {
-      await service.dict.addTotalPV();
-    });
     await ctx.render("tophub.html", { nodes });
   }
 }

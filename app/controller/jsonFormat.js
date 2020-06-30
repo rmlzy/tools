@@ -6,7 +6,6 @@ class JsonFormatController extends Controller {
   async render() {
     const { ctx, service } = this;
     ctx.runInBackground(async () => {
-      await service.dict.addTotalPV();
       await service.tool.addUsed("json-format");
     });
     await ctx.render("json-format.html");

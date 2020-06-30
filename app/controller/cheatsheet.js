@@ -15,9 +15,6 @@ class CheatsheetController extends Controller {
     } catch (e) {
       // ignore
     }
-    ctx.runInBackground(async () => {
-      await service.dict.addTotalPV();
-    });
     await ctx.render("cheatsheet.html", { cheatsheets });
   }
 

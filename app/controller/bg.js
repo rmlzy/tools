@@ -48,7 +48,6 @@ class BackgroundController extends Controller {
       // ignore
     }
     ctx.runInBackground(async () => {
-      await service.dict.addTotalPV();
       await service.tool.addUsed("bg");
     });
     await ctx.render("bg.html", { names });

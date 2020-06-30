@@ -6,7 +6,6 @@ class HttpCodeController extends Controller {
   async render() {
     const { ctx, service } = this;
     ctx.runInBackground(async () => {
-      await service.dict.addTotalPV();
       await service.tool.addUsed("http-code");
     });
     await ctx.render("http-code.html", {

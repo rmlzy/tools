@@ -6,9 +6,6 @@ const parser = require("xml-js");
 class Xml2jsonController extends Controller {
   async render() {
     const { ctx, service } = this;
-    ctx.runInBackground(async () => {
-      await service.dict.addTotalPV();
-    });
     await ctx.render("xml2json.html");
   }
 
