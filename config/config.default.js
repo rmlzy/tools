@@ -48,10 +48,7 @@ module.exports = (appInfo) => {
   };
 
   // 安全配置
-  config.security = {
-    // 关闭 csrf 防范
-    csrf: false,
-  };
+  config.security = {};
 
   config.static = {
     gzip: true,
