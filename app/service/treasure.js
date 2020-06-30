@@ -16,7 +16,6 @@ class TreasureService extends Service {
   }
 
   async encrypt(plainText) {
-    console.log(_.uniq(this.dict.split("")));
     plainText = plainText.toUpperCase();
     const uniqTexts = _.uniq(plainText.split(""));
     const valToKey = {};

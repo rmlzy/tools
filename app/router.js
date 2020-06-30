@@ -104,6 +104,11 @@ module.exports = (app) => {
   router.post("/api/minImage/upload", controller.minImage.upload);
   router.get("/api/minImage/downloadZip", controller.minImage.downloadZip);
 
+  // Github Trending
+  router.get("/tool/trending.html", controller.trending.render);
+  router.get("/api/trending", controller.trending.query);
+  router.get("/api/trending/queryAll", controller.trending.queryAll);
+
   // Admin
   router.get("/admin/login.html", controller.admin.login.render);
   router.get("/admin/home.html", controller.admin.home.render);

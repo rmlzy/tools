@@ -1,0 +1,72 @@
+{% extends "./base.html" %}
+
+<!-- Head -->
+{% block head %}
+<style>
+  .lang-color {
+    position: relative;
+    top: 1px;
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #ccc;
+    margin-right: 5px;
+  }
+
+  .media:last-child hr {
+    display: none;
+  }
+</style>
+{% endblock %}
+
+<!-- Body -->
+{% block body %}
+<div class="container">
+  <ol class="breadcrumb">
+    <li><a href="/">首页</a></li>
+    <li class="active">Github Trending</li>
+  </ol>
+
+  <h3>{{ date }}</h3>
+  <br />
+
+  {% for repo in repos %}
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="panel panel-default">
+        <div class="panel-heading">{{ repo.humanLanguage or 'All Language' }}</div>
+        <div class="panel-body">
+          {% for item in repo.json %}
+          <div class="media">
+            <div class="media-body">
+              <h4 class="media-heading">
+                <span>{{ loop.index }}.&nbsp;</span>
+                <a href="{{ item.url }}" target="_blank">{{ item.author }}/{{ item.name }}</a>
+                <button class="btn btn-sm btn-default pull-right">Star</button>
+              </h4>
+              <p>{{ item.description }}</p>
+              <p>
+                <span class="lang-color" style="background: {{ item.languageColor }};"></span>
+                <span>{{ item.language or 'Unknown' }}</span>
+                <span>&nbsp;•&nbsp;</span>
+                <span>Stars: {{ item.stars }}</span>
+                <span>&nbsp;•&nbsp;</span>
+                <span>Forks: {{ item.forks }}</span>
+
+                <span class="pull-right">stars today: {{ item.currentPeriodStars }}</span>
+              </p>
+            </div>
+            <hr />
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}
+
+<!-- Foot -->
+{% block foot %} {% endblock %}
