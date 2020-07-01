@@ -47,7 +47,6 @@ class Img2AsciiController extends Controller {
       ctx.runInBackground(async () => {
         await service.tool.addUsed("img2ascii");
       });
-      console.log(res);
       ctx.body = { success: true, message: "OK", data: res };
     } catch (e) {
       ctx.logger.error("Error while Img2AsciiController.upload, stack: ", e);

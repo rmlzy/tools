@@ -19,7 +19,6 @@
     "egg-sequelize": "^5.2.1",
     "egg-view-nunjucks": "^2.2.0",
     "fs-extra": "^9.0.1",
-    "gm": "^1.23.1",
     "iconv-lite": "^0.6.0",
     "image-to-ascii": "^3.0.12",
     "imagemin": "^7.0.1",
