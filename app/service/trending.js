@@ -33,6 +33,10 @@ const langs = [
     name: "Ruby",
   },
   {
+    urlParam: "rust",
+    name: "Rust",
+  },
+  {
     urlParam: "java",
     name: "Java",
   },
