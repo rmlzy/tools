@@ -13,6 +13,14 @@
     background: #ccc;
     margin-right: 5px;
   }
+
+  .trending-filter {
+    display: inline-block;
+    width: 200px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    text-transform: capitalize;
+  }
 </style>
 {% endblock %}
 
@@ -24,8 +32,21 @@
     <li class="active">Github Trending</li>
   </ol>
 
-  <h3>{{ date }}</h3>
-  <br />
+  <select id="js_dateSelect" class="form-control trending-filter">
+    {% for item in dateList %}
+    <option value="{{ item }}" {% if item == date %} selected="selected" {% endif %}>{{ item }}</option>
+    {% endfor %}
+  </select>
+  <select id="js_langSelect" class="form-control trending-filter">
+    {% for item in langs %}
+    <option value="{{ item.urlParam }}" {% if item.urlParam == lang %} selected="selected" {% endif %}>{{ item.name }}</option>
+    {% endfor %}
+  </select>
+  <select id="js_sinceSelect" class="form-control trending-filter">
+    {% for item in sinces %}
+    <option value="{{ item }}" {% if item == since %} selected="selected" {% endif %}>{{ item }}</option>
+    {% endfor %}
+  </select>
 
   {% for repo in repos %}
   <div class="row">
@@ -64,4 +85,18 @@
 {% endblock %}
 
 <!-- Foot -->
-{% block foot %} {% endblock %}
+{% block foot %}
+<script>
+  $(document).ready(function () {
+    $("#js_dateSelect, #js_langSelect, #js_sinceSelect").on('change', function() {
+      // prettier-ignore
+      window.location.href =
+              window.location.origin +
+              window.location.pathname +
+              "?date=" + $("#js_dateSelect").val() +
+              "&lang=" + $("#js_langSelect").val() +
+              "&since=" + $("#js_sinceSelect").val();
+    })
+  });
+</script>
+{% endblock %}

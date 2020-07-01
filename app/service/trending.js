@@ -5,42 +5,42 @@ const dayjs = require("dayjs");
 const GITHUB_URL = "https://github.com";
 const langs = [
   {
-    "urlParam": "",
-    "name": "All Language"
+    urlParam: "",
+    name: "All Language",
   },
   {
-    "urlParam": "html",
-    "name": "HTML"
+    urlParam: "html",
+    name: "HTML",
   },
   {
-    "urlParam": "shell",
-    "name": "Shell"
+    urlParam: "shell",
+    name: "Shell",
   },
   {
-    "urlParam": "css",
-    "name": "CSS"
+    urlParam: "css",
+    name: "CSS",
   },
   {
-    "urlParam": "typescript",
-    "name": "TypeScript"
+    urlParam: "typescript",
+    name: "TypeScript",
   },
   {
-    "urlParam": "python",
-    "name": "Python"
+    urlParam: "python",
+    name: "Python",
   },
   {
-    "urlParam": "ruby",
-    "name": "Ruby"
+    urlParam: "ruby",
+    name: "Ruby",
   },
   {
-    "urlParam": "java",
-    "name": "Java"
+    urlParam: "java",
+    name: "Java",
   },
   {
-    "urlParam": "javascript",
-    "name": "JavaScript"
+    urlParam: "javascript",
+    name: "JavaScript",
   },
-]
+];
 const sinces = ["daily", "weekly", "monthly"];
 
 class TrendingService extends Service {
@@ -90,6 +90,10 @@ class TrendingService extends Service {
       }
     }
     return humanLanguage;
+  }
+
+  getEnums() {
+    return { langs, sinces };
   }
 
   async fetchRepositories({ language = "", since = "daily", spokenLanguage = "" }) {

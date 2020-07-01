@@ -7,13 +7,21 @@ class TrendingController extends Controller {
   async render() {
     const { ctx, service } = this;
     const today = dayjs().format("YYYY-MM-DD");
-    const { date = today, since = "daily" } = ctx.request.query;
+    const { date = today, lang = "", since = "daily" } = ctx.request.query;
     const entity = {
       repos: [],
       date: date,
+      dateList: this._getDateRanges(),
+      lang: lang,
+      langs: [],
+      since,
+      sinces: [],
     };
     try {
-      entity.repos = await service.trending.findAll({ where: { date: date, since } });
+      const { langs, sinces } = await service.trending.getEnums();
+      entity.langs = langs;
+      entity.sinces = sinces;
+      entity.repos = await service.trending.findAll({ where: { date, since, language: lang } });
       entity.repos = entity.repos
         .map((el) => el.get({ plain: true }))
         .map((el) => {
@@ -28,6 +36,17 @@ class TrendingController extends Controller {
       await service.tool.addUsed("trending");
     });
     await ctx.render("trending.html", entity);
+  }
+
+  _getDateRanges() {
+    const ranges = [];
+    const start = dayjs("2020-06-30");
+    const today = dayjs();
+    const diff = today.diff(start, "day");
+    for (let i = 0; i < diff + 1; i++) {
+      ranges.push(start.add(i, "day").format("YYYY-MM-DD"));
+    }
+    return ranges;
   }
 
   async query() {
