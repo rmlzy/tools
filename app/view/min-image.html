@@ -1,47 +1,5 @@
 {% extends "./base.html" %}
 
-<!-- Head -->
-{% block head %}
-<style>
-  .progress {
-    margin-bottom: 0;
-  }
-
-  .dropzone {
-    position: relative;
-    height: 180px;
-    text-align: center;
-    border: 1px solid rgba(0, 0, 0, 0.6);
-    border-radius: 10px;
-    background: #1c1e22;
-    padding-top: 30px;
-  }
-
-  .dropzone i {
-    font-size: 50px;
-  }
-
-  .dropzone .upload-input {
-    position: absolute;
-    top: 0;
-    right: 0;
-    margin: 0;
-    height: 100%;
-    opacity: 0;
-    filter: alpha(opacity=0);
-    font-size: 200px !important;
-    direction: ltr;
-    cursor: pointer;
-  }
-
-  .download-link {
-    text-decoration: underline;
-    display: inline-block;
-    width: 70px;
-  }
-</style>
-{% endblock %}
-
 <!-- Body -->
 {% block body %}
 <div class="container page">

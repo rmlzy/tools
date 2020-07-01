@@ -100,6 +100,10 @@ module.exports = (app) => {
   router.get("/tool/ocr.html", controller.ocr.render);
   router.post("/api/ocr/upload", controller.ocr.upload);
 
+  // Image to Ascii
+  router.get("/tool/img2ascii.html", controller.img2ascii.render);
+  router.post("/api/img2ascii/upload", controller.img2ascii.upload);
+
   // Minify Image
   router.get("/tool/min-image.html", controller.minImage.render);
   router.post("/api/minImage/upload", controller.minImage.upload);

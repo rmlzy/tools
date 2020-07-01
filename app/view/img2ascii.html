@@ -1,21 +1,29 @@
 {% extends "./base.html" %}
 
+<!-- Head -->
+{% block head %}
+<style>
+  .ascii-area {
+    font-family: monospace;
+    line-height: 1.2;
+    width: 515px;
+  }
+</style>
+{% endblock %}
+
 <!-- Body -->
 {% block body %}
 <div class="container page">
   <ol class="breadcrumb">
     <li><a href="/">首页</a></li>
-    <li class="active">文字识别</li>
+    <li class="active">图片转字符画</li>
   </ol>
 
   <h4>说明:</h4>
-  <p>
-    1. 本工具基于<a href="https://ai.baidu.com/ai-doc/OCR/zk3h7xz52" target="_blank">百度通用文字识别</a>接口实现,
-    <span class="text-danger">今天还剩余 <b>{{ freeNum }}</b> 次免费额度</span>；
-  </p>
+  <p>1. 本工具基于 <a href="https://github.com/IonicaBizau/image-to-ascii" target="_blank">image-to-ascii</a> 实现；</p>
   <p>2. 本工具不采集您的任何数据；</p>
 
-  <form id="js_fileUpload" action="/api/minImage/upload">
+  <form id="js_fileUpload" action="/api/img2ascii/upload">
     <div id="js_dropZone" class="dropzone">
       <p>
         <i class="glyphicon glyphicon-cloud-upload"></i>
@@ -27,15 +35,9 @@
   </form>
 
   <br />
-  <div id="js_result" class="row" style="display: none;">
-    <div class="col-md-6">
-      <p>您的图片:</p>
-      <img id="js_preview" class="thumbnail preview-image" src="" alt="" />
-    </div>
-    <div class="col-md-6">
-      <p>识别结果:</p>
-      <textarea id="js_output" class="form-control" rows="10"></textarea>
-    </div>
+  <div id="js_result" style="display: none;">
+    <p>解析结果:</p>
+    <div id="js_output" class="ascii-area"></div>
   </div>
 </div>
 {% endblock %}
@@ -50,7 +52,7 @@
     var $uploadInput = $("#js_fileUpload");
 
     $uploadInput.fileupload({
-      url: "/api/ocr/upload",
+      url: "/api/img2ascii/upload",
       dropZone: $("#js_dropZone"),
       dataType: "json",
       maxNumberOfFiles: 100, // 100 个
@@ -65,8 +67,7 @@
         layer.closeAll("loading");
         var res = data.result;
         if (res.success) {
-          $("#js_output").attr("rows", res.data.words.length).val(res.data.words.join("\n"));
-          $("#js_preview").attr("src", "data:image/png;base64," + res.data.base64);
+          $("#js_output").html(res.data);
           $("#js_result").show();
         } else {
           layer.msg(res.message, { icon: 5 });
