@@ -16,7 +16,7 @@ class DemandController extends Controller {
         item.updatedAtFormat = dayjs(item.updatedAt).format("YYYY-MM-DD HH:mm:ss");
         return item;
       });
-    await ctx.render("demand.html", { demands, pageTitle: "申请收录" });
+    await ctx.render("demand.html", { demands });
   }
 
   async create() {

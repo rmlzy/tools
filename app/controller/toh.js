@@ -17,7 +17,7 @@ class TohController extends Controller {
     ctx.runInBackground(async () => {
       await service.tool.addUsed("toh");
     });
-    await ctx.render("toh.html", { pageTitle: "历史上的今天", toh });
+    await ctx.render("toh.html", { toh });
   }
 }
 

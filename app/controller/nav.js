@@ -13,7 +13,7 @@ class NavController extends Controller {
     } catch (e) {
       // ignore
     }
-    await ctx.render("nav.html", { pageTitle: "网站导航", categories });
+    await ctx.render("nav.html", { categories });
   }
 }
 

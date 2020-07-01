@@ -8,9 +8,7 @@ class HttpCodeController extends Controller {
     ctx.runInBackground(async () => {
       await service.tool.addUsed("http-code");
     });
-    await ctx.render("http-code.html", {
-      pageTitle: "HTTP Code",
-    });
+    await ctx.render("http-code.html");
   }
 }
 

@@ -11,10 +11,7 @@ class Png2JpgController extends Controller {
   async render() {
     const { ctx, service } = this;
     const uuid = uuidv4();
-    await ctx.render("png2jpg.html", {
-      pageTitle: "PNG 转 JPG",
-      key: uuid,
-    });
+    await ctx.render("png2jpg.html", { key: uuid });
   }
 
   async _fire(file, outputDir) {
