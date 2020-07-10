@@ -14,7 +14,7 @@ module.exports = (appInfo) => {
   config.middleware = ["locals"];
 
   // TDK
-  config.title = "工具城";
+  config.title = "工具小站";
   config.description = "开源免费的在线工具, 让你事半功倍";
   config.keywords = "在线工具, JSON格式化, LOGO制作";
   config.author = {
