@@ -21,7 +21,7 @@ module.exports = (app) => {
 
     // 正文
     content: {
-      type: TEXT,
+      type: TEXT('medium'),
       defaultValue: "",
     },
 
