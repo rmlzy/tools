@@ -21,7 +21,7 @@ module.exports = (app) => {
 
     // 正文
     content: {
-      type: STRING(10000),
+      type: STRING(20000),
       defaultValue: "",
     },
 
