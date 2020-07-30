@@ -3,7 +3,7 @@
 const dayjs = require("dayjs");
 
 module.exports = (app) => {
-  const { INTEGER, STRING, DATE } = app.Sequelize;
+  const { INTEGER, STRING, DATE, TEXT } = app.Sequelize;
   const Cheatsheet = app.model.define("Cheatsheet", {
     id: {
       type: INTEGER(10),
@@ -21,7 +21,7 @@ module.exports = (app) => {
 
     // 正文
     content: {
-      type: STRING(20000),
+      type: TEXT,
       defaultValue: "",
     },
 
