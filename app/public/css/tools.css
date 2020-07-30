@@ -1,5 +1,5 @@
 .panel-heading a {
-  color: inherit;
+  color: inherit!important;
 }
 .form-control {
   background: rgba(255, 255, 255, 0.8) !important;
