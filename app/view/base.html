@@ -37,7 +37,7 @@
             <li><a href="/design.html">设计资源</a></li>
             <li><a style="color: orangered;" href="/tool/ebook.html">搜电子书</a></li>
             <li><a href="http://poppython.com" target="_blank">博客</a></li>
-<!--            <li><a href="/i-need-this.html">申请收录</a></li>-->
+            <!--            <li><a href="/i-need-this.html">申请收录</a></li>-->
           </ul>
         </div>
       </div>
@@ -47,7 +47,10 @@
 
     <footer class="well" style="margin: 30px 0 0; border-radius: 0;">
       <div class="container">
-        <p>本站已经稳定运行 <span id="js_running"></span> 天，总访问量 <span id="js_totalPV"></span> 次，累计用户 <span id="js_totalUser"></span> 位。</p>
+        <p>
+          本站已经稳定运行 <span id="js_running"></span> 天，总访问量 <span id="js_totalPV"></span> 次，累计用户
+          <span id="js_totalUser"></span> 位。
+        </p>
         <p>
           源代码托管在 <a href="{{ repoUrl }}" target="_blank">Github</a>，
           <a href="{{ repoUrl }}/commits/master" target="_blank">更新日志</a>。
@@ -61,6 +64,14 @@
     <script src="/public/lib/bootstrap/js/bootstrap.min.js"></script>
     <script src="/public/lib/lodash/lodash.min.js"></script>
     <script src="/public/js/main.js?v={{ version }}"></script>
+    <script
+      src="https://browser.sentry-cdn.com/5.20.1/bundle.min.js"
+      integrity="sha384-O8HdAJg1h8RARFowXd2J/r5fIWuinSBtjhwQoPesfVILeXzGpJxvyY/77OaPPXUo"
+      crossorigin="anonymous"
+    ></script>
+    <script>
+      Sentry.init({ dsn: "https://6fbbe64eecdd4cf98a2a891a3554de85@o432583.ingest.sentry.io/5385453" });
+    </script>
     {% block foot %}{% endblock %}
   </body>
 </html>
