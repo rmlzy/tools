@@ -128,7 +128,7 @@ class EbookController extends Controller {
   }
 
   async search() {
-    const { ctx } = this;
+    const { ctx, service } = this;
     const { keyword } = ctx.query;
     const { site } = ctx.params;
     let rows = [];
