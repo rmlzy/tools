@@ -31,7 +31,7 @@ module.exports = (appInfo) => {
   config.firstDeployDate = "2020-01-18 17:42:45";
 
   // 静态文件版本
-  config.version = "2020-06-28_2";
+  config.version = "2020-08-11";
 
   // 模板引擎配置
   // https://mozilla.github.io/nunjucks/
