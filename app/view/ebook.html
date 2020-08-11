@@ -1,0 +1,127 @@
+{% extends "./base.html" %}
+
+<!-- Body -->
+{% block body %}
+<div class="container">
+  <ol class="breadcrumb">
+    <li><a href="/">首页</a></li>
+    <li class="active">搜电子书</li>
+  </ol>
+
+  <form id="js_searchForm" class="form-inline" action="#">
+    <div class="text-center" style="padding: 50px 0;">
+      <h2>搜电子书</h2>
+      <br />
+      <div class="row">
+        <div class="col-xs-3"></div>
+        <div class="col-xs-6">
+          <input type="text" style="width: 100%;" class="form-control" name="keyword" placeholder="请输入关键字" />
+        </div>
+        <div class="col-xs-3 text-left">
+          <button type="submit" class="btn btn-primary">&nbsp;搜&nbsp;索&nbsp;</button>
+        </div>
+      </div>
+    </div>
+  </form>
+  <br />
+
+  <div class="row">
+    {% for source in sources %}
+    <div class="col-xs-12">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <a href="{{ source.url }}" target="_blank" title="{{ source.name }}">{{ source.name }}</a>
+        </div>
+        <div id="js_{{ source.type }}" class="panel-body">
+          <p>请输入关键字</p>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <span>Github 高 Star 收藏仓库</span>
+        </div>
+        <div class="panel-body panel-wrap">
+          {% for repo in githubRepos %}
+          <div class="media">
+            <div class="media-body">
+              <h4 class="media-heading">
+                <a href="{{ repo.url }}" target="_blank">{{ loop.index }}. {{ repo.name }}</a>
+              </h4>
+              <p>{{ repo.desc }}</p>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h4>说明:</h4>
+  <ol>
+    <li>所有数据均采集自网络, 如有侵权请联系我删除；</li>
+    <li>本工具不采集您的任何数据；</li>
+  </ol>
+</div>
+{% endblock %}
+
+<!-- Foot -->
+{% block foot %}
+<script>
+  var sourceTypes = "{{ sourceTypes }}".split(",");
+  $("#js_searchForm").on("submit", function (evt) {
+    evt.preventDefault();
+    var formData = $(this).serializeJSON();
+    if (formData.keyword === "") {
+      return;
+    }
+    for (var i = 0; i < sourceTypes.length; i++) {
+      var source = sourceTypes[i];
+      var sourceId = "#js_" + source;
+      $(sourceId).html("<p>正在努力抓取...</p>");
+      $.ajax({
+        type: "GET",
+        url: "/api/ebook/" + source + "?keyword=" + formData.keyword,
+        success: function (res) {
+          var $site = $("#js_" + res.site);
+          if (res.success) {
+            if (res.data.length === 0) {
+              $site.html("<p>未抓取到有效数据!</p>");
+              return;
+            }
+            var htmls = [];
+            for (var r = 0; r < res.data.length; r++) {
+              var row = res.data[r];
+              var index = r + 1;
+              htmls.push(
+                '<div class="media">' +
+                  '   <div class="media-body">' +
+                  '     <h4 class="media-heading">' +
+                  '       <a href="' +
+                  row.url +
+                  '" target="_blank">' +
+                  index +
+                  ". " +
+                  row.title +
+                  "</a>" +
+                  "     </h4>" +
+                  "     <p>{{ repo.desc }}</p>" +
+                  "   </div>" +
+                  "</div>"
+              );
+            }
+            $site.html(htmls.join(""));
+          } else {
+            $site.html("<p>数据抓取失败!</p>");
+          }
+        },
+      });
+    }
+  });
+</script>
+{% endblock %}

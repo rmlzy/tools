@@ -114,6 +114,10 @@ module.exports = (app) => {
   router.get("/api/trending", controller.trending.query);
   router.get("/api/trending/queryAll", controller.trending.queryAll);
 
+  // 搜电子书
+  router.get("/tool/ebook.html", controller.ebook.render);
+  router.get("/api/ebook/:site", controller.ebook.search);
+
   // Admin
   router.get("/admin/login.html", controller.admin.login.render);
   router.get("/admin/home.html", controller.admin.home.render);
