@@ -28,7 +28,7 @@ module.exports = (appInfo) => {
   config.repoUrl = "https://github.com/rmlzy/tools";
 
   // 第一次部署的时间
-  config.firstDeployDate = "2020-02-18 17:42:45";
+  config.firstDeployDate = "2020-01-18 17:42:45";
 
   // 静态文件版本
   config.version = "2020-06-28_2";
