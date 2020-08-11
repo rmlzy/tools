@@ -64,13 +64,14 @@
     <script src="/public/lib/bootstrap/js/bootstrap.min.js"></script>
     <script src="/public/lib/lodash/lodash.min.js"></script>
     <script src="/public/js/main.js?v={{ version }}"></script>
-    <script
-      src="https://browser.sentry-cdn.com/5.20.1/bundle.min.js"
-      integrity="sha384-O8HdAJg1h8RARFowXd2J/r5fIWuinSBtjhwQoPesfVILeXzGpJxvyY/77OaPPXUo"
-      crossorigin="anonymous"
-    ></script>
     <script>
-      Sentry.init({ dsn: "https://6fbbe64eecdd4cf98a2a891a3554de85@o432583.ingest.sentry.io/5385453" });
+      var _hmt = _hmt || [];
+      (function() {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?b5e79c59507462f80dc671b2ea61da83";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();
     </script>
     {% block foot %}{% endblock %}
   </body>
