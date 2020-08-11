@@ -1,5 +1,14 @@
 {% extends "./base.html" %}
 
+{% block head %}
+<style>
+  .panel-wrap {
+    max-height: 400px;
+    overflow-y: scroll;
+  }
+</style>
+{% endblock %}
+
 <!-- Body -->
 {% block body %}
 <div class="container">
@@ -14,7 +23,7 @@
       <br />
 
       <div class="input-group">
-        <input name="keyword" type="text" class="form-control" placeholder="请输入关键字">
+        <input name="keyword" type="text" class="form-control" placeholder="书籍、文档、小说...">
         <span class="input-group-btn">
           <button type="submit" class="btn btn-primary">&nbsp;搜&nbsp;索&nbsp;</button>
         </span>
@@ -29,8 +38,9 @@
       <div class="panel panel-default">
         <div class="panel-heading">
           <a href="{{ source.url }}" target="_blank" title="{{ source.name }}">{{ source.name }}</a>
+          <span class="pull-right text-success">{{ source.desc }}</span>
         </div>
-        <div id="js_{{ source.type }}" class="panel-body">
+        <div id="js_{{ source.type }}" class="panel-body panel-wrap">
           <p>请输入关键字</p>
         </div>
       </div>
@@ -60,8 +70,31 @@
     </div>
   </div>
 
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="panel panel-warning">
+        <div class="panel-heading">
+          <span>暂时无法抓取的网站</span>
+        </div>
+        <div class="panel-body panel-wrap">
+          {% for repo in cannotGrabs %}
+          <div class="media">
+            <div class="media-body">
+              <h4 class="media-heading">
+                <a href="{{ repo.url }}" target="_blank">{{ loop.index }}. {{ repo.name }}</a>
+              </h4>
+              <p>{{ repo.desc }}</p>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+
   <h4>说明:</h4>
   <ol>
+    <li>如果你有优秀的站点, 可以 <a href="mailto:rmlzy@outlook.com">联系我</a> 添加相应的爬虫；</li>
     <li>所有数据均采集自网络, 如有侵权请联系我删除；</li>
     <li>本工具不采集您的任何数据；</li>
   </ol>

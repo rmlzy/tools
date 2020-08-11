@@ -6,6 +6,18 @@ const cheerio = require("cheerio");
 class EbookController extends Controller {
   async render() {
     const { ctx } = this;
+    const cannotGrabs = [
+      {
+        name: "静然书屋",
+        url: "https://books.andrewjr.wang",
+        desc: "无需注册即可下载, 提供 epub、mobi 等格式, 由于技术原因暂时无法抓取",
+      },
+      {
+        name: "我爱书籍",
+        url: "http://www.52book.me/",
+        desc: "无需注册即可下载, 由于技术原因暂时无法抓取",
+      },
+    ];
     const githubRepos = [
       {
         name: "CS-Book",
@@ -84,47 +96,59 @@ class EbookController extends Controller {
         name: "淘链客",
         type: "toplinks_cc",
         url: "http://www.toplinks.cc",
-        desc: "",
+        desc: "游客单日可下载5次, 会员不限制下载次数, 收费: 9元/30天",
+      },
+      {
+        name: "知轩藏书",
+        type: "zxcs_me",
+        url: "http://www.zxcs.me",
+        desc: "无需注册即可下载, 主要是网络小说",
       },
       {
         name: "云海电子图书馆",
         type: "pdfbook_cn",
         url: "http://www.pdfbook.cn",
-        desc: "",
-      },
-      {
-        name: "图灵社区",
-        type: "ituring_com_cn",
-        url: "https://www.ituring.com.cn",
-        desc: "",
+        desc: "无需注册即可下载",
       },
       {
         name: "书伴",
         type: "bookfere_com",
         url: "https://bookfere.com",
-        desc: "",
+        desc: "主要是 Kindle 电子书",
       },
       {
         name: "书格",
         type: "shuge_org",
         url: "https://new.shuge.org",
-        desc: "",
+        desc: "一个自由开放的在线古籍图书馆资源网站",
       },
       {
         name: "胖虎书屋",
         type: "panghubook_cn",
         url: "http://panghubook.cn/",
-        desc: "",
+        desc: "有传记、科幻、历史等许多分类, 免费下载",
+      },
+      {
+        name: "搬书匠",
+        type: "banshujiang_cn",
+        url: "http://www.banshujiang.cn",
+        desc: "码农专用, 无需注册即可下载",
+      },
+      {
+        name: "图灵社区",
+        type: "ituring_com_cn",
+        url: "https://www.ituring.com.cn",
+        desc: "码农专用, 有些是需要付费的, 有些是免费的",
       },
       {
         name: "IT熊猫",
         type: "itpanda_net",
         url: "https://itpanda.net",
-        desc: "",
+        desc: "码农专用, 主要是计算机方向的书籍, 免费下载",
       },
     ];
     const sourceTypes = sources.map((item) => item.type);
-    await ctx.render("ebook.html", { githubRepos, sources, sourceTypes: sourceTypes.join(",") });
+    await ctx.render("ebook.html", { cannotGrabs, githubRepos, sources, sourceTypes: sourceTypes.join(",") });
   }
 
   async search() {
@@ -154,12 +178,18 @@ class EbookController extends Controller {
       if (site === "panghubook_cn") {
         rows = await this.panghubook_cn(keyword);
       }
+      if (site === "zxcs_me") {
+        rows = await this.zxcs_me(keyword);
+      }
+      if (site === "banshujiang_cn") {
+        rows = await this.banshujiang_cn(keyword);
+      }
     } catch (e) {
       // ignore
     }
-    ctx.runInBackground(async () => {
-      await service.tool.addUsed("ebook");
-    });
+    // ctx.runInBackground(async () => {
+    //   await service.tool.addUsed("ebook");
+    // });
     ctx.body = {
       success: true,
       message: "SUCCESS",
@@ -258,6 +288,35 @@ class EbookController extends Controller {
         url: `http://panghubook.cn/book/${item.id}`,
       }));
     }
+    return rows;
+  }
+
+  async zxcs_me(keyword) {
+    const { ctx } = this;
+    const res = await ctx.curl(`http://www.zxcs.me/index.php?keyword=${keyword}`, { type: "GET", dataType: "text" });
+    const $ = cheerio.load(res.data);
+    const rows = [];
+    $("#pleft dl").each(function () {
+      const title = $(this).find("dt a").text();
+      const url = $(this).find("dt a").attr("href");
+      rows.push({ title, url });
+    });
+    return rows;
+  }
+
+  async banshujiang_cn(keyword) {
+    const { ctx } = this;
+    const res = await ctx.curl(`http://www.banshujiang.cn/e_books/search/page/1?searchWords=${keyword}`, {
+      type: "GET",
+      dataType: "text",
+    });
+    const $ = cheerio.load(res.data);
+    const rows = [];
+    $(".small-list li.shadow-panel").each(function () {
+      const title = $(this).find(".small-list__item-image img").attr("alt");
+      const url = $(this).find(".small-list__item-download a").attr("href");
+      rows.push({ title, url: `http://www.banshujiang.cn${url}` });
+    });
     return rows;
   }
 }
