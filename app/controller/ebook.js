@@ -10,12 +10,32 @@ class EbookController extends Controller {
       {
         name: "静然书屋",
         url: "https://books.andrewjr.wang",
-        desc: "无需注册即可下载, 提供 epub、mobi 等格式, 由于技术原因暂时无法抓取",
+        desc: "技术原因暂时无法抓取",
       },
       {
         name: "我爱书籍",
         url: "http://www.52book.me/",
-        desc: "无需注册即可下载, 由于技术原因暂时无法抓取",
+        desc: "技术原因暂时无法抓取",
+      },
+      {
+        name: "苦瓜书盘",
+        url: "https://kgbook.com/",
+        desc: "技术原因暂时无法抓取",
+      },
+      {
+        name: "伴读",
+        url: "https://www.bandubook.com/",
+        desc: "技术原因暂时无法抓取",
+      },
+      {
+        name: "阅读链",
+        url: "https://www.yuedu.pro/",
+        desc: "需要登录暂时无法抓取",
+      },
+      {
+        name: "婴幼儿绘本下载",
+        url: "http://bbs.ibabyzone.cn/showtype-15-153.html",
+        desc: "需要登录暂时无法抓取",
       },
     ];
     const githubRepos = [
@@ -96,19 +116,19 @@ class EbookController extends Controller {
         name: "淘链客",
         type: "toplinks_cc",
         url: "http://www.toplinks.cc",
-        desc: "游客单日可下载5次, 会员不限制下载次数, 收费: 9元/30天",
+        desc: "游客单日可下载5次, 会员不限制",
       },
       {
         name: "知轩藏书",
         type: "zxcs_me",
         url: "http://www.zxcs.me",
-        desc: "无需注册即可下载, 主要是网络小说",
+        desc: "免费下载, 主要是网络小说",
       },
       {
         name: "云海电子图书馆",
         type: "pdfbook_cn",
         url: "http://www.pdfbook.cn",
-        desc: "无需注册即可下载",
+        desc: "免费下载",
       },
       {
         name: "书伴",
@@ -120,31 +140,49 @@ class EbookController extends Controller {
         name: "书格",
         type: "shuge_org",
         url: "https://new.shuge.org",
-        desc: "一个自由开放的在线古籍图书馆资源网站",
+        desc: "免费下载",
+      },
+      {
+        name: "时宜搜书",
+        type: "shiyisoushu_com",
+        url: "https://www.shiyisoushu.com/",
+        desc: "电子书搜索引擎",
+      },
+      {
+        name: "西边云",
+        type: "xibianyun_com",
+        url: "http://www.xibianyun.com/",
+        desc: "电子书搜索引擎",
       },
       {
         name: "胖虎书屋",
         type: "panghubook_cn",
         url: "http://panghubook.cn/",
-        desc: "有传记、科幻、历史等许多分类, 免费下载",
+        desc: "免费下载",
+      },
+      {
+        name: "回形针手册",
+        type: "ipaperclip_net",
+        url: "https://www.ipaperclip.net/",
+        desc: "百科手册",
       },
       {
         name: "搬书匠",
         type: "banshujiang_cn",
         url: "http://www.banshujiang.cn",
-        desc: "码农专用, 无需注册即可下载",
+        desc: "码农专用, 免费下载",
       },
       {
         name: "图灵社区",
         type: "ituring_com_cn",
         url: "https://www.ituring.com.cn",
-        desc: "码农专用, 有些是需要付费的, 有些是免费的",
+        desc: "码农专用, 部分免费",
       },
       {
         name: "IT熊猫",
         type: "itpanda_net",
         url: "https://itpanda.net",
-        desc: "码农专用, 主要是计算机方向的书籍, 免费下载",
+        desc: "码农专用, 免费下载",
       },
     ];
     const sourceTypes = sources.map((item) => item.type);
@@ -183,6 +221,15 @@ class EbookController extends Controller {
       }
       if (site === "banshujiang_cn") {
         rows = await this.banshujiang_cn(keyword);
+      }
+      if (site === "shiyisoushu_com") {
+        rows = await this.shiyisoushu_com(keyword);
+      }
+      if (site === "xibianyun_com") {
+        rows = await this.xibianyun_com(keyword);
+      }
+      if (site === "ipaperclip_net") {
+        rows = await this.ipaperclip_net(keyword);
       }
     } catch (e) {
       // ignore
@@ -316,6 +363,56 @@ class EbookController extends Controller {
       const title = $(this).find(".small-list__item-image img").attr("alt");
       const url = $(this).find(".small-list__item-download a").attr("href");
       rows.push({ title, url: `http://www.banshujiang.cn${url}` });
+    });
+    return rows;
+  }
+
+  async shiyisoushu_com(keyword) {
+    const { ctx } = this;
+    const res = await ctx.curl(`https://www.shiyisoushu.com/api/search/v3?q=${keyword}`, {
+      type: "GET",
+      dataType: "json",
+    });
+    let rows = [];
+    if (res.data.code === 0) {
+      rows = res.data.data.content.map((item) => ({
+        title: item.title,
+        url: `https://www.shiyisoushu.com/detail/${item.id}`,
+      }));
+    }
+    return rows;
+  }
+
+  async xibianyun_com(keyword) {
+    const { ctx } = this;
+    const res = await ctx.curl(`http://www.xibianyun.com/book/search?kw=${keyword}`, {
+      type: "GET",
+      dataType: "text",
+    });
+    const $ = cheerio.load(res.data);
+    const rows = [];
+    $("#main table tbody tr").each(function () {
+      const title = $(this).find("a").text();
+      if (title) {
+        const url = $(this).find("a").attr("href");
+        rows.push({ title, url });
+      }
+    });
+    return rows;
+  }
+
+  async ipaperclip_net(keyword) {
+    const { ctx } = this;
+    const res = await ctx.curl(`https://www.ipaperclip.net/doku.php?do=search&id=start&q=${keyword}`, {
+      type: "GET",
+      dataType: "text",
+    });
+    const $ = cheerio.load(res.data);
+    const rows = [];
+    $(".paperclip__qresult .paperclip__qtitle").each(function () {
+      const title = $(this).find("a:first-child").text();
+      const url = $(this).find("a:first-child").attr("href");
+      rows.push({ title, url: `https://www.ipaperclip.net${url}` });
     });
     return rows;
   }
