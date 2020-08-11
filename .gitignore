@@ -16,6 +16,7 @@ typings/
 config/config.local.js
 config/config.prod.js
 deploy.sh
+copyTophub.sh
 /app/public/temp
 /app/public/tophub
 /app/public/cached
