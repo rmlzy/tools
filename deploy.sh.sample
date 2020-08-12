@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+git push gitee master
+# 改为你的IP
+ssh root@xxx.xxx.xxx.xxx "cd /home/tools; git pull; npm install; npm run stop; npm run start; exit;"
+echo "✅发布成功"

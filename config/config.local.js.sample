@@ -1,0 +1,42 @@
+"use strict";
+
+module.exports = (appInfo) => {
+  const config = (exports = {});
+
+  // 聚合数据API
+  config.juheKey = "";
+
+  // 阿里云OSS配置
+  // https://oss.console.aliyun.com
+  config.oss = {
+    client: {
+      accessKeyId: "",
+      accessKeySecret: "",
+      bucket: "",
+      endpoint: "",
+      timeout: "",
+      secure: ,
+    },
+  };
+
+  // 百度文字识别配置
+  config.bdOCR = {
+    appId: "",
+    appKey: "",
+    appSecret: ""
+  };
+
+  // 阿里云RDS配置
+  // https://github.com/eggjs/egg-sequelize
+  config.sequelize = {
+    dialect: "",
+    database: "",
+    host: "",
+    port: "",
+    username: "",
+    password: "",
+    timezone: "+08:00", // 东八时区
+  };
+
+  return config;
+};
