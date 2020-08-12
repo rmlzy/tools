@@ -10,4 +10,14 @@ $(document).ready(function () {
       }
     },
   });
+
+  $("#js_showWechatBtn").on("click", function () {
+    layer.open({
+      type: 1,
+      title: "请备注: 工具小站",
+      skin: "layui-layer-rim",
+      area: ["500px", "720px"],
+      content: "<img style='width: 100%;' src='/public/img/wechat-qr.jpeg' />",
+    });
+  });
 });
