@@ -234,9 +234,9 @@ class EbookController extends Controller {
     } catch (e) {
       // ignore
     }
-    // ctx.runInBackground(async () => {
-    //   await service.tool.addUsed("ebook");
-    // });
+    ctx.runInBackground(async () => {
+      await service.tool.addUsed("ebook");
+    });
     ctx.body = {
       success: true,
       message: "SUCCESS",
