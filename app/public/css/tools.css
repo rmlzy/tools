@@ -15,9 +15,8 @@
   position: relative;
   height: 180px;
   text-align: center;
-  border: 1px solid rgba(0, 0, 0, 0.6);
+  border: 1px solid #ddd;
   border-radius: 10px;
-  background: #1c1e22;
   padding-top: 30px;
 }
 .dropzone i {
