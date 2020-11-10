@@ -1,0 +1,45 @@
+{% extends "./base.html" %}
+
+<!-- Head -->
+{% block head %} {% endblock %}
+
+<!-- Body -->
+{% block body %}
+<div class="container">
+  <ol class="breadcrumb">
+    <li><a href="/">首页</a></li>
+    <li class="active">毒鸡汤</li>
+  </ol>
+
+  <div class="text-center">
+    <h1 id="js_text" style="padding: 185px 0;">哈哈哈</h1>
+    <p>
+      <button id="js_randomBtn" class="btn btn-primary">再来一个</button>
+    </p>
+  </div>
+</div>
+{% endblock %}
+
+<!-- Foot -->
+{% block foot %}
+<script>
+  $(document).ready(function () {
+    function fetchDu() {
+      $.ajax({
+        type: "GET",
+        url: "/api/du",
+        success: function (res) {
+          if (res.success) {
+            $("#js_text").text(res.data);
+          } else {
+            layer.msg(res.message, { icon: 5 });
+          }
+        },
+      });
+    }
+
+    fetchDu();
+    $("#js_randomBtn").on("click", fetchDu);
+  });
+</script>
+{% endblock %}

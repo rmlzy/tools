@@ -157,4 +157,8 @@ module.exports = (app) => {
   router.post("/api/cheatsheet", controller.admin.cheatsheet.create);
   router.put("/api/cheatsheet/:id", controller.admin.cheatsheet.update);
   router.delete("/api/cheatsheet/:id", controller.admin.cheatsheet.delete);
+
+  // 毒鸡汤
+  router.get("/tool/du.html", controller.du.render);
+  router.get("/api/du", controller.du.random);
 };
