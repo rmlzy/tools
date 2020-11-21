@@ -306,7 +306,7 @@ $(document).ready(function () {
             : window.webkitURL.createObjectURL(blob);
         img.src = blobURL;
         img.onload = function () {
-          ctx.drawImage(img, size / 4, size / 4, size / 2, size / 2);
+          ctx.drawImage(img, 0, 0, size, size);
         };
       },
 
